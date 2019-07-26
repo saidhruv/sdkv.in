@@ -1,20 +1,141 @@
+@font-face {
+	font-family: avenir;
+	src: url('Avenir-Light.otf');
+}
+
 body {
-  background-color: #191919;
-  width: 100%;
+	background-color: #191919;
+	height: 100%;
+	width: 100%;
+}
+
+#loginCard {
+	background-color: #fefefe;
+	border-radius: 10px;
+	box-shadow: 10px 20px 50px 5px black;
+	display: flex;
+	height: 20vh;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 40vh;
+	width: 40vh;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+#form {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+input[type='password'] {
+	letter-spacing: 0.3em;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: solid;
+	border-left-style: none;
+	font-size: 20px;
+	padding: 5px;
+}
+
+input:focus {
+	outline: none;
+}
+
+#submit {
+	border-radius: 24px;
+	height: 24px;
+	margin-left: 10px;
+	padding: 10px;
+	transition: 0.3s;
+	width: 24px;
+}
+
+#submit:hover {
+	box-shadow: 1px 1px 5px 1px grey;
 }
 
 #mainImage {
-  box-shadow: 10px 20px 50px 5px black;
-  display: block;
-  margin-bottom: 50px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 50px;
-  width: 20cm;
+	box-shadow: 10px 20px 50px 5px black;
+	display: block;
+	margin-bottom: 50px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 50px;
+	width: 20cm;
 }
 
 @media screen and (max-width: 992px) {
-  #mainImage {
-    width:90%;
-  }
+	#mainImage {
+		width: 90%;
+	}
+}
+
+#snackbar {
+	visibility: hidden;
+	min-width: 250px;
+	margin-left: -125px;
+	background-color: #f44336;
+	color: #fff;
+	text-align: center;
+	border-radius: 2px;
+	padding: 16px;
+	position: fixed;
+	z-index: 1;
+  margin-left: auto;
+  margin-right: auto;
+	bottom: 30px;
+	font-family: avenir;
+}
+
+#snackbar.show {
+	visibility: visible;
+	-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+	animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+	from {
+		bottom: 0;
+		opacity: 0;
+	}
+	to {
+		bottom: 30px;
+		opacity: 1;
+	}
+}
+
+@keyframes fadein {
+	from {
+		bottom: 0;
+		opacity: 0;
+	}
+	to {
+		bottom: 30px;
+		opacity: 1;
+	}
+}
+
+@-webkit-keyframes fadeout {
+	from {
+		bottom: 30px;
+		opacity: 1;
+	}
+	to {
+		bottom: 0;
+		opacity: 0;
+	}
+}
+
+@keyframes fadeout {
+	from {
+		bottom: 30px;
+		opacity: 1;
+	}
+	to {
+		bottom: 0;
+		opacity: 0;
+	}
 }
