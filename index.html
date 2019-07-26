@@ -1,10 +1,16 @@
 <!DOCTYPE html>
+<script>
+	var host = 'sdkv.in';
+	if (host == window.location.host && window.location.protocol != 'https:')
+		window.location.protocol = 'https';
+</script>
 <html>
 	<head>
 		<meta charset="utf-8" />
-    <title>Sai Dhruv</title>
-    <link rel="shortcut icon" type="image/png" href="http://sdkv.in/favicon.png"/>
-    <link rel="stylesheet" href="styles.css">
+		<title>Sai Dhruv</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="/favicon.ico" type="image/x-icon">
+		<link rel="stylesheet" href="styles.css" />
 		<meta
 			name="description"
 			content="This site will keep evolving to showcase Sai's capabilities."
@@ -15,6 +21,10 @@
 		/>
 	</head>
 	<body>
-		<img id="mainImage" src="sai.png" alt="Hmmm... This is weird. Pretty sure there should be something else here!">
+		<img
+			id="mainImage"
+			src="sai.png"
+			alt="Hmmm... This is weird. Pretty sure there should be something else here!"
+		/>
 	</body>
 </html>
