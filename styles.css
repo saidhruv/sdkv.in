@@ -15,6 +15,6 @@ body {
 
 @media screen and (max-width: 992px) {
   #mainImage {
-    width:100%;
+    width:90%;
   }
 }
