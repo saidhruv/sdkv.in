@@ -1,10 +1,16 @@
 body {
-  width: 100%
+  background-color: #191919;
+  width: 100%;
 }
 
 #mainImage {
+  box-shadow: 10px 20px 50px 5px black;
+  display: block;
+  margin-bottom: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
   width: 20cm;
-  margin: auto;
 }
 
 @media screen and (max-width: 992px) {
