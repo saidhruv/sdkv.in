@@ -1,3 +1,10 @@
 #mainImage {
-  width: 100%
+  width: 20cm;
+  margin: auto;
+}
+
+@media screen and (max-width: 992px) {
+  #mainImage {
+    width:100%;
+  }
 }
