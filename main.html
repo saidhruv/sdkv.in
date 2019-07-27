@@ -58,6 +58,7 @@
 		if (!x) {
 			window.location.replace('index.html');
 		}
+		window.history.pushState('', '', '/');
 		var image = document.getElementById('mainImage');
 		var loading = document.getElementById('loading');
 		var loadingHolder = document.getElementById('loadingHolder');
