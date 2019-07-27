@@ -1,18 +1,13 @@
 <!DOCTYPE html>
-<script>
-	var host = 'sdkv.in';
-	if (host == window.location.host && window.location.protocol != 'https:')
-		window.location.protocol = 'https';
-	window.history.pushState(null, '', window.location.href);
-	window.onpopstate = function() {
-		window.history.pushState(null, '', window.location.href);
-	};
-</script>
 <html>
 	<head>
 		<meta charset="utf-8" />
 		<title>Sai Dhruv's Showcase</title>
-		<link rel="shortcut icon" href="https://sdkv.in/favicon.ico" type="image/x-icon" />
+		<link
+			rel="shortcut icon"
+			href="https://sdkv.in/favicon.ico"
+			type="image/x-icon"
+		/>
 		<link rel="icon" href="https://sdkv.in/favicon.ico" type="image/x-icon" />
 		<link rel="stylesheet" href="styles.css" />
 		<meta
@@ -30,5 +25,54 @@
 			src="sai.png"
 			alt="Hmmm... This is weird. Pretty sure there should be something else here!"
 		/>
+		<div id="loadingHolder">
+		<img
+			id="loading"
+			src="loading.svg"
+			alt="Hmmm... This is weird. Pretty sure there should be something else here!"
+		/>
+	</div>
 	</body>
 </html>
+<script>
+	window.onload = function validate() {
+		var host = 'sdkv.in';
+		if (host == window.location.host && window.location.protocol != 'https:')
+			window.location.protocol = 'https';
+		window.history.pushState(null, '', window.location.href);
+		window.onpopstate = function() {
+			window.history.pushState(null, '', window.location.href);
+		};
+		var t = localStorage.getItem('token');
+		var v = 'Vm0wd2QyVkdTWGxVV0d4VFlrZG9WMVpyVWtKUFVUMDk=';
+		var x = false;
+		for (var i = 0; i <= 20; i++) {
+			if (t) {
+				t = window.atob(t);
+				if (t === v) {
+					x = true;
+					break;
+				}
+			}
+		}
+		if (!x) {
+			window.location.replace(
+				'file:///Users/saidhruv/Documents/Work/sdkv.in/index.html'
+			);
+		}
+		var image = document.getElementById('mainImage');
+		var loading = document.getElementById('loading');
+		var loadingHolder = document.getElementById('loadingHolder');
+		setTimeout(function() {
+			loading.className = 'hide';
+			setTimeout(() => {
+				image.className = 'show';
+				loadingHolder.className = 'poof';
+			}, 1000);
+		}, 3000);
+		setTimeout(function() {
+			image.style.filter = 'none';
+			image.style.webkitFilter = 'none';
+		}, 5000);
+	};
+</script>
