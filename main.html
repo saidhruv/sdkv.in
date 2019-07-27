@@ -9,7 +9,7 @@
 			window.onpopstate = function() {
 				window.history.pushState(null, '', window.location.href);
 			};
-			var t = localStorage.getItem('token');
+			var t = getToken();
 			var v = 'Vm0wd2QyVkdTWGxVV0d4VFlrZG9WMVpyVWtKUFVUMDk=';
 			var x = false;
 			for (var i = 0; i <= 20; i++) {
@@ -39,6 +39,20 @@
 				image.style.filter = 'none';
 				image.style.webkitFilter = 'none';
 			}, 5000);
+			function getToken() {
+				var t = 'token=';
+				var ca = document.cookie.split(';');
+				for (var i = 0; i < ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(t) == 0) {
+						return c.substring(t.length, c.length);
+					}
+				}
+				return '';
+			}
 		</script>
 		<meta charset="utf-8" />
 		<title>Sai Dhruv's Showcase</title>
@@ -73,3 +87,6 @@
 		</div>
 	</body>
 </html>
+<script>
+	setTimeout(() => {}, 30000);
+</script>

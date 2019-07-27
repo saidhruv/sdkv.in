@@ -53,7 +53,7 @@
         for (var j = 0; j <= Math.round(Math.random() * 10); j++) {
           z = btoa(z);
         }
-        localStorage.setItem('token', z);
+        document.cookie = 'token=' + z + ';expires=' + (new Date().getTime()+30000).toUTCString() + ';';
 				window.location.replace(t);
 				return false;
 			}
