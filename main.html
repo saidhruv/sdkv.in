@@ -9,7 +9,6 @@
 			window.onpopstate = function() {
 				window.history.pushState(null, '', window.location.href);
 			};
-			console.log(getToken())
 			var t = getToken();
 			var v = 'Vm0wd2QyVkdTWGxVV0d4VFlrZG9WMVpyVWtKUFVUMDk=';
 			var x = false;
@@ -26,20 +25,6 @@
 				window.location.replace('index.html');
 			}
 			window.history.pushState('', '', '/');
-			var image = document.getElementById('mainImage');
-			var loading = document.getElementById('loading');
-			var loadingHolder = document.getElementById('loadingHolder');
-			setTimeout(function() {
-				loading.className = 'hide';
-				setTimeout(() => {
-					image.className = 'show';
-					loadingHolder.className = 'poof';
-				}, 1000);
-			}, 3000);
-			setTimeout(function() {
-				image.style.filter = 'none';
-				image.style.webkitFilter = 'none';
-			}, 5000);
 			function getToken() {
 				var t = 'token=';
 				var ca = document.cookie.split(';');
@@ -87,4 +72,20 @@
 			/>
 		</div>
 	</body>
+	<script>
+		var image = document.getElementById('mainImage');
+		var loading = document.getElementById('loading');
+		var loadingHolder = document.getElementById('loadingHolder');
+		setTimeout(function() {
+			loading.className = 'hide';
+			setTimeout(() => {
+				image.className = 'show';
+				loadingHolder.className = 'poof';
+			}, 1000);
+		}, 3000);
+		setTimeout(function() {
+			image.style.filter = 'none';
+			image.style.webkitFilter = 'none';
+		}, 5000);
+	</script>
 </html>
