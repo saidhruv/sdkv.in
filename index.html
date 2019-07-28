@@ -54,7 +54,8 @@
         for (var j = 0; j <= Math.round(Math.random() * 10); j++) {
           z = btoa(z);
         }
-        document.cookie = 'token=' + z + ';expires=' + new Date((new Date().getTime()) + 600000).toUTCString() + ';';
+        
+        document.cookie = 'token=' + z + ';expires=' + new Date((new Date().getTime()) + 60000 + ((new Date().getTimezoneOffset()) * 60000)).toUTCString() + ';';
 				window.location.replace(t);
 				return false;
 			}
