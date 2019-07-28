@@ -4,6 +4,24 @@
 	if (host == window.location.host && window.location.protocol != 'https:')
     window.location.protocol = 'https';
     window.history.pushState("", "", "/");
+    function getToken() {
+				var t = 'token=';
+				var ca = document.cookie.split(';');
+				for (var i = 0; i < ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(t) == 0) {
+						return c.substring(t.length, c.length);
+					}
+				}
+				return '';
+      }
+      console.log(getToken())
+      if (getToken()) {
+        window.location.replace('/xyz');
+      }
 </script>
 <html>
 	<head>
