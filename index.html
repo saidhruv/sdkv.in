@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <script>
-	var host = 'sdkv.in';
+  var host = 'sdkv.in';
+  var k = 'VjFkNGExSXlUa2hUYmtKUFZucHNjbFZ1Y0VkbFp6MDk=';
 	if (host == window.location.host && window.location.protocol != 'https:')
     window.location.protocol = 'https';
     window.history.pushState("", "", "/");
@@ -20,7 +21,7 @@
       }
       console.log(getToken())
       if (getToken()) {
-        window.location.replace('/xyz');
+        window.location.replace(`/${atob(atob(atob(atob(atob(k)))))}`);
       }
 </script>
 <html>
