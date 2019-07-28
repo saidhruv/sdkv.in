@@ -1,2 +1,3 @@
 RewriteEngine On
-RewriteRule ^sdvk.in/?$ sdkv.in
+Redirect ^sdvk.in/abc sdkv.in/index.html
+Redirect ^sdvk.in/xyz sdkv.in/main.html

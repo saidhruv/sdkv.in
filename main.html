@@ -25,7 +25,7 @@
 				window.location.replace('index.html');
 			}
 			window.history.pushState('', '', '/');
-			function getToken() {
+			getToken = () => {
 				var t = 'token=';
 				var ca = document.cookie.split(';');
 				for (var i = 0; i < ca.length; i++) {
@@ -87,5 +87,12 @@
 			image.style.filter = 'none';
 			image.style.webkitFilter = 'none';
 		}, 5000);
+		window.onbeforeunload = event => {
+			if(getToken()) {
+				window.location.replace('/xyz');
+			} else {
+				window.location.replace('/abc');
+			}
+		}
 	</script>
 </html>

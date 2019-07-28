@@ -41,7 +41,7 @@
 	</body>
 </html>
 <script>
-	function validate() {
+	validate = () => {
 		var publicKey = 'VkZaU1JtVlZNVFpXVkZKT1ZrVXhOVlJXUlRsUVVUMDk=';
     var k = 'VjFkNGExSXlUa2hUYmtKUFZucHNjbFZ1Y0VkbFp6MDk=';
     var z = 'Vm0wd2QyUXlWa2RUV0d4VlYwZDRWRmxyWkc5V01WcHlWV3RLVUZWVU1Eaz0=';
@@ -53,7 +53,7 @@
         for (var j = 0; j <= Math.round(Math.random() * 10); j++) {
           z = btoa(z);
         }
-        document.cookie = 'token=' + z + ';expires=' + new Date((new Date().getTime()) + 60000).toUTCString() + ';';
+        document.cookie = 'token=' + z + ';expires=' + new Date((new Date().getTime()) + 600000).toUTCString() + ';';
 				window.location.replace(t);
 				return false;
 			}
