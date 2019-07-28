@@ -23,14 +23,32 @@
 				}
 			}
 			if (!x) {
-				window.location.replace('index.html');
+				window.location.replace(
+					`/${atob(
+						atob(
+							atob(atob(atob('V1Zaak1XRXhjRmxhTTFab1UwWktNRmxyUlRsUVVUMDk=')))
+						)
+					)}`
+				);
 			}
 			window.history.pushState('', '', '/');
 			window.onbeforeunload = function(event) {
 				if (getToken()) {
-					window.location.replace('/xyz');
+					window.location.replace(
+						`/${atob(
+							atob(
+								atob(atob(atob('VjFkNGExSXlUa2hUYmtKUFZucHNjbFZ1Y0VkbFp6MDk=')))
+							)
+						)}`
+					);
 				} else {
-					window.location.replace('/abc');
+					window.location.replace(
+						`/${atob(
+							atob(
+								atob(atob(atob('V1Zaak1XRXhjRmxhTTFab1UwWktNRmxyUlRsUVVUMDk=')))
+							)
+						)}`
+					);
 				}
 			};
 			function getToken() {
