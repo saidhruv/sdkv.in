@@ -3,6 +3,7 @@
 .idea/
 .yalc/
 .DS_Store
+build/
 coverage/
 cypress/screenshots/
 cypress/videos/
