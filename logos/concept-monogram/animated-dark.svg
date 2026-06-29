@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="SD monogram animated">
+  <rect width="200" height="200" fill="#111113"/>
+  <style>
+    .sd{font-family:Italiana,serif;font-size:96px;letter-spacing:2px;fill:#f4f4f5;
+      opacity:0;animation:mFade 6s cubic-bezier(.4,0,.2,1) infinite}
+    @keyframes mFade{
+      0%,6%{opacity:0;letter-spacing:10px}
+      30%{opacity:1;letter-spacing:2px}
+      88%{opacity:1;letter-spacing:2px}
+      100%{opacity:0;letter-spacing:10px}
+    }
+    @media (prefers-reduced-motion:reduce){.sd{animation:none;opacity:1;letter-spacing:2px}}
+  </style>
+  <text class="sd" x="100" y="103" text-anchor="middle" dominant-baseline="central">SD</text>
+</svg>

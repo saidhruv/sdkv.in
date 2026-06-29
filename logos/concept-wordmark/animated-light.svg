@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 120" role="img" aria-label="Sai Dhruva K V wordmark animated">
+  <rect width="760" height="120" fill="#f3efe7"/>
+  <style>
+    .name{font-family:Italiana,serif;font-size:52px;letter-spacing:7px;fill:#16140f}
+    .name tspan{opacity:0;animation:wIn 7s cubic-bezier(.33,0,.2,1) infinite}
+    @keyframes wIn{0%,4%{opacity:0}40%{opacity:1}90%{opacity:1}100%{opacity:0}}
+    .name tspan:nth-child(1){animation-delay:.00s}.name tspan:nth-child(2){animation-delay:.04s}
+    .name tspan:nth-child(3){animation-delay:.08s}.name tspan:nth-child(4){animation-delay:.14s}
+    .name tspan:nth-child(5){animation-delay:.18s}.name tspan:nth-child(6){animation-delay:.22s}
+    .name tspan:nth-child(7){animation-delay:.26s}.name tspan:nth-child(8){animation-delay:.30s}
+    .name tspan:nth-child(9){animation-delay:.34s}.name tspan:nth-child(10){animation-delay:.40s}
+    .name tspan:nth-child(11){animation-delay:.46s}
+    @media (prefers-reduced-motion:reduce){.name tspan{animation:none;opacity:1}}
+  </style>
+  <text class="name" x="380" y="62" text-anchor="middle" dominant-baseline="central"><tspan>S</tspan><tspan>A</tspan><tspan>I </tspan><tspan>D</tspan><tspan>H</tspan><tspan>R</tspan><tspan>U</tspan><tspan>V</tspan><tspan>A </tspan><tspan>K </tspan><tspan>V</tspan></text>
+</svg>
