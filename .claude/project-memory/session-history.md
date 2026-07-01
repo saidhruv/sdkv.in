@@ -14,7 +14,9 @@
 
 **Environment note:** PowerShell (no `&&`; no heredoc — use `;` and multiple `-m` flags). `npx`-installed packages aren't resolvable by ESM `import` (no NODE_PATH for ESM) — used a temp-dir `npm i` instead.
 
-**Outstanding (in scope, not yet done):** `og.png` social card. Also still deferred: resume PDF, Projects section.
+**og.png (done, same session):** authored a Kinetic Editorial 1200×630 card (Fraunces heavy display + red italic "Leader." + mono meta) and rendered it with a one-off `@resvg/resvg-js` run using the project fonts (variable TTFs downloaded into a temp dir — resvg wouldn't match the variable woff2 with system fonts disabled, so text dropped; TTFs fixed it). Added `og:image:width/height/alt` meta.
+
+**Still deferred (out of scope):** resume PDF, Projects section. All other in-scope backlog items are complete.
 
 ## 2026-06-28 (later) — Leadership repositioning (player-coach balance)
 

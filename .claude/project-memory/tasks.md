@@ -2,7 +2,6 @@
 
 ## Backlog
 
-- [ ] Add `og.png` social card (1200×630) — meta tags already reference https://sdkv.in/og.png but the asset doesn't exist yet
 - [ ] Add downloadable resume PDF — link in hero or contact section
 - [ ] "Projects" section — freelance / side projects case studies
 
@@ -15,6 +14,7 @@ _(nothing currently)_
 - [x] `sitemap.xml` (single URL `https://sdkv.in/`) + `robots.txt` (allow all, references sitemap) at repo root.
 - [x] Real favicon fallbacks — `favicon.ico` (16/32/48), `apple-touch-icon.png` (180), `icon-192.png`, `icon-512.png`, `site.webmanifest`, all from the "SD" Italiana monogram. Animated inline SVG favicon kept as primary for capable browsers; rasters are the fallback.
 - [x] Self-hosted fonts — Fraunces (roman+italic variable), JetBrains Mono (variable), Italiana in `fonts/` (latin woff2). `@font-face` in `index.css`; removed Google Fonts `<link>`/preconnect; added `<link rel=preload>` for Fraunces. No more `fonts.gstatic.com` request.
+- [x] `og.png` social card (1200×630) — Kinetic Editorial layout (Fraunces heavy display, red italic "Leader.", mono meta, editorial rules). Rendered via a one-off `@resvg/resvg-js` run with the project fonts. Added `og:image:width/height/alt` meta.
 
 ## Completed (2026-06-28 — Kinetic Editorial redesign)
 

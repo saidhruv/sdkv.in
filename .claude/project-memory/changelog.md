@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-07-01 — og.png social card
+
+### New
+- Added `og.png` (1200×630) — the OG/Twitter card meta already referenced it but the asset was missing. Designed in the Kinetic Editorial language: cream paper, Fraunces heavy display "AI & Technology" + red italic "Leader.", JetBrains Mono metadata ("SDKV.IN", "// PORTFOLIO — 2026", "Consulting Architect @ AMD"), editorial hairline + strong rule, name + tagline footer.
+- Added `og:image:width`, `og:image:height`, and `og:image:alt` meta to `index.html` for cleaner unfurls.
+
+### How
+- Authored as an SVG and rendered to PNG with a one-off `@resvg/resvg-js` run (in a temp dir, using the project's font files as variable TTFs). No dependency added to the repo.
+
 ## 2026-07-01 — Self-hosted fonts + real favicon set
 
 ### Self-hosted fonts (removed Google Fonts CDN)
