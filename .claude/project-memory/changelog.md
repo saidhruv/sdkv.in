@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-01 — Cloudflare Web Analytics
+
+### New
+- Added Cloudflare Web Analytics beacon (`static.cloudflareinsights.com/beacon.min.js`, deferred) just before the JS module tags in `index.html`. Cookieless and privacy-first, so no consent banner is required. Token: `1c2c924612d349f7b9bf26b846779ffa`.
+
+### Context
+- Chosen over paid Plausible/Fathom for the free, privacy-friendly tier. Site is on GitHub Pages (not proxied through Cloudflare), so the manual beacon + token approach is used rather than automatic injection.
+
 ## 2026-06-28 — Logo system + brand identity
 
 ### Context

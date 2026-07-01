@@ -6,13 +6,16 @@
 - [ ] Replace the inline SVG favicon with a real favicon.ico / apple-touch-icon if desired
 - [ ] Add downloadable resume PDF — link in hero or contact section
 - [ ] Add sitemap.xml (single URL, trivial)
-- [ ] Evaluate Plausible/Fathom analytics (privacy-first, no cookie banner)
-- [ ] Self-host Inter font (remove Google Fonts CDN dependency)
+- [ ] Self-host fonts (Fraunces + JetBrains Mono + Italiana) — remove Google Fonts CDN dependency
 - [ ] "Projects" section — freelance / side projects case studies
 - [ ] Commit + push the rebuild to deploy it (master currently still serves the old placeholder)
 
 ## In Progress
 _(nothing currently)_
+
+## Completed (2026-07-01)
+
+- [x] Cloudflare Web Analytics — cookieless beacon added before the JS tags in `index.html` (token `1c2c9246…`); privacy-first, no consent banner. (Chose Cloudflare over paid Plausible/Fathom.)
 
 ## Completed (2026-06-28 — Kinetic Editorial redesign)
 
