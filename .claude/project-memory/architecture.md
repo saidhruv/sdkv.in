@@ -14,6 +14,9 @@ sdkv.in/
 │   ├── kinetic.js      ← Kinetic IIFE: renders content from data + animates the headline
 │   ├── animations.js   ← Reveal IIFE: scroll reveal + count-up metrics
 │   └── main.js         ← Main IIFE: topbar, theme toggle, mobile nav, copy-email, init
+├── fonts/              ← self-hosted latin woff2 (Fraunces roman+italic, JetBrains Mono, Italiana)
+├── favicon.ico · apple-touch-icon.png · icon-192.png · icon-512.png · site.webmanifest
+├── sitemap.xml · robots.txt
 ├── CNAME               ← "sdkv.in" — DO NOT DELETE
 └── README.md
 ```
@@ -53,8 +56,9 @@ elements exist before the reveal observer wires up. Every init guards on element
 - Copy-email has an `execCommand` fallback for when the async Clipboard API is blocked
 
 ## External Dependencies
-- Google Fonts CDN: Fraunces (variable, incl. italic) + JetBrains Mono (`preconnect` + `display=swap`)
-- Zero npm, zero bundler, zero framework
+- **Fonts are self-hosted** in `fonts/` (latin-subset woff2): Fraunces (roman + italic variable), JetBrains Mono (variable), Italiana. Declared via `@font-face` in `index.css` (`font-display: swap`); `index.html` preloads `fonts/fraunces-latin.woff2`. No Google Fonts CDN request.
+- Cloudflare Web Analytics beacon (`static.cloudflareinsights.com/beacon.min.js`, deferred) — the only third-party runtime request; cookieless.
+- Zero npm, zero bundler, zero framework (a one-off `sharp`/`png-to-ico` run generated the icons; not a repo dependency).
 
 ## Local Preview
 `.claude/launch.json` defines a "static" server (`npx serve -l 4321 .`).

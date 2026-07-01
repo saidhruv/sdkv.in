@@ -23,6 +23,11 @@
 
   <link id="favicon" rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 fill=%22%23f3efe7%22/><path fill=%22%2316140f%22 d=%22M12.99 7.87L12.89 8.12Q10.57 7.23 8.52 7.23Q6.46 7.23 5.32 8.10Q4.17 8.96 4.17 10.49L4.17 10.49Q4.17 12.35 6.11 13.37L6.11 13.37Q6.97 13.81 8.01 14.18Q9.04 14.55 10.08 15.01Q11.13 15.46 12.00 16.05Q12.86 16.64 13.40 17.67Q13.93 18.70 13.93 20.30Q13.93 21.89 13.04 23.01Q12.15 24.13 10.89 24.53Q9.63 24.92 7.94 24.92L7.94 24.92Q4.81 24.92 2.59 23.37L2.59 23.37L2.72 23.16Q3.56 23.83 4.90 24.25Q6.24 24.67 7.64 24.67L7.64 24.67Q9.70 24.67 11.17 23.71Q12.63 22.76 12.63 20.90L12.63 20.90Q12.63 18.86 10.70 17.71L10.70 17.71Q9.83 17.20 8.80 16.76Q7.76 16.33 6.72 15.86Q5.67 15.39 4.81 14.80L4.81 14.80Q2.87 13.53 2.87 11.18L2.87 11.18Q2.87 9.32 4.12 8.16Q5.37 7 7.88 7Q10.39 7 12.99 7.87L12.99 7.87ZM16.61 7.08L18.65 7.08Q19.77 7.03 20.86 7.03Q21.94 7.03 23.15 7.25Q24.36 7.48 25.55 8.11Q26.73 8.73 27.56 9.72Q28.39 10.70 28.90 12.30Q29.41 13.91 29.41 16.20Q29.41 18.50 28.66 20.32Q27.91 22.14 26.61 23.11L26.61 23.11Q24.08 25.00 20.51 25.00L20.51 25.00Q19.26 25.00 17.89 24.90L17.89 24.90L16.61 24.90L16.61 7.08ZM18.73 7.36L18.73 24.69Q19.26 24.75 20.08 24.75Q20.90 24.75 21.30 24.72Q21.71 24.69 22.42 24.50Q23.14 24.31 23.75 23.98Q24.36 23.65 25.04 23.00Q25.71 22.35 26.20 21.46L26.20 21.46Q27.29 19.37 27.29 16L27.29 16Q27.29 13.60 26.71 11.86Q26.12 10.11 25.37 9.27Q24.62 8.43 23.55 7.93Q22.48 7.43 21.84 7.36Q21.20 7.28 20.36 7.28Q19.52 7.28 18.73 7.36L18.73 7.36Z%22/></svg>" />
 
+  <!-- Raster fallbacks for browsers/OSes that don't render (animated) SVG favicons -->
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
   <script>
     (function () {
       try {
@@ -33,9 +38,7 @@
     })();
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600&family=Italiana&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="preload" href="fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="index.css" />
 
   <script type="application/ld+json">

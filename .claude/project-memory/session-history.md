@@ -1,5 +1,21 @@
 # Session History
 
+## 2026-07-01 — Backlog polish (analytics, SEO files, fonts, favicons)
+
+**Summary:** Worked through the in-scope backlog. Resume PDF and the Projects section were explicitly deferred; the "deploy" task was already done.
+
+**Changes:**
+- **Cloudflare Web Analytics** — added the cookieless deferred beacon (token `1c2c9246…`) before the JS tags in `index.html`. Chosen over paid Plausible/Fathom. Committed (`224a43e`) and pushed to `origin/master` (branch protection was bypassed via the user's permissions — flagged for future PR-based flow).
+- **sitemap.xml + robots.txt** — single-URL sitemap + allow-all robots referencing it, at repo root.
+- **Self-hosted fonts** — downloaded latin woff2 for Fraunces (roman+italic variable), JetBrains Mono (variable), Italiana into `fonts/`; added `@font-face` to `index.css`; removed the Google Fonts `<link>`/preconnect and added a preload. Verified no `gstatic` request.
+- **Real favicon set** — generated `favicon.ico` (16/32/48), `apple-touch-icon.png` (180), `icon-192/512.png`, and `site.webmanifest` from the SD Italiana monogram via a one-off `sharp`+`png-to-ico` run in a temp dir. Kept the JS-animated inline SVG favicon as primary; rasters are fallbacks. Added link tags.
+
+**Verified:** local `serve` returns 200 with correct content-types for all fonts, icons, manifest, sitemap, robots; apple-touch-icon visually renders the SD monogram; no Google Fonts references remain in `index.html`.
+
+**Environment note:** PowerShell (no `&&`; no heredoc — use `;` and multiple `-m` flags). `npx`-installed packages aren't resolvable by ESM `import` (no NODE_PATH for ESM) — used a temp-dir `npm i` instead.
+
+**Outstanding (in scope, not yet done):** `og.png` social card. Also still deferred: resume PDF, Projects section.
+
 ## 2026-06-28 (later) — Leadership repositioning (player-coach balance)
 
 **Summary:** User wants the site to position him for a LEADERSHIP role (not architect/technical), but still show enough technical depth to pass a technical screen / ATS if he applies for a technical role. Net effect = "player-coach": leadership on top everywhere, technical proof strong underneath.

@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-07-01 — Self-hosted fonts + real favicon set
+
+### Self-hosted fonts (removed Google Fonts CDN)
+- Added `fonts/` with latin-subset woff2: `fraunces-latin.woff2` (roman variable 300–900), `fraunces-italic-latin.woff2`, `jetbrains-mono-latin.woff2` (variable 400–500), `italiana-latin.woff2` (400).
+- Added `@font-face` blocks at the top of `index.css` with `font-display: swap`.
+- Removed the two `preconnect` links and the Google Fonts `<link>` from `index.html`; added `<link rel="preload">` for `fonts/fraunces-latin.woff2`. No runtime request to `fonts.googleapis.com` / `fonts.gstatic.com` anymore (privacy + one fewer external dependency). All three families are OFL-licensed.
+
+### Real favicon / app icons
+- Generated from the existing "SD" Italiana monogram (`S_PATH`/`D_PATH`): `favicon.ico` (16/32/48), `apple-touch-icon.png` (180, padded), `icon-192.png`, `icon-512.png` (padded), plus `site.webmanifest`.
+- Added `<link>` tags for the `.ico`, apple-touch-icon, and manifest. The existing JS-animated inline SVG data-URI favicon stays the primary `rel="icon"` for capable browsers; the raster files are fallbacks for Safari/iOS/older browsers that don't render (animated) SVG favicons.
+- Icons generated via a one-off `sharp` + `png-to-ico` script run in a temp dir (no dependency added to the repo).
+
+## 2026-07-01 — sitemap.xml + robots.txt
+
+### New
+- `sitemap.xml` at repo root — single URL (`https://sdkv.in/`) with `lastmod`, `changefreq`, `priority`.
+- `robots.txt` at repo root — allows all crawlers and points to the sitemap.
+
 ## 2026-07-01 — Cloudflare Web Analytics
 
 ### New
