@@ -23,10 +23,11 @@ Type-as-art editorial direction (chosen from 3 previewed concepts):
 - **About** — narrative prose + 4 count-up metrics in a bordered grid
 - **Work** — 5 roles as editorial entries that expand on hover/focus (AMD, FINEOS/Spraoi, Goin, HPE, iService)
 - **Capabilities** — 8-cell bordered grid with numbered red superscripts + mono skill lists
-- **Impact** — 6 outcomes with large red display numbers
+- **Impact** — 4 measured outcomes (AI-centric: 100% AI-coded, ~67% less dev time, ~95% fewer critical errors via Playwright+AI, ~40% faster delivery) as large red display numbers in a 2×2 grid
 - **Contact** — big italic headline, underlined email + copy-to-clipboard, mono social pills
 - **Topbar** — sticky blurred bar + theme toggle + mobile hamburger
 - **Footer** — preserves "Save Paper · Save Trees" tagline
+- **Résumé** (`/resume`) — standalone page with a **Normal ⇄ ATS** mode toggle: Normal = branded poster (theme-aware light/dark); ATS = accessible single-column Atkinson-Hyperlegible document (always light, parser-friendly). Anti-print in both modes; Download serves the matching PDF (`resume-light`/`resume-dark`/`resume-ats.pdf`). Shares the site theme, drafting-grid background, and footer. Linked from Contact.
 - Content is data-driven from `js/data.js`
 
 ## Hosting

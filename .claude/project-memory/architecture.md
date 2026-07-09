@@ -13,8 +13,15 @@ sdkv.in/
 │   ├── data.js         ← SITE_DATA: roles, capabilities, impact (single source of content)
 │   ├── kinetic.js      ← Kinetic IIFE: renders content from data + animates the headline
 │   ├── animations.js   ← Reveal IIFE: scroll reveal + count-up metrics
+│   ├── backgrounds.js  ← Backgrounds IIFE: cursor/scroll parallax for the drafting-grid layer
 │   └── main.js         ← Main IIFE: topbar, theme toggle, mobile nav, copy-email, init
-├── fonts/              ← self-hosted latin woff2 (Fraunces roman+italic, JetBrains Mono, Italiana)
+├── fonts/              ← self-hosted latin woff2 (Fraunces roman+italic, JetBrains Mono, Italiana; Atkinson Hyperlegible 400/700 + italics for the résumé's ATS mode)
+├── resume/
+│   ├── index.html      ← résumé page. Header: Back + wordmark + Normal|ATS mode toggle + theme toggle + Download. Contains BOTH the branded poster (.sheet, Normal) AND the accessible single-column Atkinson doc (.doc, ATS, always light); mode persists via localStorage.resumeMode. Download picks the PDF by mode+theme. Anti-print in BOTH modes (Ctrl+P → "designed for screen" notice). Has the drafting-grid background + site footer; honors shared `theme` key + theme-aware favicon. Linked from Contact; public.
+│   ├── resume-light.pdf ← downloadable PDF: Normal-mode poster, native size, light
+│   ├── resume-dark.pdf  ← downloadable PDF: Normal-mode poster, native size, dark
+│   └── resume-ats.pdf   ← downloadable PDF: ATS mode, single tall page (no breaks), Atkinson, cream
+├── tools/build-resume-pdf.mjs  ← offline Puppeteer renderer (self-serving): emits all 3 PDFs from /resume/ by seeding resumeMode(+theme) — Normal light/dark posters (screen media) + ATS single page (print media, injects a reveal override past anti-print); manual, not deployed runtime
 ├── favicon.ico · apple-touch-icon.png · icon-192.png · icon-512.png · site.webmanifest
 ├── sitemap.xml · robots.txt
 ├── CNAME               ← "sdkv.in" — DO NOT DELETE
@@ -29,7 +36,10 @@ Each JS file is a self-contained IIFE. `data.js` exposes a single global object 
 - `Reveal.init()` — IntersectionObservers for entrance + count-up (unobserve after first trigger)
 - `Main.init()` — runs on DOMContentLoaded; calls Kinetic + Reveal first, then nav/theme/copy
 
-**Load order:** `data.js` → `kinetic.js` → `animations.js` → `main.js`.
+**Load order:** `data.js` → `kinetic.js` → `animations.js` → `backgrounds.js` → `main.js`.
+`Main.init()` calls `Backgrounds.init()` (guarded) after Kinetic/Reveal.
+
+**Drafting-grid background:** one fixed `.bg-layer` div (`#bg-grid`) at `z-index:-1`; paper fill lives on `<html>` so the grid renders above it but below content. Grid drawn with CSS `linear-gradient` hairlines (minor + major) in `--line`. `backgrounds.js` drifts it with a single lerped RAF (passive `mousemove` + per-frame `scrollY`, `visibilitychange` pause, `reduce()` bail). (Earlier previewed animated-grain and ghost-type concepts were removed once the grid was chosen.)
 `Main.init()` calls `Kinetic.init()` BEFORE `Reveal.init()` so the dynamically-built `.reveal`
 elements exist before the reveal observer wires up. Every init guards on element/global presence.
 
@@ -56,7 +66,7 @@ elements exist before the reveal observer wires up. Every init guards on element
 - Copy-email has an `execCommand` fallback for when the async Clipboard API is blocked
 
 ## External Dependencies
-- **Fonts are self-hosted** in `fonts/` (latin-subset woff2): Fraunces (roman + italic variable), JetBrains Mono (variable), Italiana. Declared via `@font-face` in `index.css` (`font-display: swap`); `index.html` preloads `fonts/fraunces-latin.woff2`. No Google Fonts CDN request.
+- **Fonts are self-hosted** in `fonts/` (latin-subset woff2): Fraunces (roman + italic variable), JetBrains Mono (variable), Italiana. Declared via `@font-face` in `index.css` (`font-display: swap`); `index.html` preloads `fonts/fraunces-latin.woff2`. No Google Fonts CDN request. Atkinson Hyperlegible (400/700 + italics) is also self-hosted here but used only by the résumé's ATS-mode document (`@font-face` in `resume/index.html`).
 - Cloudflare Web Analytics beacon (`static.cloudflareinsights.com/beacon.min.js`, deferred) — the only third-party runtime request; cookieless.
 - Zero npm, zero bundler, zero framework (a one-off `sharp`/`png-to-ico` run generated the icons; not a repo dependency).
 

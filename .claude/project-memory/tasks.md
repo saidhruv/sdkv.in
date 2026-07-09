@@ -2,11 +2,23 @@
 
 ## Backlog
 
-- [ ] Add downloadable resume PDF — link in hero or contact section
 - [ ] "Projects" section — freelance / side projects case studies
 
 ## In Progress
-_(nothing currently)_
+
+- [ ] Résumé publish (built & verified locally; NOT yet committed/deployed — pending review/commit). Added a **"Résumé →"** accent-red pill (last in the Contact social row; `index.html` + `.social-accent` in `index.css`) opening the branded résumé page (`resume/index.html`) in a new tab. The page keeps its **anti-print** swap (Ctrl+P → "designed for screen" notice); a **Download button is the only way to get a copy** — JS blob-downloads (forces the filename **"Sai Dhruva K V - Resume.pdf"**) the branded poster PDF matching the viewer's light/dark mode: `resume/resume-light.pdf` / `resume/resume-dark.pdf`, rendered at **native poster page size** from `resume/index.html` via `tools/build-resume-pdf.mjs`. Added a readable mobile single-column fallback. Verified: button, download (light + dark), anti-print swap, mobile — no console errors.
+  - Header bar added: Back (→ /), Italiana wordmark, theme toggle (System/Light/Dark, synced via the shared `theme` key + repaints the SD favicon), and the Download PDF button. Résumé now honors the saved theme and has a theme-aware favicon (previously it only followed OS and had no favicon).
+  - **Download button made theme-dynamic** — `applyTheme()` keeps `#dl-btn`'s `href` in sync (`resume-dark.pdf`/`resume-light.pdf`) on load/toggle/OS-change; blob handler uses that href (single source of truth). Fixes stale-cache downloads always serving light. E2E-verified in headless Chrome.
+  - **Dark PDF render fixed** — build was resolving `light-dark()` to light for both files (puppeteer `emulateMediaType` reset the colour-scheme feature). Build now drives `localStorage.theme` + one `setEmulatedMedia` CDP call; verified dark `body-bg rgb(17,17,19)`.
+  - **Résumé is ONE page with a Normal ⇄ ATS mode toggle** (`resume/index.html`): Normal = branded poster (Fraunces, theme-aware light/dark); ATS = accessible **single-column, Atkinson-only, always-light** document. Toggle persists to `localStorage.resumeMode` (head bootstrap seeds `data-resume-mode`). Download picks the PDF by mode + colour (Normal → `resume-light`/`resume-dark.pdf`; ATS → `resume-ats.pdf`, one tall cream page). Both layouts live in the page; ATS `.doc` classes scoped/renamed so poster CSS doesn't leak. Superseded (all removed): plain-Arial `resume/ats.html`, the `?mode=ats` redirect, the poster-mirror, and the standalone `/resume/ats` page.
+  - `tools/build-resume-pdf.mjs` is **self-serving**; seeds `resumeMode` (+theme) and emits all three PDFs from `/resume/` (posters = screen/native size; ats = print/one-tall-page, cream `.doc` stretched to full page height so no dark canvas strip).
+  - Tradeoffs: anti-print only protects the web page (a downloaded PDF is a normal file); PDFs are ~3.2MB each (grain overlay) — regenerate with the tool when content changes.
+  - Committing this also ships earlier uncommitted work (drafting-grid background + metrics refresh), intermixed in `index.html`/`index.css`; pushing makes it all public on sdkv.in.
+  - Superseded the earlier "gated/encrypted vault" + "serverless-for-free" explorations (dropped — see decisions/session-history).
+
+## Completed (2026-07-03)
+
+- [x] Animated background — added a subtle **drafting-grid** layer (hairline minor + major rules in `--line`, cursor/scroll parallax via `js/backgrounds.js`, `z-index:-1` behind content, reduced-motion bail). Previewed 3 concepts (animated grain, ghost type, drafting grid) via a temporary `?preview` switcher; user chose the grid and dropped the grain. Losing concepts + the preview harness (`js/bg-preview.js`) removed.
 
 ## Completed (2026-07-01)
 

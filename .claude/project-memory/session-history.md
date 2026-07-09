@@ -1,5 +1,101 @@
 # Session History
 
+## 2026-07-09 (evening) — Résumé: ATS mode, one-page consolidation, grid/footer/anti-print
+
+**Summary:** Big résumé pass. Built an accessible **ATS** version, then consolidated everything into a single `/resume` page with a **Normal ⇄ ATS** mode toggle (removed the separate `/resume/ats` route the user briefly had), and rounded it out with the site's grid background, a footer, wordmark centering, and anti-print in both modes.
+
+**ATS résumé + PDF (the hard part):** Built a parser-friendly single-column semantic doc (h1/h2/h3, real `<ul>` bullets), set entirely in **Atkinson Hyperlegible** (the accessible face; the top bar keeps Italiana + JetBrains Mono chrome), always light. The ATS PDF fought back: Chromium bakes a **dark `color-scheme` canvas** into `printToPDF` (root is `light dark` for the top bar), so the page **margins came out near-black** — and Chrome's own PDF viewer *masked* it by compositing on a light background (my early "it's cream" claim was wrong). Verified the truth with a **pdf.js raster onto a magenta canvas** (margins were literally `rgb(18,18,18)`). Real fix: paint a real cream rectangle over the whole sheet (`@page margin:0` + cream `body/.doc` + text inset via padding; `.doc { min-height }` so the trailing mm never expose the canvas). Then made it **one tall page, no breaks** (measure the print-layout height, override `@page { size: 210mm <h>mm }`, `preferCSSPageSize`). Lesson recorded: verify PDF output with pdf.js rasterization, never a browser's PDF viewer.
+
+**Consolidation (the main ask):** Merged the standalone `/resume/ats` into `/resume`. The page now holds BOTH layouts (`.sheet` poster + `.doc` ATS, colliding classes renamed `.doc-spec/.doc-contact/.doc-summary`); a themed **Normal | ATS segmented toggle** in the top bar switches them, persisted to `localStorage.resumeMode` (head-bootstrapped, no flash). One combined script drives theme + mode + fit + download. **Download picks the PDF by mode + theme** (Normal light/dark → `resume-light/dark.pdf`, ATS → `resume-ats.pdf`), absolute `/resume/…` paths. `tools/build-resume-pdf.mjs` now emits all three PDFs from `/resume/` by seeding `resumeMode` (+theme). Deleted `resume/ats/`.
+
+**Also this session:**
+- **Download button 404** — the ATS href was relative (`../resume-ats.pdf`), which resolves to `/resume-ats.pdf` (404) when `/resume/ats` was opened without a trailing slash (dev `serve` serves it in place). Fixed with absolute paths.
+- **Top-bar wordmark not centered** — `.rz-bar` was flex `space-between` (only centers when both sides are equal width); switched to grid `1fr auto 1fr` (0px offset at desktop).
+- **Footer** added to `/resume` (both modes, matches main site, hidden in print, year via JS).
+- **Drafting-grid scroll bug (main site)** — `backgrounds.js` transformed `#bg-grid` itself, but that's the `position:fixed; overflow:hidden` clip window, so scrolling shifted the clip and blanked a strip. Fixed by parallaxing the PATTERN (`#bg-grid::before`) via `--bg-x/--bg-y`; the container is never transformed. Then **added the same grid to `/resume`** (résumé `body` made transparent so the grid on `<html>` shows through; hidden in print/PDF build).
+- **Anti-print in BOTH modes** — printing either mode now shows the "designed for screen" notice; the build injects a print override to still capture the ATS doc for the PDF.
+
+**Verified:** headless screenshots of both modes × light/dark (correct layout/fonts/download href); pdf.js on all 3 PDFs (1 page each, correct backgrounds — light cream, dark, ATS cream top-to-bottom); anti-print `notice=flex, stage=none` in both modes; grid covers the full viewport while scrolled (`#bg-grid transform:none`).
+
+**Env notes:** Puppeteer's Chromium kept getting evicted from the shifting sandbox cache dir; pinned `PUPPETEER_CACHE_DIR=C:\Users\sadhruva\puppeteer-cache` (outside the repo). Non-allowlisted shell needs `required_permissions:["all"]`. **All uncommitted**; preview server on `:4324`.
+
+## 2026-07-09 (later) — Footer + résumé UI polish
+
+**Summary:** Small polish pass alongside a résumé ATS-score review. UI changes: (1) gave the main-site footer the topbar's translucent-paper + `blur(10px)` background (`.footer` in `index.css`); (2) scaled the résumé Normal poster to 75% of the viewport width (centered) instead of full width (`WIDTH_FRACTION` in `resume/index.html`'s `fit()`); (3) added a two-layer paper drop shadow to the résumé — Normal `.scaler` (theme-aware `light-dark()`) and ATS `.doc` (always light) — and set `box-shadow: none` in `tools/build-resume-pdf.mjs` (NEUTRALIZE + ATS print override) so downloaded PDFs stay flat.
+
+**Also this session (no code):** reviewed the résumé for ATS — produced a scorecard canvas (`canvases/resume-ATS-analysis.canvas.tsx`, ~76/100 for the PDF/`AI & Technology Leader` version) and drafted paste-ready fixes (flatten multi-column Skills, remove the `/301225` footer artifact, rename "Introduction" → "Professional Summary", add city, relabel the overlapping freelance dates, add graduation year). Clarified for the user that the only timeline note was the freelance overlap, not graduation (2015 grad is consistent).
+
+**State:** these three tweaks were the ones missing from project memory when the user asked if context was saved — recorded now. Still uncommitted; couldn't verify live git state (terminal returned no output this session).
+
+## 2026-07-08 — Résumé published (Contact button + anti-print + download-only PDF)
+
+**Summary:** Explored gating the résumé (encrypted "vault" chunks on GitHub + questionnaire + unique 10-char PDF password + email evaluation), then how to do it serverless-for-free (Cloudflare Workers 100k/day but 10ms CPU; Vercel/Netlify free functions for real server-side assembly; Resend free 3k/mo for email — MailChannels free is dead). **User dropped all of that** ("never mind all these") in favor of a simple public résumé.
+
+**Built (final):** a **"Résumé →"** accent-red pill (last in the Contact social row; `.social-accent`) opening `resume/` in a new tab. Kept the résumé page's **anti-print** swap; made a **Download button the only way to get a copy** — JS blob-downloads it as **"Sai Dhruva K V - Resume.pdf"** (a blob download forces the filename past the server's Content-Disposition), choosing the PDF matching the viewer's light/dark mode. The downloadables are `resume/resume-light.pdf` + `resume/resume-dark.pdf`, rendered from the actual résumé page at its **native poster page size** in each colour mode via `tools/build-resume-pdf.mjs` (Puppeteer, screen media to bypass the anti-print swap). Added a mobile single-column fallback.
+
+**Iterations:** started with a clean-A4 PDF (`pdf.html`/`resume.pdf`); switched per user request to rendering the HTML as-is at native poster size in both modes (A4 files removed). Fixed the download filename — the dev server's `Content-Disposition: inline; filename="resume.pdf"` overrode the `download` attribute, so moved to a blob download. Moved the Résumé link into the social row and recoloured it to the accent (kept the arrow).
+
+**Verified:** Contact pill present; print emulation shows the notice + hides the sheet; mobile readable; light + dark PDFs generated and differ (dark render confirmed dark); download picks by `prefers-color-scheme`; zero console errors. **NOT yet committed/deployed** — user is reviewing first. A pending broad commit would also bundle the earlier uncommitted drafting-grid background + metrics-refresh work (intermixed in the same files).
+
+**Header + theme (added after the download work):** user reported the résumé download/page not matching dark mode. Root cause: the résumé page only followed the OS, not the site's theme toggle. Fixed by having the résumé read the shared `localStorage['theme']` (bootstrap applies it early; download resolver + favicon use it). Then, per request, added a **fixed header** to the résumé page: Back (→ `/`), Italiana wordmark, a full **theme toggle** (System/Light/Dark, cycles like the main site, persists, repaints a theme-aware SD favicon the page previously lacked), and the Download button moved into it. Verified via headless: toggle cycles + persists + flips sheet bg and favicon; back href `/`; download picks by mode; print hides the header; no console errors. (Much of the earlier "download gives light in dark mode" back-and-forth was the user viewing a stale résumé tab / OS-vs-toggle mismatch — the in-page toggle now makes theme control explicit on the résumé itself.)
+
+**Env notes:** fresh environment (OS build changed) re-downloaded Puppeteer's Chromium (~6 min). `npx serve` / node still need `required_permissions:["all"]`. Session briefly reverted to plan mode mid-execution; switched back to agent to finish.
+
+## 2026-07-06 (latest) — Résumé: filled metrics + sidebar/main restructure
+
+**Summary:** Filled the remaining placeholders (AMD ~30, FINEOS ~20 team sizes; dropped the FINEOS engagement/conversion percentages → "measurably lifting user engagement and conversion" — no placeholders remain). Then, on user feedback that the A0 magazine layout had "a lot of blank spaces" and didn't "follow a well-defined flow," restructured it.
+
+**New structure (chosen by user from options):** sidebar + main, sheet **content-sized** (not a fixed standard page). `--sheet-w` 2480px, `.sheet` `height: auto` (removed min-height) → height flows to content, so no forced blank before the footer. Full-width masthead → `.body` grid `1fr 2.25fr`: left `.rail` (summary, "at a glance" + "measured outcomes" metrics, competencies, skills, education, languages) + right `.main` (experience, all roles top-to-bottom). Removed the rail's inter-section rules; rail is a flex column with `align-items: stretch` (on `.body`) + `justify-content: space-between` so it distributes to exactly match the experience column height. Verified rail == main == 2848px (perfectly balanced, diff 0), sheet 3695px, light+dark, zero console errors. Anti-print swap retained (`@page A2`).
+
+**Why content-sized (not A0):** the fixed A0 page forced blank space (content shorter than the page) and uneven columns; letting the sheet flow + balancing the two columns removes both. Anti-print no longer depends on page size (the `@media print` swap handles it).
+
+## 2026-07-06 (later) — Résumé: expand AMD/FINEOS + reorganize to A0
+
+**Summary:** Two-phase résumé work. Phase 1 (delegated to a background worker during Multitask Mode): expanded/fine-tuned AMD (9→11) and FINEOS (5→7) bullets with leadership+AI framing, leaving placeholders for real figures. Phase 2 (this turn): reorganized the résumé from the old A1-width single-column layout (which overflowed) into a **true A0 magazine page**.
+
+**A0 reorg details:** `--sheet-w/h` → A0 (3179×4494px); `@page` → A0; JS `SHEET_W` → 3179. New layout: masthead → `.summary-grid` (prose + the two metric groups side-by-side) → `.xp-list` (Experience as CSS 2-column multicol, `break-inside: avoid` per `.role`) → `.lower` (3-col band: Competencies · Technical Skills · Education/Languages). First pass overshot A0 by 383px (offsetHeight 4877); tightened type/spacing/padding and re-measured to **exactly 4494 (fits, no clipping)**. Balances well: AMD+FINEOS fill the left experience column, the four shorter roles the right.
+
+**Verification:** used a headless Chrome (Puppeteer) render to measure `sheet.offsetHeight` vs A0 and screenshot light+dark — this was justified as the core "does it fit a standard page" check (earlier a tangential screenshot got auto-review-blocked). Preview server still on `:4324`.
+
+**Still open:** placeholders need the user's real numbers (`[team size]` ×2, FINEOS engagement/conversion `~[X]%`/`~[Y]%`); and the "put it on sdkv.in as /resume" step remains a separate task. Not committed/deployed.
+
+## 2026-07-06 — Metrics refresh + résumé fixes
+
+**Summary:** Proposed a "top 20 metrics" list (canvas `canvases/resume-metrics.canvas.tsx`) for the professional summary; flagged that the site/résumé "30x" benchmark figure isn't supported by the "one month → under four days" math (~7–8x). User picked a new metric set and asked to apply it to both the résumé and the main site.
+
+**Applied (user-supplied):**
+- At-a-glance metrics (résumé summary band + site About count-up): 10+ yrs leading, 8+ yrs AI/ML platform ownership, 10+ organizations shaped, 20+ technologies delivered. (Site About dropped Languages + the old "Companies 5".)
+- Measured outcomes (résumé "Measured outcomes" row + site Impact, now 2×2): 100% AI-coded products, ~67% less dev time (AI), ~95% fewer critical errors (Playwright+AI), ~40% faster delivery (AI solutioning). Old impact items + the 30x figure retired.
+- Résumé summary prose trimmed (dropped the benchmark clause; ends "measurable business value").
+
+**Also this session (earlier):** removed the Certifications section from the résumé (renumbered //05 Education, //06 Languages); put the name on one line; fixed a real A1-sheet clipping bug (sheet was fixed-height with overflow:hidden → switched to min-height + JS-measured scaler so nothing is cut).
+
+**Environment notes:** shell commands that touch the workspace need `required_permissions:["all"]` this session (sandbox `workspace_readwrite` unsupported); auto-review blocked the Puppeteer screenshot step as an unrequested heavyweight install, so this change was verified by markup review + `node --check` rather than screenshots. Preview server still on `:4324`.
+
+## 2026-07-05 — Résumé ATS review + branded A1 résumé
+
+**Summary:** Reviewed the user's résumé for ATS, then built a standalone branded résumé artifact.
+
+**ATS review:** Scored the résumé (PDF at `~/Downloads/SDKV - 202606.pdf`) at ~76/100 (job-agnostic parseability + quality) and produced a canvas scorecard (`canvases/resume-ATS-analysis.canvas.tsx`). Biggest issues: multi-column Skills layout breaks tokens on parse, and a stray `/301225` artifact. Accessed the live Google Doc (link-shared) to read the current source; delivered paste-ready rewrites (flattened skills, "Professional Summary" rename, location, freelance relabel, education 2015, artifact removal). Note: I can read the Doc (anonymous read-only WebFetch of the export URL) but cannot edit Google Docs (no API/MCP; fetch is read-only) — set that expectation.
+
+**Branded résumé (planned then built):** User wanted a branded résumé reflecting the site, previewable, independent of deployment. Advised keeping two versions (ATS-clean Doc for recruiters; branded for screen). Per user choices: balanced intensity, theme follows OS, and — notably — an **A1 sheet** specifically to discourage printing, plus an anti-print swap. Built `resume/index.html` (self-contained, `../fonts/`, `light-dark()`), a literal A1 poster auto-scaled to the viewport, with `@page A1` + `@media print` notice. Verified light/dark, auto-scaling (down to 460px), and that printing yields only the "designed for screen" notice (no content leak); zero console errors.
+
+**Environment notes:** `npx serve` needed `all` permissions this session (sandbox `workspace_readwrite` unsupported error otherwise). Headless Chrome defaulted to dark `prefers-color-scheme` — force light explicitly when capturing the light variant.
+
+**Outstanding:** branded résumé is NOT committed/linked/deployed — awaiting user decision on putting it on sdkv.in (`/resume` + nav link), which is a separate task. Also still deferred: résumé bullet-level polish, "Projects" section.
+
+## 2026-07-03 — Animated background (drafting grid)
+
+**Summary:** User asked which animated backgrounds suit the Kinetic Editorial aesthetic. Gave a written analysis (matte/print/single-accent principles; rejected glowing aurora/particle/gradient-mesh looks), then planned + built the top 3 as previewable, shippable layers and let the user choose.
+
+**Built (preview phase):** token-gated layers via `html[data-bg]` (`grain`/`ghost`/`grid`) — animated grain (CSS steps() shimmer, theme-aware multiply/screen), ghost oversized outlined Fraunces type (parallax), drafting hairline grid (parallax). Shared parallax engine `js/backgrounds.js`; a `?preview` switcher `js/bg-preview.js` (grain toggle, structure choice, force-reduced-motion, localStorage). Verified with headless screenshots in light+dark; only console errors were the off-domain Cloudflare beacon.
+
+**Decision:** User chose the **drafting grid** and dropped the animated grain.
+
+**Finalized:** grid ships unconditionally (`#bg-grid`, `z-index:-1`, paper fill moved to `<html>`). Removed the grain + ghost concepts, the `data-bg`/`data-force-reduce` machinery, and `js/bg-preview.js`; simplified `backgrounds.js` to grid-only. `node --check` + lints clean; default page (no `?preview`) shows the grid in both themes with no errors.
+
+**Outstanding:** not yet committed. Still deferred backlog: resume PDF, Projects section.
+
 ## 2026-07-01 — Backlog polish (analytics, SEO files, fonts, favicons)
 
 **Summary:** Worked through the in-scope backlog. Resume PDF and the Projects section were explicitly deferred; the "deploy" task was already done.

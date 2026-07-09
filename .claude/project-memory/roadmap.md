@@ -30,7 +30,7 @@
 
 ### Content
 - Add a "Projects" section (freelance work or notable side projects)
-- Add a downloadable resume PDF link in the contact or hero section
+- ~~Downloadable résumé~~ — DONE: `/resume` page with a Normal ⇄ ATS mode toggle; per-mode/theme PDF downloads (`resume-light/dark/ats.pdf`), linked from Contact. (Pending commit/deploy.)
 - Update experience when new roles / milestones are reached
 - Add PMP certification badge when certified
 

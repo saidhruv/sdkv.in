@@ -23,6 +23,7 @@ The red is the sole accent — used for italic display words, units (+), section
 ## Typography
 - **Display/headings:** `'Fraunces', Georgia, serif` — variable, optical-sizing, weights 300/400/600/900, incl. italic
 - **Meta/UI/labels:** `'JetBrains Mono', monospace`
+- **Accessible face:** `'Atkinson Hyperlegible'` (400/700 + italics, self-hosted) — the only font in the résumé's **ATS mode** document (parser-friendly single-column, always-light `.doc` on `/resume`); the top bar keeps the Italiana + JetBrains Mono chrome. Not part of the main site's kinetic type.
 - **Signature moves:**
   - Display at weight 900, very tight tracking (-0.04em), line-height 0.86
   - Italic weight-300 words in red for emphasis ("of", "ships.", "stack", "that matters.")
@@ -45,6 +46,7 @@ The red is the sole accent — used for italic display words, units (+), section
 - Container max-width 1280px; padding `clamp(20px, 5vw, 64px)`
 - Section padding `clamp(70px, 11vw, 150px)`
 - **Film grain:** fixed SVG-noise overlay at ~3.5% opacity, `mix-blend-mode: multiply`
+- **Drafting-grid background:** a single `#bg-grid` layer behind all content (`z-index:-1`; paper fill moved to `<html>`). Three tiers of hairlines in `--line` for depth: fine cells every `--cell` (`clamp(22px,2.4vw,34px)`, ~35% line), mid rules every 4 cells (~70%), bold major rules every 12 cells (full). Drifts toward the cursor and has a continuous **scroll parallax** (grid moves at ~18% of scroll, wrapped by the 12-cell period in `js/backgrounds.js` so it loops seamlessly); static under reduced motion. Chosen over animated grain and ghost-type concepts (previewed then removed).
 - **Bordered grids:** metrics (2×2) and capabilities (4-col) use 1px gaps over a `--line` background to draw internal rules — editorial table feel
 - **Marquee strip:** mono keywords between two strong `--line-2` rules
 - Numbered sections: `// 01 — The story`, `// 02 — Selected work`, etc.
@@ -60,6 +62,8 @@ The red is the sole accent — used for italic display words, units (+), section
 
 ## Component Patterns
 - **Topbar:** sticky, blurred, name left + mono nav + theme toggle + burger; `.scrolled` adds bottom rule
+- **Footer:** shares the topbar's surface — translucent paper (`color-mix(var(--paper) 82%, transparent)`) + `blur(10px)` so the drafting grid shows through; top rule in `--line-2`
+- **Résumé paper (résumé page only):** the Normal poster (`.scaler`, 75% viewport width) and ATS `.doc` carry a soft two-layer drop shadow to read as a physical sheet — a deliberate, screen-only exception to the site's no-shadows rule (stripped from the built PDFs)
 - **Theme toggle:** cycles System/Light/Dark, icon via `[data-theme-mode]`
 - **Work entry:** `.entry` grid (num · company · meta) with expanding `.detail` + tag pills
 - **Capability:** `.cap` cell, numbered red superscript + mono list
