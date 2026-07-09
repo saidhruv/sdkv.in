@@ -26,11 +26,9 @@ const SITE_DATA = {
     { t: 'Design & Tools', items: ['Figma', 'Adobe Photoshop', 'Jira', 'Asana', 'Cybersecurity Awareness'] }
   ],
   impact: [
-    { n: '30×', t: 'Faster benchmark automation', p: 'Re-engineered AMD’s benchmarking pipeline and data warehouse, slashing the automation cycle from a month to under four days.' },
-    { n: '6.5', t: 'Years of full AI platform ownership', p: 'At FINEOS / Spraoi, owned the entire AI/ML platform lifecycle — pipelines, training accelerators, personalization, workflow automation.' },
-    { n: '♿', t: 'WCAG-compliant inclusive transport', p: 'Led end-to-end development of an accessible cab aggregator with full WCAG compliance for riders with disabilities.' },
-    { n: '20%', t: 'Faster time-to-market at HPE', p: 'Rapid prototyping and cross-platform delivery cut enterprise partner launch timelines by 20%.' },
-    { n: '∞', t: 'Agentic AI patterns established', p: 'Defined and evangelized agent-oriented architectural patterns at AMD — adaptive, explainable, auditable AI reasoning at scale.' },
-    { n: 'LLM', t: 'Natural-language benchmark product', p: 'Technical lead for an LLM-powered product letting users ask questions about benchmarks and performance data in plain language.' }
+    { n: '100%', t: 'AI-coded products delivered', p: 'Recent products shipped end to end through AI-assisted development — from architecture to release.' },
+    { n: '~67%', t: 'Less development time', p: 'AI woven through the delivery workflow cut development time by roughly two-thirds.' },
+    { n: '~95%', t: 'Fewer critical errors', p: 'Automated end-to-end testing with Playwright and AI caught critical defects before release.' },
+    { n: '~40%', t: 'Faster delivery', p: 'Sharper solutioning combined with AI accelerated delivery across the board.' }
   ]
 };

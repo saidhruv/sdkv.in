@@ -187,6 +187,7 @@ const Main = (() => {
   function init() {
     if (typeof Kinetic !== 'undefined' && Kinetic.init) Kinetic.init();
     if (typeof Reveal !== 'undefined' && Reveal.init) Reveal.init();
+    if (typeof Backgrounds !== 'undefined' && Backgrounds.init) Backgrounds.init();
     initThemeToggle();
     initFaviconLoop();
     initBurger();
