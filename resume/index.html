@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sai Dhruva K V — Résumé</title>
+  <meta name="description" content="Résumé of Sai Dhruva K V — AI &amp; Technology Leader and Consulting Architect at AMD." />
+  <meta name="robots" content="noindex" />
+
+  <link id="favicon" rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <script>
+    /* Honor the site's saved theme (shared localStorage key) so the résumé matches
+       the mode the visitor picked on the main site (falls back to OS), and paint a
+       theme-aware SD favicon to match. */
+    (function () {
+      var dark = false;
+      try {
+        var m = localStorage.getItem('theme');
+        if (m === 'light' || m === 'dark') document.documentElement.style.colorScheme = m;
+        document.documentElement.dataset.themeMode = (m === 'light' || m === 'dark') ? m : 'system';
+        var rm = localStorage.getItem('resumeMode');
+        document.documentElement.dataset.resumeMode = (rm === 'ats') ? 'ats' : 'normal';
+        dark = m === 'dark' ? true : (m === 'light' ? false : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches));
+      } catch (e) {}
+      try {
+        var S = 'M12.99 7.87L12.89 8.12Q10.57 7.23 8.52 7.23Q6.46 7.23 5.32 8.10Q4.17 8.96 4.17 10.49L4.17 10.49Q4.17 12.35 6.11 13.37L6.11 13.37Q6.97 13.81 8.01 14.18Q9.04 14.55 10.08 15.01Q11.13 15.46 12.00 16.05Q12.86 16.64 13.40 17.67Q13.93 18.70 13.93 20.30Q13.93 21.89 13.04 23.01Q12.15 24.13 10.89 24.53Q9.63 24.92 7.94 24.92L7.94 24.92Q4.81 24.92 2.59 23.37L2.59 23.37L2.72 23.16Q3.56 23.83 4.90 24.25Q6.24 24.67 7.64 24.67L7.64 24.67Q9.70 24.67 11.17 23.71Q12.63 22.76 12.63 20.90L12.63 20.90Q12.63 18.86 10.70 17.71L10.70 17.71Q9.83 17.20 8.80 16.76Q7.76 16.33 6.72 15.86Q5.67 15.39 4.81 14.80L4.81 14.80Q2.87 13.53 2.87 11.18L2.87 11.18Q2.87 9.32 4.12 8.16Q5.37 7 7.88 7Q10.39 7 12.99 7.87L12.99 7.87Z';
+        var D = 'M16.61 7.08L18.65 7.08Q19.77 7.03 20.86 7.03Q21.94 7.03 23.15 7.25Q24.36 7.48 25.55 8.11Q26.73 8.73 27.56 9.72Q28.39 10.70 28.90 12.30Q29.41 13.91 29.41 16.20Q29.41 18.50 28.66 20.32Q27.91 22.14 26.61 23.11L26.61 23.11Q24.08 25.00 20.51 25.00L20.51 25.00Q19.26 25.00 17.89 24.90L17.89 24.90L16.61 24.90L16.61 7.08ZM18.73 7.36L18.73 24.69Q19.26 24.75 20.08 24.75Q20.90 24.75 21.30 24.72Q21.71 24.69 22.42 24.50Q23.14 24.31 23.75 23.98Q24.36 23.65 25.04 23.00Q25.71 22.35 26.20 21.46L26.20 21.46Q27.29 19.37 27.29 16L27.29 16Q27.29 13.60 26.71 11.86Q26.12 10.11 25.37 9.27Q24.62 8.43 23.55 7.93Q22.48 7.43 21.84 7.36Q21.20 7.28 20.36 7.28Q19.52 7.28 18.73 7.36L18.73 7.36Z';
+        var bg = dark ? '#111113' : '#f3efe7', fg = dark ? '#f4f4f5' : '#16140f';
+        var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='" + bg + "'/><path fill='" + fg + "' d='" + S + "'/><path fill='" + fg + "' d='" + D + "'/></svg>";
+        var link = document.getElementById('favicon');
+        if (link) link.setAttribute('href', 'data:image/svg+xml,' + encodeURIComponent(svg));
+      } catch (e) {}
+    })();
+  </script>
+
+  <style>
+    /* Self-hosted fonts (shared with the site) */
+    @font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 300 900; font-display: swap; src: url('../fonts/fraunces-latin.woff2') format('woff2'); }
+    @font-face { font-family: 'Fraunces'; font-style: italic; font-weight: 300 900; font-display: swap; src: url('../fonts/fraunces-italic-latin.woff2') format('woff2'); }
+    @font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400 500; font-display: swap; src: url('../fonts/jetbrains-mono-latin.woff2') format('woff2'); }
+    @font-face { font-family: 'Italiana'; font-style: normal; font-weight: 400; font-display: swap; src: url('../fonts/italiana-latin.woff2') format('woff2'); }
+    /* Accessible face — used only by the ATS-mode document (.doc) */
+    @font-face { font-family: 'Atkinson Hyperlegible'; font-style: normal; font-weight: 400; font-display: swap; src: url('../fonts/atkinson-latin.woff2') format('woff2'); }
+    @font-face { font-family: 'Atkinson Hyperlegible'; font-style: normal; font-weight: 700; font-display: swap; src: url('../fonts/atkinson-bold-latin.woff2') format('woff2'); }
+    @font-face { font-family: 'Atkinson Hyperlegible'; font-style: italic; font-weight: 400; font-display: swap; src: url('../fonts/atkinson-italic-latin.woff2') format('woff2'); }
+    @font-face { font-family: 'Atkinson Hyperlegible'; font-style: italic; font-weight: 700; font-display: swap; src: url('../fonts/atkinson-bold-italic-latin.woff2') format('woff2'); }
+
+    :root {
+      color-scheme: light dark;
+      --paper:   light-dark(#f3efe7, #111113);
+      --paper-2: light-dark(#ebe5d9, #1a1a1d);
+      --ink:     light-dark(#16140f, #f4f4f5);
+      --muted:   light-dark(#6b6457, #a1a1aa);
+      --faint:   light-dark(#9a9486, #71717a);
+      --line:    light-dark(#d8d2c6, #2a2a2e);
+      --line-2:  light-dark(#16140f, #f4f4f5);
+      --red:     light-dark(#e8472b, #ff6347);
+      --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+      --mono: 'JetBrains Mono', ui-monospace, monospace;
+
+      /* Poster width is fixed; height flows to the content (no forced blank space) */
+      --sheet-w: 2480px;
+      --sheet-h: 3300px; /* rough initial estimate; JS sets the real scaled height */
+      --s: 0.5; /* set by JS to fit the viewport */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { -webkit-text-size-adjust: 100%; background: var(--paper); }
+    body {
+      font-family: var(--serif);
+      color: var(--ink);
+      background: transparent; /* transparent so the #bg-grid (on the <html> paper) shows */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* Drafting-grid background (mirrors the main site) — behind content, above the
+       <html> paper fill; parallaxed by the inline script via --bg-x / --bg-y. */
+    .bg-layer { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+    #bg-grid { --cell: clamp(22px, 2.4vw, 34px); opacity: 0.65; }
+    #bg-grid::before {
+      content: ''; position: absolute; inset: -460px;
+      background-image:
+        linear-gradient(to right, color-mix(in srgb, var(--line) 35%, transparent) 1px, transparent 1px),
+        linear-gradient(to bottom, color-mix(in srgb, var(--line) 35%, transparent) 1px, transparent 1px),
+        linear-gradient(to right, color-mix(in srgb, var(--line) 70%, transparent) 1px, transparent 1px),
+        linear-gradient(to bottom, color-mix(in srgb, var(--line) 70%, transparent) 1px, transparent 1px),
+        linear-gradient(to right, var(--line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+      background-size:
+        var(--cell) var(--cell),
+        var(--cell) var(--cell),
+        calc(var(--cell) * 4) calc(var(--cell) * 4),
+        calc(var(--cell) * 4) calc(var(--cell) * 4),
+        calc(var(--cell) * 12) calc(var(--cell) * 12),
+        calc(var(--cell) * 12) calc(var(--cell) * 12);
+      transform: translate3d(var(--bg-x, 0px), var(--bg-y, 0px), 0);
+      will-change: transform;
+    }
+
+    /* Film-grain texture (shared motif) */
+    body::after {
+      content: ''; position: fixed; inset: 0; z-index: 50; pointer-events: none;
+      opacity: 0.035; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    @media (prefers-color-scheme: dark) { body::after { mix-blend-mode: screen; opacity: 0.05; } }
+
+    /* --- Sheet scaling (width fixed, height = content) ------------------- */
+    .stage { display: flex; justify-content: center; padding: 84px 20px 40px; }
+    .scaler {
+      width: calc(var(--sheet-w) * var(--s)); height: calc(var(--sheet-h) * var(--s)); position: relative;
+      /* Soft paper drop shadow (screen-space, so the poster's scale() doesn't distort it) */
+      box-shadow:
+        0 2px 6px light-dark(rgba(22, 20, 15, 0.10), rgba(0, 0, 0, 0.40)),
+        0 30px 70px -24px light-dark(rgba(22, 20, 15, 0.30), rgba(0, 0, 0, 0.65));
+    }
+    .sheet {
+      position: absolute; top: 0; left: 0;
+      width: var(--sheet-w); height: auto;
+      transform: scale(var(--s)); transform-origin: top left;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 130px 120px 110px;
+    }
+
+    /* --- Masthead (full width) ------------------------------------------ */
+    .brandrow { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 44px; }
+    .mark { font-family: 'Italiana', Georgia, serif; font-size: 42px; letter-spacing: 8px; color: var(--ink); }
+    .doc-tag { font-family: var(--mono); font-size: 20px; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); }
+
+    .name { font-family: var(--serif); font-weight: 900; font-size: 150px; line-height: 0.9; letter-spacing: -0.04em; white-space: nowrap; }
+    .title { font-family: var(--mono); font-weight: 500; font-size: 24px; letter-spacing: 3px; text-transform: uppercase; color: var(--ink); margin-top: 28px; }
+    .specialties { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 32px; color: var(--muted); margin-top: 14px; }
+    .specialties .dot { color: var(--red); font-style: normal; margin: 0 11px; }
+    .contact { font-family: var(--mono); font-size: 20px; letter-spacing: 1px; color: var(--ink); margin-top: 30px; display: flex; flex-wrap: wrap; gap: 6px 0; }
+    .contact .dot { color: var(--red); margin: 0 14px; }
+    .contact a:hover { color: var(--red); }
+
+    .rule { height: 2px; background: var(--line-2); margin: 40px 0; }
+    .rule.thin { height: 1px; background: var(--line); margin: 28px 0; }
+
+    /* --- Section scaffold ------------------------------------------------ */
+    .label { font-family: var(--mono); font-size: 20px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 22px; }
+    .label .num { color: var(--red); margin-right: 12px; }
+
+    /* --- Body: rail (left) + main (right) -------------------------------- */
+    .body { display: grid; grid-template-columns: 1fr 2.25fr; gap: 100px; align-items: stretch; }
+    /* Rail stretches to the experience column's height; sections distribute to fill (no blank). */
+    .rail { display: flex; flex-direction: column; justify-content: space-between; gap: 46px; }
+
+    /* Left rail */
+    .summary { font-size: 24px; line-height: 1.55; color: var(--ink); }
+    .summary em { font-style: italic; color: var(--red); }
+    .metric-group { margin-top: 30px; }
+    .metric-label { font-family: var(--mono); font-size: 18px; letter-spacing: 2px; text-transform: uppercase; color: var(--red); margin-bottom: 16px; }
+    .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 30px; }
+    .metric .n { font-family: var(--serif); font-weight: 900; font-size: 58px; line-height: 1; color: var(--red); letter-spacing: -0.02em; }
+    .metric .l { font-family: var(--mono); font-size: 16px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
+
+    .comp { display: flex; flex-wrap: wrap; gap: 12px; }
+    .comp span { font-family: var(--mono); font-size: 18px; letter-spacing: 0.5px; color: var(--ink); border: 1px solid var(--line); border-radius: 3px; padding: 7px 13px; }
+    .skillgroup { margin-bottom: 16px; }
+    .skillgroup:last-child { margin-bottom: 0; }
+    .skillgroup h4 { font-family: var(--mono); font-size: 18px; letter-spacing: 1px; text-transform: uppercase; color: var(--red); margin-bottom: 7px; font-weight: 500; }
+    .skillgroup p { font-size: 21px; line-height: 1.45; color: var(--ink); }
+    .simple { font-size: 23px; line-height: 1.55; color: var(--ink); }
+    .simple strong { font-weight: 600; }
+    .muted { color: var(--muted); font-family: var(--mono); font-size: 18px; letter-spacing: 1px; }
+
+    /* Right main — experience */
+    .role { margin: 0 0 36px; padding-left: 28px; border-left: 2px solid var(--line); }
+    .role:last-child { margin-bottom: 0; }
+    .co { font-family: var(--serif); font-weight: 600; font-size: 42px; letter-spacing: -0.01em; line-height: 1; }
+    .role .meta { font-family: var(--mono); font-size: 20px; color: var(--muted); margin: 12px 0 16px; line-height: 1.5; }
+    .role .meta .r { color: var(--ink); }
+    .role ul { list-style: none; }
+    .role li { position: relative; font-size: 24px; line-height: 1.5; padding-left: 32px; margin-bottom: 11px; color: var(--ink); }
+    .role li::before { content: ''; position: absolute; left: 0; top: 16px; width: 14px; height: 2px; background: var(--red); }
+
+    /* --- Footer --------------------------------------------------------- */
+    .foot { margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: baseline; font-family: var(--mono); font-size: 19px; letter-spacing: 1px; color: var(--faint); }
+    .foot .site { color: var(--ink); }
+
+    /* --- ATS mode: single-column accessible document (Atkinson, always light) --- */
+    .doc { display: none; }                                   /* shown only in ATS mode */
+    :root[data-resume-mode="ats"] .scaler { display: none; }
+    :root[data-resume-mode="ats"] .doc { display: block; }
+    :root[data-resume-mode="ats"] body::after { display: none; } /* no film grain in ATS */
+    .doc {
+      color-scheme: light;
+      width: 100%; max-width: 900px; margin: 0 auto;
+      background: #f3efe7; color: #16140f;
+      border: 1px solid #d8d2c6;
+      /* Soft paper drop shadow (ATS doc is always light) */
+      box-shadow:
+        0 2px 6px rgba(22, 20, 15, 0.10),
+        0 30px 70px -24px rgba(22, 20, 15, 0.30);
+      padding: clamp(30px, 5vw, 68px);
+      font-family: 'Atkinson Hyperlegible', Verdana, Arial, sans-serif;
+      font-size: 16px; line-height: 1.5;
+      --ink: #16140f; --muted: #6b6457; --line: #d8d2c6; --red: #e8472b;
+    }
+    .doc h1 { font-family: inherit; font-weight: 700; font-size: clamp(34px, 6vw, 54px); letter-spacing: -0.01em; line-height: 1.05; color: var(--ink); }
+    .doc .headline { font-size: clamp(15px, 2.4vw, 19px); font-weight: 700; margin-top: 10px; }
+    .doc .doc-spec { font-size: 15px; color: var(--muted); margin-top: 6px; }
+    .doc .doc-contact { font-size: 14px; margin-top: 12px; color: var(--ink); }
+    .doc .doc-contact a:hover { color: var(--red); }
+    .doc .dot { color: var(--red); margin: 0 8px; }
+    .doc .hr { height: 2px; background: var(--ink); margin: 22px 0; }
+    .doc section { margin-top: 26px; }
+    .doc h2 { font-family: inherit; font-size: 15px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink); padding-bottom: 6px; border-bottom: 2px solid var(--red); margin-bottom: 14px; }
+    .doc p { margin-bottom: 8px; }
+    .doc .doc-summary { font-size: 16.5px; }
+    .doc .highlights { color: var(--muted); font-size: 14.5px; }
+    .doc .kv { margin-bottom: 6px; }
+    .doc .kv strong, .doc .highlights strong { color: var(--red); }
+    .doc .job { margin-bottom: 18px; }
+    .doc .job:last-child { margin-bottom: 0; }
+    .doc .job h3 { font-family: inherit; font-size: 19px; font-weight: 700; color: var(--ink); }
+    .doc .job .meta { font-family: inherit; font-size: 14px; color: var(--muted); margin: 2px 0 8px; }
+    .doc ul { list-style: none; }
+    .doc .job li { position: relative; padding-left: 20px; margin-bottom: 6px; color: var(--ink); }
+    .doc .job li::before { content: ''; position: absolute; left: 0; top: 11px; width: 10px; height: 2px; background: var(--red); }
+    .doc .edu strong { font-weight: 700; }
+    .doc .job, .doc .edu, .doc .masthead { break-inside: avoid; page-break-inside: avoid; }
+    .doc h2 { break-after: avoid; page-break-after: avoid; }
+
+    /* --- Mode toggle (Normal | ATS) — themed segmented control ----------- */
+    .mode-toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 2px; overflow: hidden; }
+    .mode-toggle button { font-family: var(--mono); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; padding: 8px 12px; background: transparent; color: var(--muted); border: none; cursor: pointer; line-height: 1; transition: background-color 0.2s, color 0.2s; }
+    .mode-toggle button + button { border-left: 1px solid var(--line); }
+    .mode-toggle button:hover { color: var(--ink); }
+    :root[data-resume-mode="normal"] .mode-toggle [data-mode-btn="normal"],
+    :root[data-resume-mode="ats"] .mode-toggle [data-mode-btn="ats"] { background: var(--ink); color: var(--paper); }
+
+    /* --- Header bar (Back · wordmark · mode + theme toggle + Download) ---------- */
+    .rz-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px;
+      padding: 12px clamp(14px, 3vw, 32px);
+      background: color-mix(in srgb, var(--paper) 86%, transparent);
+      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    .rz-back { justify-self: start; display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: var(--ink); }
+    .rz-back svg { width: 15px; height: 15px; }
+    .rz-back:hover { color: var(--red); }
+    .rz-wm { justify-self: center; font-family: 'Italiana', Georgia, serif; font-size: 22px; letter-spacing: 6px; text-indent: 6px; color: var(--ink); white-space: nowrap; }
+    .rz-actions { justify-self: end; display: inline-flex; align-items: center; gap: 12px; }
+    .theme-toggle { width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; border-radius: 2px; transition: border-color 0.2s var(--ease); }
+    .theme-toggle:hover { border-color: var(--red); }
+    .theme-toggle svg { width: 18px; height: 18px; display: none; }
+    :root[data-theme-mode="light"] .theme-toggle [data-icon="light"] { display: block; }
+    :root[data-theme-mode="dark"] .theme-toggle [data-icon="dark"] { display: block; }
+    :root[data-theme-mode="system"] .theme-toggle [data-icon="system"] { display: block; }
+    :root:not([data-theme-mode]) .theme-toggle [data-icon="system"] { display: block; }
+    .dl-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 13px; letter-spacing: 1px; text-transform: uppercase;
+      padding: 10px 16px; background: var(--red); color: var(--paper); border: 1px solid var(--red); border-radius: 3px;
+      transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease);
+    }
+    .dl-btn:hover { background: var(--ink); border-color: var(--ink); }
+
+    /* --- Page footer (matches the main site) ---------------------------- */
+    .rz-foot { border-top: 1px solid var(--line-2); margin-top: 8px; }
+    .rz-foot-inner { max-width: 1100px; margin: 0 auto; padding: 40px clamp(16px, 4vw, 40px) 56px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); }
+
+    /* --- Anti-print (BOTH modes): printing shows the "designed for screen" notice,
+       never the résumé. The offline build tool (tools/build-resume-pdf.mjs) injects an
+       override to re-reveal the ATS document so resume-ats.pdf can still be generated. */
+    .print-notice { display: none; }
+    @media print {
+      @page { size: A4; margin: 0; }
+      body::after { display: none !important; }
+      #bg-grid { display: none !important; }
+      .rz-bar { display: none !important; }
+      .rz-foot { display: none !important; }
+      .stage { display: none !important; }
+      .print-notice {
+        display: flex; align-items: center; justify-content: center; text-align: center;
+        min-height: 100vh; background: #f3efe7; color: #16140f; padding: 60px;
+      }
+      .print-notice .pn-mark { font-family: 'Italiana', Georgia, serif; font-size: 64px; letter-spacing: 12px; margin-bottom: 40px; }
+      .print-notice h2 { font-family: var(--serif); font-weight: 900; font-size: 52px; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 28px; }
+      .print-notice h2 em { font-style: italic; color: #e8472b; }
+      .print-notice p { font-family: var(--mono); font-size: 22px; letter-spacing: 1px; line-height: 1.8; color: #6b6457; }
+      .print-notice p strong { color: #e8472b; }
+    }
+
+    /* --- Mobile: reflow the scaled poster into a readable single column -- */
+    @media (max-width: 700px) {
+      .stage { padding: 64px 10px 24px; }
+      .rz-bar { padding: 9px 12px; gap: 10px; }
+      .rz-wm { display: none; }
+      .rz-back span { display: none; }
+      .dl-btn { font-size: 12px; padding: 8px 12px; }
+      .theme-toggle { width: 34px; height: 34px; }
+      .scaler { width: 100% !important; height: auto !important; }
+      .sheet { position: static; transform: none !important; width: 100% !important; min-height: 0; height: auto; padding: 36px 20px; }
+      .brandrow { margin-bottom: 26px; }
+      .mark { font-size: 30px; letter-spacing: 6px; }
+      .doc-tag { font-size: 13px; }
+      .name { font-size: clamp(40px, 13vw, 66px); line-height: 0.95; white-space: normal; }
+      .title { font-size: 13px; margin-top: 18px; }
+      .specialties { font-size: 18px; margin-top: 12px; }
+      .contact { font-size: 13px; margin-top: 20px; }
+      .rule { margin: 28px 0; }
+      .body { grid-template-columns: 1fr; gap: 40px; }
+      .rail { gap: 34px; }
+      .label { font-size: 13px; margin-bottom: 16px; }
+      .summary { font-size: 16px; line-height: 1.55; }
+      .metrics { gap: 18px 20px; }
+      .metric .n { font-size: 40px; }
+      .metric .l { font-size: 11px; }
+      .comp span { font-size: 13px; padding: 6px 11px; }
+      .skillgroup p { font-size: 15px; }
+      .simple { font-size: 15px; }
+      .muted { font-size: 13px; }
+      .co { font-size: 26px; }
+      .role { padding-left: 20px; margin-bottom: 26px; }
+      .role .meta { font-size: 13px; margin: 8px 0 12px; }
+      .role li { font-size: 15px; padding-left: 22px; margin-bottom: 9px; }
+      .role li::before { top: 11px; width: 10px; }
+      .foot { flex-direction: column; gap: 8px; font-size: 13px; margin-top: 40px; padding-top: 28px; align-items: flex-start; }
+      .dl-btn { top: 12px; right: 12px; font-size: 12px; padding: 10px 16px; }
+      .mode-toggle button { padding: 7px 9px; font-size: 11px; }
+      .doc { padding: 24px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="bg-grid" class="bg-layer" aria-hidden="true"></div>
+  <header class="rz-bar">
+    <a class="rz-back" href="/" aria-label="Back to sdkv.in">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      <span>Back</span>
+    </a>
+    <a class="rz-wm" href="/" aria-label="Sai Dhruva K V — home">SAI DHRUVA K V</a>
+    <div class="rz-actions">
+      <div class="mode-toggle" id="mode-toggle" role="group" aria-label="Résumé mode">
+        <button type="button" data-mode-btn="normal" aria-label="Normal résumé">Normal</button>
+        <button type="button" data-mode-btn="ats" aria-label="ATS-friendly résumé">ATS</button>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Theme: follow system">
+        <svg data-icon="system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <svg data-icon="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg data-icon="dark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <a class="dl-btn" id="dl-btn" href="/resume/resume-light.pdf" download="Sai Dhruva K V - Resume.pdf" aria-label="Download résumé as PDF">Download PDF</a>
+    </div>
+  </header>
+
+  <div class="stage">
+    <div class="scaler" id="scaler">
+      <main class="sheet" id="sheet">
+        <!-- Masthead -->
+        <div class="brandrow">
+          <span class="mark">SD</span>
+          <span class="doc-tag">Résumé · 2026</span>
+        </div>
+        <h1 class="name">Sai Dhruva K V</h1>
+        <p class="title">AI &amp; Technology Leader — Architecting Intelligent Platforms at Scale</p>
+        <p class="specialties">Generative AI <span class="dot">·</span> Enterprise Architecture <span class="dot">·</span> Cloud Engineering <span class="dot">·</span> Organizational Transformation</p>
+        <p class="contact">
+          <span>Bengaluru, India</span><span class="dot">·</span>
+          <a href="tel:+918123166570">+91 8123 166 570</a><span class="dot">·</span>
+          <a href="mailto:sai_dhruv@hotmail.com">sai_dhruv@hotmail.com</a><span class="dot">·</span>
+          <a href="https://linkedin.com/in/saidhruv" rel="noopener noreferrer" target="_blank">linkedin.com/in/saidhruv</a><span class="dot">·</span>
+          <a href="https://sdkv.in" rel="noopener noreferrer" target="_blank">sdkv.in</a>
+        </p>
+
+        <div class="rule"></div>
+
+        <div class="body">
+          <!-- Left rail: summary, metrics, competencies, skills, education, languages -->
+          <aside class="rail">
+            <div class="rail-block">
+              <div class="label"><span class="num">// 01</span> Professional Summary</div>
+              <p class="summary">AI &amp; Technology Leader and Enterprise Architect with 10+ years leading engineering teams, technology strategy, and organizational transformation at enterprise scale. Proven track record designing and governing AI platforms, agentic AI systems, and cloud-native architecture on AWS that turn strategy into <em>measurable business value</em>.</p>
+              <div class="metric-group">
+                <div class="metric-label">At a glance</div>
+                <div class="metrics">
+                  <div class="metric"><div class="n">10+</div><div class="l">Years leading at scale</div></div>
+                  <div class="metric"><div class="n">8+</div><div class="l">Years AI/ML platform ownership</div></div>
+                  <div class="metric"><div class="n">10+</div><div class="l">Organizations shaped</div></div>
+                  <div class="metric"><div class="n">20+</div><div class="l">Technologies delivered</div></div>
+                </div>
+              </div>
+              <div class="metric-group">
+                <div class="metric-label">Measured outcomes</div>
+                <div class="metrics">
+                  <div class="metric"><div class="n">100%</div><div class="l">AI-coded products</div></div>
+                  <div class="metric"><div class="n">~67%</div><div class="l">Less dev time with AI</div></div>
+                  <div class="metric"><div class="n">~95%</div><div class="l">Fewer critical errors</div></div>
+                  <div class="metric"><div class="n">~40%</div><div class="l">Faster delivery</div></div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="rail-block">
+              <div class="label"><span class="num">// 03</span> Core Competencies</div>
+              <div class="comp">
+                <span>Strategic Leadership</span>
+                <span>Technology Strategy</span>
+                <span>Enterprise Architecture</span>
+                <span>Organizational Transformation</span>
+                <span>Technical Vision &amp; Innovation</span>
+                <span>Agile Delivery</span>
+                <span>Product Roadmapping</span>
+                <span>Project Management</span>
+                <span>Risk Management &amp; Governance</span>
+                <span>Stakeholder Management</span>
+                <span>Vendor &amp; Contract Mgmt</span>
+                <span>Cross-Functional Team Leadership</span>
+                <span>Mentoring &amp; Coaching</span>
+                <span>Cybersecurity Awareness</span>
+              </div>
+            </div>
+
+
+            <div class="rail-block">
+              <div class="label"><span class="num">// 04</span> Technical Skills</div>
+              <div class="skillgroup"><h4>AI &amp; Data</h4><p>Generative AI, LLM Products, Agentic AI, NLP Analytics, ML Pipelines, Data Architecture, Data Standards, Data Analytics</p></div>
+              <div class="skillgroup"><h4>Cloud — AWS</h4><p>Lambda, API Gateway, CloudFormation, DynamoDB, CloudFront, CloudWatch, Cognito, S3</p></div>
+              <div class="skillgroup"><h4>Engineering</h4><p>ReactJS, Next.js, Node.js, React Native, iOS, Android, JavaScript, HTML, CSS, GraphQL, ElasticSearch, Python</p></div>
+              <div class="skillgroup"><h4>DevOps &amp; CI/CD</h4><p>Terraform, CircleCI, Jenkins, GitHub, Bitbucket</p></div>
+              <div class="skillgroup"><h4>Tools &amp; Design</h4><p>Jira, Asana, Figma, Adobe Photoshop</p></div>
+            </div>
+
+
+            <div class="rail-block">
+              <div class="label"><span class="num">// 05</span> Education</div>
+              <p class="simple"><strong>B.E., Mechanical Engineering</strong><br>Atria Institute of Technology, Bangalore<br>VTU, Belagavi, Karnataka, India <span class="muted">| 2015</span></p>
+            </div>
+
+
+            <div class="rail-block">
+              <div class="label"><span class="num">// 06</span> Languages</div>
+              <p class="simple">English <span class="muted">·</span> Hindi <span class="muted">·</span> Telugu <span class="muted">·</span> Kannada</p>
+            </div>
+          </aside>
+
+          <!-- Right main: experience, top to bottom -->
+          <section class="main">
+            <div class="label"><span class="num">// 02</span> Experience</div>
+
+            <article class="role">
+              <h3 class="co">AMD</h3>
+              <div class="meta"><span class="r">Consulting Architect</span> · via Infobell IT Solutions Pvt. Ltd.<br>February 2025 – Present</div>
+              <ul>
+                <li>Led architectural vision and technical strategy for agentic AI, guiding ~30 engineers through the full SDLC to turn AI strategy into production-grade performance-analytics platforms.</li>
+                <li>Architected and governed an enterprise AI data platform and data standards that made analytics explainable, reusable, and globally scalable across all business units.</li>
+                <li>Directed the design of agentic AI systems for context-aware benchmark analysis, enabling adaptive, self-directed reasoning over large, complex hardware-performance datasets.</li>
+                <li>Served as technical lead for an LLM-powered product that answers benchmark and performance questions in natural language — pairing hands-on model and prompt design with team direction.</li>
+                <li>Spearheaded agent-based pipelines for AI-augmented data validation, enrichment, and reasoning, cutting manual effort while improving accuracy, scalability, and throughput.</li>
+                <li>Delivered role- and entitlement-aware analytics applications that let stakeholders securely explore benchmark results through natural-language search and multi-dimensional performance comparison.</li>
+                <li>Cut benchmark automation from one month to under four days by re-architecting the Automated Benchmarking Platform, enterprise data warehouse, and end-to-end workflow.</li>
+                <li>Delivered products that are 100% AI-coded, using AI-assisted development to compress build time ~67% and accelerate delivery ~40% through AI-driven solutioning.</li>
+                <li>Hardened release quality by embedding AI-augmented Playwright testing into the delivery pipeline, reducing critical production errors ~95%.</li>
+                <li>Established AI governance guardrails — explainability, access control, and reuse — that de-risked enterprise adoption and kept analytics consistent and auditable across teams.</li>
+                <li>Mentored engineers and aligned cross-business-unit AI/ML initiatives onto shared platforms, standards, and delivery practices, lifting overall technical quality.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <h3 class="co">FINEOS <span style="font-weight:400;font-style:italic;color:var(--muted);font-size:0.62em;">(formerly Spraoi)</span></h3>
+              <div class="meta"><span class="r">Senior Software Developer</span> · FINEOS Corporate Holdings, Ireland<br>March 2018 – January 2025</div>
+              <ul>
+                <li>Led cross-functional teams of ~20 engineers, designers, and QA to deliver an enterprise insurance portal spanning product showcase, e-commerce, document management, and claims tracking.</li>
+                <li>Owned the AI/ML platform end to end — data architecture, pipelines, and model delivery — establishing it as the reusable backbone for the organization's intelligent product features.</li>
+                <li>Directed an AI personalization initiative that shipped predictive plan recommendations, measurably lifting user engagement and conversion.</li>
+                <li>Built an AI/ML training accelerator with standardized, reusable data pipelines, improving scalability and cutting time-to-insight for new models.</li>
+                <li>Engineered self-describing dataset infrastructure with built-in validation and error handling, ensuring data integrity and trust across AI workloads.</li>
+                <li>Drove adoption of a reusable workflow pipeline builder that let teams compose and deploy AI/ML workflows rapidly, eliminating duplicated engineering effort.</li>
+                <li>Mentored developers and set front-end and delivery standards that raised code quality and shipping consistency across the portal.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <h3 class="co">Goin LLC</h3>
+              <div class="meta"><span class="r">Consulting Mobile Application Developer</span><br>June 2017 – March 2018</div>
+              <ul>
+                <li>Led development of an inclusive cab aggregator, ensuring accessibility for riders with disabilities and WCAG compliance.</li>
+                <li>Built an iOS Rider app; defined requirements and coordinated design and QA for registration, booking, and real-time tracking.</li>
+                <li>Created a React Native Driver app with smart ride-tracking based on driver activity and accessibility guidelines.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <h3 class="co">HPE</h3>
+              <div class="meta"><span class="r">Consulting Mobile Application Developer</span><br>October 2016 – June 2017</div>
+              <ul>
+                <li>Led rapid-prototyping initiatives for enterprise-partner mobile and web apps, supporting HPE's mobility product strategy.</li>
+                <li>Delivered cross-platform solutions in ReactJS, Android, and PHP/MySQL, expediting time-to-market by 20%.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <h3 class="co">iService</h3>
+              <div class="meta"><span class="r">Mobile Application Developer</span> · Service Monk Technologies Pvt. Ltd.<br>October 2015 – October 2016</div>
+              <ul>
+                <li>Managed development of a CRM suite with integrated geo-fencing and mobile lab testing, ensuring scalability across fragmented Android ecosystems.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <h3 class="co">Freelance Consultant</h3>
+              <div class="meta"><span class="r">Part-time, concurrent</span><br>2016 – Present</div>
+              <ul>
+                <li>Partnered with diverse clients to plan, build, and deliver tailored web and mobile solutions across JavaScript frameworks and cloud services, on time and within budget.</li>
+              </ul>
+            </article>
+          </section>
+        </div>
+
+        <div class="foot">
+          <span>Designed to discourage printing · Save Paper · Save Trees</span>
+          <span class="site">sdkv.in</span>
+        </div>
+      </main>
+    </div>
+
+    <!-- ATS mode: single-column, Atkinson-only, always-light accessible document -->
+    <div class="doc" id="doc">
+      <div class="masthead">
+        <h1>Sai Dhruva K V</h1>
+        <div class="headline">AI &amp; Technology Leader — Architecting Intelligent Platforms at Scale</div>
+        <div class="doc-spec">Generative AI <span class="dot">·</span> Enterprise Architecture <span class="dot">·</span> Cloud Engineering <span class="dot">·</span> Organizational Transformation</div>
+        <div class="doc-contact">
+          Bengaluru, India <span class="dot">·</span>
+          <a href="tel:+918123166570">+91 8123 166 570</a> <span class="dot">·</span>
+          <a href="mailto:sai_dhruv@hotmail.com">sai_dhruv@hotmail.com</a> <span class="dot">·</span>
+          <a href="https://linkedin.com/in/saidhruv">linkedin.com/in/saidhruv</a> <span class="dot">·</span>
+          <a href="https://sdkv.in">sdkv.in</a>
+        </div>
+      </div>
+      <div class="hr"></div>
+
+      <section>
+        <h2>Professional Summary</h2>
+        <p class="doc-summary">AI &amp; Technology Leader and Enterprise Architect with 10+ years leading engineering teams, technology strategy, and organizational transformation at enterprise scale. Proven track record designing and governing AI platforms, agentic AI systems, and cloud-native architecture on AWS that turn strategy into measurable business value.</p>
+        <p class="highlights"><strong>Highlights:</strong> 10+ years leading at scale · 8+ years AI/ML platform ownership · 10+ organizations shaped · 20+ technologies delivered · 100% AI-coded products · ~67% less development time with AI · ~95% fewer critical errors · ~40% faster delivery.</p>
+      </section>
+
+      <section>
+        <h2>Core Competencies</h2>
+        <p>Strategic Leadership, Technology Strategy, Enterprise Architecture, Organizational Transformation, Technical Vision &amp; Innovation, Agile Delivery, Product Roadmapping, Project Management, Risk Management &amp; Governance, Stakeholder Management, Vendor &amp; Contract Management, Cross-Functional Team Leadership, Mentoring &amp; Coaching, Cybersecurity Awareness.</p>
+      </section>
+
+      <section>
+        <h2>Technical Skills</h2>
+        <p class="kv"><strong>AI &amp; Data:</strong> Generative AI, LLM Products, Agentic AI, NLP Analytics, ML Pipelines, Data Architecture, Data Standards, Data Analytics</p>
+        <p class="kv"><strong>Cloud (AWS):</strong> Lambda, API Gateway, CloudFormation, DynamoDB, CloudFront, CloudWatch, Cognito, S3</p>
+        <p class="kv"><strong>Engineering:</strong> ReactJS, Next.js, Node.js, React Native, iOS, Android, JavaScript, HTML, CSS, GraphQL, ElasticSearch, Python</p>
+        <p class="kv"><strong>DevOps &amp; CI/CD:</strong> Terraform, CircleCI, Jenkins, GitHub, Bitbucket</p>
+        <p class="kv"><strong>Tools &amp; Design:</strong> Jira, Asana, Figma, Adobe Photoshop</p>
+      </section>
+
+      <section>
+        <h2>Professional Experience</h2>
+
+        <div class="job">
+          <h3>AMD — Consulting Architect</h3>
+          <div class="meta">via Infobell IT Solutions Pvt. Ltd. · February 2025 – Present</div>
+          <ul>
+            <li>Led architectural vision and technical strategy for agentic AI, guiding ~30 engineers through the full SDLC to turn AI strategy into production-grade performance-analytics platforms.</li>
+            <li>Architected and governed an enterprise AI data platform and data standards that made analytics explainable, reusable, and globally scalable across all business units.</li>
+            <li>Directed the design of agentic AI systems for context-aware benchmark analysis, enabling adaptive, self-directed reasoning over large, complex hardware-performance datasets.</li>
+            <li>Served as technical lead for an LLM-powered product that answers benchmark and performance questions in natural language — pairing hands-on model and prompt design with team direction.</li>
+            <li>Spearheaded agent-based pipelines for AI-augmented data validation, enrichment, and reasoning, cutting manual effort while improving accuracy, scalability, and throughput.</li>
+            <li>Delivered role- and entitlement-aware analytics applications that let stakeholders securely explore benchmark results through natural-language search and multi-dimensional performance comparison.</li>
+            <li>Cut benchmark automation from one month to under four days by re-architecting the Automated Benchmarking Platform, enterprise data warehouse, and end-to-end workflow.</li>
+            <li>Delivered products that are 100% AI-coded, using AI-assisted development to compress build time ~67% and accelerate delivery ~40% through AI-driven solutioning.</li>
+            <li>Hardened release quality by embedding AI-augmented Playwright testing into the delivery pipeline, reducing critical production errors ~95%.</li>
+            <li>Established AI governance guardrails — explainability, access control, and reuse — that de-risked enterprise adoption and kept analytics consistent and auditable across teams.</li>
+            <li>Mentored engineers and aligned cross-business-unit AI/ML initiatives onto shared platforms, standards, and delivery practices, lifting overall technical quality.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <h3>FINEOS (formerly Spraoi) — Senior Software Developer</h3>
+          <div class="meta">FINEOS Corporate Holdings, Ireland · March 2018 – January 2025</div>
+          <ul>
+            <li>Led cross-functional teams of ~20 engineers, designers, and QA to deliver an enterprise insurance portal spanning product showcase, e-commerce, document management, and claims tracking.</li>
+            <li>Owned the AI/ML platform end to end — data architecture, pipelines, and model delivery — establishing it as the reusable backbone for the organization's intelligent product features.</li>
+            <li>Directed an AI personalization initiative that shipped predictive plan recommendations, measurably lifting user engagement and conversion.</li>
+            <li>Built an AI/ML training accelerator with standardized, reusable data pipelines, improving scalability and cutting time-to-insight for new models.</li>
+            <li>Engineered self-describing dataset infrastructure with built-in validation and error handling, ensuring data integrity and trust across AI workloads.</li>
+            <li>Drove adoption of a reusable workflow pipeline builder that let teams compose and deploy AI/ML workflows rapidly, eliminating duplicated engineering effort.</li>
+            <li>Mentored developers and set front-end and delivery standards that raised code quality and shipping consistency across the portal.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <h3>Goin LLC — Consulting Mobile Application Developer</h3>
+          <div class="meta">June 2017 – March 2018</div>
+          <ul>
+            <li>Led development of an inclusive cab aggregator, ensuring accessibility for riders with disabilities and WCAG compliance.</li>
+            <li>Built an iOS Rider app; defined requirements and coordinated design and QA for registration, booking, and real-time tracking.</li>
+            <li>Created a React Native Driver app with smart ride-tracking based on driver activity and accessibility guidelines.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <h3>HPE — Consulting Mobile Application Developer</h3>
+          <div class="meta">October 2016 – June 2017</div>
+          <ul>
+            <li>Led rapid-prototyping initiatives for enterprise-partner mobile and web apps, supporting HPE's mobility product strategy.</li>
+            <li>Delivered cross-platform solutions in ReactJS, Android, and PHP/MySQL, expediting time-to-market by 20%.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <h3>iService — Mobile Application Developer</h3>
+          <div class="meta">Service Monk Technologies Pvt. Ltd. · October 2015 – October 2016</div>
+          <ul>
+            <li>Managed development of a CRM suite with integrated geo-fencing and mobile lab testing, ensuring scalability across fragmented Android ecosystems.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <h3>Freelance Consultant — Part-time, concurrent</h3>
+          <div class="meta">2016 – Present</div>
+          <ul>
+            <li>Partnered with diverse clients to plan, build, and deliver tailored web and mobile solutions across JavaScript frameworks and cloud services, on time and within budget.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="edu">
+        <h2>Education</h2>
+        <p><strong>B.E., Mechanical Engineering</strong><br>
+        Atria Institute of Technology, Bangalore<br>
+        VTU, Belagavi, Karnataka, India · 2015</p>
+      </section>
+
+      <section>
+        <h2>Languages</h2>
+        <p>English · Hindi · Telugu · Kannada</p>
+      </section>
+    </div>
+  </div>
+
+  <footer class="rz-foot">
+    <div class="rz-foot-inner">
+      <span>© <span id="footer-year">2026</span> Sai Dhruva K V</span>
+      <span>Designed to discourage printing · Save Paper · Save Trees</span>
+    </div>
+  </footer>
+
+  <!-- Shown only when someone tries to print -->
+  <div class="print-notice" role="note">
+    <div>
+      <div class="pn-mark">SD</div>
+      <h2>This résumé is designed <em>for screen.</em></h2>
+      <p>Save paper. Save trees.<br>Read it at <strong>sdkv.in</strong></p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const root = document.documentElement;
+      const sheet = document.getElementById('sheet');
+      const scaler = document.getElementById('scaler');
+      const SHEET_W = 2480;
+      const WIDTH_FRACTION = 0.75; /* poster occupies 75% of the viewport width (centered) */
+      function fit() {
+        if ((root.dataset.resumeMode || 'normal') !== 'normal') return; /* poster hidden in ATS mode */
+        const avail = window.innerWidth * WIDTH_FRACTION;
+        const s = Math.min(avail / SHEET_W, 1);
+        root.style.setProperty('--s', s.toFixed(4));
+        /* Height flows to content: reserve the scaled real height so the page
+           scrolls correctly and nothing is clipped. */
+        const h = sheet.offsetHeight;
+        scaler.style.width = (SHEET_W * s) + 'px';
+        scaler.style.height = (h * s) + 'px';
+      }
+      window.__resumeFit = fit;
+      fit();
+      window.addEventListener('resize', fit, { passive: true });
+      window.addEventListener('load', fit);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    })();
+
+    /* Theme toggle (System -> Light -> Dark), persisted to the shared 'theme' key;
+       repaints the SD favicon and keeps the résumé in sync with the main site. */
+    (function () {
+      var root = document.documentElement;
+      var THEMES = ['system', 'light', 'dark'];
+      var LABELS = { system: 'Theme: follow system', light: 'Theme: light', dark: 'Theme: dark' };
+      var S = 'M12.99 7.87L12.89 8.12Q10.57 7.23 8.52 7.23Q6.46 7.23 5.32 8.10Q4.17 8.96 4.17 10.49L4.17 10.49Q4.17 12.35 6.11 13.37L6.11 13.37Q6.97 13.81 8.01 14.18Q9.04 14.55 10.08 15.01Q11.13 15.46 12.00 16.05Q12.86 16.64 13.40 17.67Q13.93 18.70 13.93 20.30Q13.93 21.89 13.04 23.01Q12.15 24.13 10.89 24.53Q9.63 24.92 7.94 24.92L7.94 24.92Q4.81 24.92 2.59 23.37L2.59 23.37L2.72 23.16Q3.56 23.83 4.90 24.25Q6.24 24.67 7.64 24.67L7.64 24.67Q9.70 24.67 11.17 23.71Q12.63 22.76 12.63 20.90L12.63 20.90Q12.63 18.86 10.70 17.71L10.70 17.71Q9.83 17.20 8.80 16.76Q7.76 16.33 6.72 15.86Q5.67 15.39 4.81 14.80L4.81 14.80Q2.87 13.53 2.87 11.18L2.87 11.18Q2.87 9.32 4.12 8.16Q5.37 7 7.88 7Q10.39 7 12.99 7.87L12.99 7.87Z';
+      var D = 'M16.61 7.08L18.65 7.08Q19.77 7.03 20.86 7.03Q21.94 7.03 23.15 7.25Q24.36 7.48 25.55 8.11Q26.73 8.73 27.56 9.72Q28.39 10.70 28.90 12.30Q29.41 13.91 29.41 16.20Q29.41 18.50 28.66 20.32Q27.91 22.14 26.61 23.11L26.61 23.11Q24.08 25.00 20.51 25.00L20.51 25.00Q19.26 25.00 17.89 24.90L17.89 24.90L16.61 24.90L16.61 7.08ZM18.73 7.36L18.73 24.69Q19.26 24.75 20.08 24.75Q20.90 24.75 21.30 24.72Q21.71 24.69 22.42 24.50Q23.14 24.31 23.75 23.98Q24.36 23.65 25.04 23.00Q25.71 22.35 26.20 21.46L26.20 21.46Q27.29 19.37 27.29 16L27.29 16Q27.29 13.60 26.71 11.86Q26.12 10.11 25.37 9.27Q24.62 8.43 23.55 7.93Q22.48 7.43 21.84 7.36Q21.20 7.28 20.36 7.28Q19.52 7.28 18.73 7.36L18.73 7.36Z';
+      function currentMode() { return root.dataset.themeMode || 'system'; }
+      function resolvedDark() {
+        var m = currentMode();
+        if (m === 'light') return false;
+        if (m === 'dark') return true;
+        return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      }
+      function setFavicon() {
+        var dark = resolvedDark();
+        var bg = dark ? '#111113' : '#f3efe7', fg = dark ? '#f4f4f5' : '#16140f';
+        var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='" + bg + "'/><path fill='" + fg + "' d='" + S + "'/><path fill='" + fg + "' d='" + D + "'/></svg>";
+        var link = document.getElementById('favicon');
+        if (link) link.setAttribute('href', 'data:image/svg+xml,' + encodeURIComponent(svg));
+      }
+      function updateDownload() {
+        var dl = document.getElementById('dl-btn');
+        if (!dl) return;
+        var rmode = root.dataset.resumeMode || 'normal';
+        dl.setAttribute('href', rmode === 'ats'
+          ? '/resume/resume-ats.pdf'
+          : (resolvedDark() ? '/resume/resume-dark.pdf' : '/resume/resume-light.pdf'));
+      }
+      window.__resumeUpdateDownload = updateDownload;
+      function applyTheme(mode) {
+        root.dataset.themeMode = mode;
+        root.style.colorScheme = (mode === 'light' || mode === 'dark') ? mode : '';
+        try { localStorage.setItem('theme', mode); } catch (e) {}
+        var b = document.getElementById('theme-toggle');
+        if (b) b.setAttribute('aria-label', LABELS[mode]);
+        updateDownload();
+        setFavicon();
+      }
+      var btn = document.getElementById('theme-toggle');
+      if (btn) btn.addEventListener('click', function () {
+        applyTheme(THEMES[(THEMES.indexOf(currentMode()) + 1) % THEMES.length]);
+      });
+      applyTheme(currentMode());
+      if (window.matchMedia) {
+        try {
+          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+            if (currentMode() === 'system') applyTheme('system');
+          });
+        } catch (e) {}
+      }
+    })();
+
+    /* Résumé mode toggle (Normal poster ⇄ ATS document), persisted to 'resumeMode'. */
+    (function () {
+      var root = document.documentElement;
+      function currentMode() { return root.dataset.resumeMode || 'normal'; }
+      function applyMode(m) {
+        root.dataset.resumeMode = (m === 'ats') ? 'ats' : 'normal';
+        try { localStorage.setItem('resumeMode', root.dataset.resumeMode); } catch (e) {}
+        if (window.__resumeUpdateDownload) window.__resumeUpdateDownload();
+        if (window.__resumeFit) window.__resumeFit();
+      }
+      var btns = document.querySelectorAll('[data-mode-btn]');
+      for (var i = 0; i < btns.length; i++) {
+        (function (b) { b.addEventListener('click', function () { applyMode(b.getAttribute('data-mode-btn')); }); })(btns[i]);
+      }
+      applyMode(currentMode());
+    })();
+
+    /* Download the résumé PDF that matches the current mode + colour, with a forced
+       filename (blob download bypasses any server Content-Disposition). */
+    (function () {
+      const btn = document.getElementById('dl-btn');
+      if (!btn) return;
+      const FILENAME = 'Sai Dhruva K V - Resume.pdf';
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        /* href is kept in sync with mode + theme by updateDownload() above. */
+        const file = btn.getAttribute('href') || '/resume/resume-light.pdf';
+        try {
+          const res = await fetch(file, { cache: 'no-store' });
+          if (!res.ok) throw new Error('fetch failed');
+          const blob = await res.blob();
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = FILENAME;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 2000);
+        } catch (err) {
+          window.location.href = file; /* fallback */
+        }
+      });
+    })();
+
+    /* Drafting-grid parallax (mirrors the main site's backgrounds.js) — drives the
+       #bg-grid::before pattern via --bg-x/--bg-y, never the fixed clip container. */
+    (function () {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var grid = document.getElementById('bg-grid');
+      if (!grid) return;
+      var SCROLL_FACTOR = 0.18, TIERS = 12, period = 480;
+      var tx = 0.5, ty = 0.5, mx = 0.5, my = 0.5, raf = null;
+      function measure() {
+        var probe = document.createElement('div');
+        probe.style.cssText = 'position:absolute;visibility:hidden;width:var(--cell);height:0;';
+        grid.appendChild(probe);
+        var w = probe.getBoundingClientRect().width;
+        grid.removeChild(probe);
+        if (w) period = w * TIERS;
+      }
+      function tick() {
+        mx += (tx - mx) * 0.08; my += (ty - my) * 0.08;
+        var sy = window.scrollY || 0;
+        grid.style.setProperty('--bg-x', ((mx - 0.5) * 16) + 'px');
+        grid.style.setProperty('--bg-y', ((my - 0.5) * 16 - ((sy * SCROLL_FACTOR) % period)) + 'px');
+        raf = requestAnimationFrame(tick);
+      }
+      measure();
+      window.addEventListener('mousemove', function (e) { tx = e.clientX / window.innerWidth; ty = e.clientY / window.innerHeight; }, { passive: true });
+      window.addEventListener('resize', measure, { passive: true });
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) { if (raf) cancelAnimationFrame(raf); raf = null; }
+        else if (!raf) raf = requestAnimationFrame(tick);
+      });
+      raf = requestAnimationFrame(tick);
+    })();
+
+    /* Footer year */
+    (function () { var fy = document.getElementById('footer-year'); if (fy) fy.textContent = new Date().getFullYear(); })();
+  </script>
+</body>
+</html>
