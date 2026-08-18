@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-08-18 — Email change + ATS-default + PDF regen
+
+**Summary:** (1) Changed the contact email everywhere to `saidhruvakv@outlook.com` (`index.html` JSON-LD/contact/copy-button; `resume/index.html` Normal + ATS lines) — left the `twitter.com/sai_dhruv` handle alone. (2) Made **ATS the default résumé mode** (head bootstrap `(rm === 'normal') ? 'normal' : 'ats'`; `currentMode`/`updateDownload`/`fit` fallbacks flipped `|| 'normal'` → `|| 'ats'`; explicit stored `normal` still wins and persists). (3) **Regenerated all three résumé PDFs** so downloads carry the new email; verified the new address in the ATS PDF text.
+
+**Env/build notes:** this machine can't enforce the sandbox — shell needs `required_permissions:["all"]`. Puppeteer is in the **home** `node_modules` (`C:\Users\sadhruva\node_modules`), not the project (repo stays dependency-free; `npm i puppeteer` → "up to date", no project manifest created). This session's Puppeteer cache resolved to an empty temp dir; a plain `npx puppeteer browsers install chrome` **stalled >10 min** (abandoned). Fix that worked: `PUPPETEER_CACHE_DIR=C:\Users\sadhruva\.cache\puppeteer` (already holds the matching `win64-148.0.7778.97` Chromium). (A prior session had instead pinned `…\puppeteer-cache`.) Build output: light/dark 2480×3695, ATS one tall 210×839mm page.
+
+**State:** uncommitted — working tree: `index.html`, `resume/index.html`, the 3 PDFs, `changelog.md`, this file.
+
 ## 2026-07-09 (evening) — Résumé: ATS mode, one-page consolidation, grid/footer/anti-print
 
 **Summary:** Big résumé pass. Built an accessible **ATS** version, then consolidated everything into a single `/resume` page with a **Normal ⇄ ATS** mode toggle (removed the separate `/resume/ats` route the user briefly had), and rounded it out with the site's grid background, a footer, wordmark centering, and anti-print in both modes.

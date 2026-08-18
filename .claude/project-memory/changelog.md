@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-18 — Contact email + ATS default mode
+
+### Changed
+- **Email updated everywhere** from `sai_dhruv@hotmail.com` to **`saidhruvakv@outlook.com`**: `index.html` (JSON-LD `email`, contact `mailto:` link + visible text, copy-button `data-email`) and `resume/index.html` (Normal + ATS contact lines, `mailto:` + text). The `twitter.com/sai_dhruv` handle is unrelated and left unchanged.
+- **All three résumé PDFs regenerated** (`resume/resume-light.pdf`, `resume-dark.pdf`, `resume-ats.pdf`) via `tools/build-resume-pdf.mjs` so the downloads carry the new email (verified present in the ATS PDF; light/dark render checks passed).
+- **ATS is now the default résumé mode.** `/resume` opens in ATS unless the visitor previously chose Normal — head bootstrap flips to `(rm === 'normal') ? 'normal' : 'ats'` (so absent/`ats` → ATS), and the `currentMode()` / `updateDownload()` / `fit()` fallbacks changed `|| 'normal'` → `|| 'ats'`. Normal stays one click away on the toggle and, once chosen, persists.
+
+### Build note
+- Puppeteer lives in the **home** `node_modules` (not the project — repo stays dependency-free; `npm i puppeteer` reported "up to date" and created no project manifest). In this environment Puppeteer's cache pointed at an empty temp dir, so the build needs `PUPPETEER_CACHE_DIR=%USERPROFILE%\.cache\puppeteer` (which already holds the matching Chromium build). Terminal also requires running outside the sandbox on this machine.
+
 ## 2026-07-09 (later) — Footer background + résumé poster polish
 
 ### Changed

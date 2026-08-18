@@ -21,7 +21,7 @@
         if (m === 'light' || m === 'dark') document.documentElement.style.colorScheme = m;
         document.documentElement.dataset.themeMode = (m === 'light' || m === 'dark') ? m : 'system';
         var rm = localStorage.getItem('resumeMode');
-        document.documentElement.dataset.resumeMode = (rm === 'ats') ? 'ats' : 'normal';
+        document.documentElement.dataset.resumeMode = (rm === 'normal') ? 'normal' : 'ats';
         dark = m === 'dark' ? true : (m === 'light' ? false : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches));
       } catch (e) {}
       try {
@@ -370,7 +370,7 @@
         <p class="contact">
           <span>Bengaluru, India</span><span class="dot">·</span>
           <a href="tel:+918123166570">+91 8123 166 570</a><span class="dot">·</span>
-          <a href="mailto:sai_dhruv@hotmail.com">sai_dhruv@hotmail.com</a><span class="dot">·</span>
+          <a href="mailto:saidhruvakv@outlook.com">saidhruvakv@outlook.com</a><span class="dot">·</span>
           <a href="https://linkedin.com/in/saidhruv" rel="noopener noreferrer" target="_blank">linkedin.com/in/saidhruv</a><span class="dot">·</span>
           <a href="https://sdkv.in" rel="noopener noreferrer" target="_blank">sdkv.in</a>
         </p>
@@ -536,7 +536,7 @@
         <div class="doc-contact">
           Bengaluru, India <span class="dot">·</span>
           <a href="tel:+918123166570">+91 8123 166 570</a> <span class="dot">·</span>
-          <a href="mailto:sai_dhruv@hotmail.com">sai_dhruv@hotmail.com</a> <span class="dot">·</span>
+          <a href="mailto:saidhruvakv@outlook.com">saidhruvakv@outlook.com</a> <span class="dot">·</span>
           <a href="https://linkedin.com/in/saidhruv">linkedin.com/in/saidhruv</a> <span class="dot">·</span>
           <a href="https://sdkv.in">sdkv.in</a>
         </div>
@@ -672,7 +672,7 @@
       const SHEET_W = 2480;
       const WIDTH_FRACTION = 0.75; /* poster occupies 75% of the viewport width (centered) */
       function fit() {
-        if ((root.dataset.resumeMode || 'normal') !== 'normal') return; /* poster hidden in ATS mode */
+        if ((root.dataset.resumeMode || 'ats') !== 'normal') return; /* poster hidden in ATS mode */
         const avail = window.innerWidth * WIDTH_FRACTION;
         const s = Math.min(avail / SHEET_W, 1);
         root.style.setProperty('--s', s.toFixed(4));
@@ -714,7 +714,7 @@
       function updateDownload() {
         var dl = document.getElementById('dl-btn');
         if (!dl) return;
-        var rmode = root.dataset.resumeMode || 'normal';
+        var rmode = root.dataset.resumeMode || 'ats';
         dl.setAttribute('href', rmode === 'ats'
           ? '/resume/resume-ats.pdf'
           : (resolvedDark() ? '/resume/resume-dark.pdf' : '/resume/resume-light.pdf'));
@@ -746,7 +746,7 @@
     /* Résumé mode toggle (Normal poster ⇄ ATS document), persisted to 'resumeMode'. */
     (function () {
       var root = document.documentElement;
-      function currentMode() { return root.dataset.resumeMode || 'normal'; }
+      function currentMode() { return root.dataset.resumeMode || 'ats'; }
       function applyMode(m) {
         root.dataset.resumeMode = (m === 'ats') ? 'ats' : 'normal';
         try { localStorage.setItem('resumeMode', root.dataset.resumeMode); } catch (e) {}
