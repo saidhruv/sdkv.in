@@ -1,5 +1,38 @@
 # Changelog
 
+## 2026-09-04 (later) — Résumé selector redesign: adaptive edition picker
+
+### Changed
+- Replaced the native `<select>` "Tailored for …" version dropdown (clashed with the mono/editorial chrome and crowded the top bar) with an **adaptive edition picker**: one `.edition-trigger` that opens a **popover on desktop** and a **bottom sheet on mobile**. Each row shows edition label + one-line focus; active marked with a red left-rule.
+- **Folded the Normal|ATS Format toggle into the same panel**, dropping the top-bar action cluster from four controls to `[Edition ▾] · theme · Download`.
+- Panel + backdrop render at `<body>` level (outside the header's `backdrop-filter`, which creates a containing block that would break a `position:fixed` bottom sheet). Desktop popover is positioned via `--ep-top`/`--ep-right` set from the trigger rect; the `max-width:700px` media query overrides to a viewport-anchored sheet + dim backdrop.
+- JS refactored to `setVariant()` / `setMode()` cores (still writing the same `data-*` + `localStorage` + `updateDownload()` + `fit()`); registry-driven edition list; a11y (menu roles, `aria-checked`, `aria-expanded`, Esc, outside-click, focus return, arrow-key nav); reduced-motion disables the slide.
+
+### Unchanged
+- Résumé content, the 6 PDFs, `tools/build-resume-pdf.mjs`, `?variant=` deep links, theme + Download. No PDF regen. Verified headless: all 8 version×mode×theme combos, download href matrix, desktop popover + mobile sheet, focus/Esc, 0 non-beacon console errors (48/48 checks).
+
+## 2026-09-04 — Résumé VERSION axis (registry-driven) + Frontend Architect variant
+
+### Added
+- **Third orthogonal résumé axis — VERSION** on `/resume`, alongside the existing **mode** (Normal | ATS) and **theme** (light/dark/system). Driven by a **`RESUME_VERSIONS` registry** (`{slug,label,focus,file,download}`) defined once at the top of the head in `resume/index.html` — the single source of truth for the dropdown options, `?variant=<slug>` deep-link validation, `html[data-resume-variant]`, the per-version PDF file names, and the forced download filename. Default version = `ai` (preserves the AI-first branding). Adding a future version = one registry entry + one `.rv-<slug>` block in the poster and the doc + one slug in the build tool.
+- **"Tailored for: <Version> ▾" dropdown** in `.rz-actions` (before the Normal | ATS control) — a scalable styled native `<select>` (mono/red chrome, custom red chevron, focus-visible outline), options built from the registry in JS. One compact control regardless of version count (a segmented chip would overflow as versions grow). On small screens the "Tailored for:" prefix hides.
+- **Frontend Architect version** (`frontend`) — a leadership-forward reframe of the real roles (no invented numbers): headline "Frontend Architect — Design Systems, Component Architecture & Performance at Scale"; specialties Design Systems · Component & State Architecture · Performance · Accessibility (WCAG); frontend-architecture + engineering-leadership summary; metrics kept to defensible figures only (10+ yrs, 6.5 yrs enterprise React platform, 10+ orgs, 20+ technologies; 20% faster TTM at HPE, WCAG-compliant delivery at Goin — the AI-specific 100%/~67%/~95%/~40% are dropped); competencies reordered (Frontend Architecture → Design Systems → Component/State → Performance → a11y → Design–Dev → leadership); technical skills reordered (Engineering first, then Cloud, AI & Data lower, DevOps, Tools/Design); experience reframed front-end-first (ReactJS analytics UIs at AMD, enterprise React portal + reusable component system at FINEOS, React Native + WCAG at Goin, cross-platform ReactJS 20% TTM at HPE, etc.). Present in both the Normal poster and the ATS doc. Existing AI content kept verbatim.
+- **3 new PDFs** — `resume/resume-frontend-{light,dark,ats}.pdf` (frontend poster is shorter: 2480×3067 vs the AI 2480×3695). Frontend download filename is **"Sai Dhruva K V - Frontend Resume.pdf"** (AI stays "Sai Dhruva K V - Resume.pdf"); both come from the registry `download` field.
+
+### Changed
+- **Content wrapped in per-version `.rv-<slug>` blocks** inside the single `.sheet` (poster) and single `.doc` (ATS). Generic CSS show/hide: `.rv-frontend { display:none }` + `:root[data-resume-variant="frontend"] .rv-ai { display:none }` / `.rv-frontend { display:block }`. Only differing content is duplicated (title, specialties, summary+metrics, competencies, skills, experience); the name and contact line (with the current email) stay shared/single. One `#sheet`/`fit()` path is preserved — the hidden version collapses to zero height, so `fit()` still measures the visible content.
+- **Head bootstrap** now also resolves the version pre-paint (flash-free), mirroring the `resumeMode` bootstrap. Resolution order: `?variant=` (registry-validated) → `localStorage.resumeVariant` → default `ai`. A registry-driven version-selector IIFE persists on change, sets `data-resume-variant`, refreshes the download href, and re-fits.
+- **`updateDownload()` is now version × mode × theme** — derives the PDF base name from the registry (`resume` / `resume-frontend`), so Normal+light → `<file>-light.pdf`, Normal+dark → `<file>-dark.pdf`, ATS → `<file>-ats.pdf`. The blob download reads the per-version filename from the registry.
+- **`tools/build-resume-pdf.mjs`** wraps its render logic in a `for (const version of VERSIONS)` loop (VERSIONS mirrors the page registry's slug + file), seeding `localStorage.resumeVariant` alongside theme/resumeMode, emitting **N×3 = 6** PDFs and reusing the existing ATS full-bleed one-tall-page handling per version. **All 6 regenerated** this session (`PUPPETEER_CACHE_DIR=%USERPROFILE%\.cache\puppeteer`, unsandboxed).
+
+### Verified
+- Headless render of **all 8 combos** (version {ai,frontend} × mode {normal,ats} × theme {light,dark}): correct visible content per version (only the active `.rv-*` blocks render), the download-button `href` matches the version×mode×theme matrix, dropdown options/selection correct, **no console errors** (only the expected off-domain Cloudflare beacon `ERR_FAILED`, ignored).
+- Build tool: all 6 PDFs — posters `pageRanges:'1'` (1 page), light bg `rgb(243,239,231)` / dark bg `rgb(17,17,19)`; ATS one tall cream page (`rgb(243,239,231)`), Atkinson embedded. Frontend poster 2480×3067, AI poster 2480×3695.
+- Per-PDF-render DOM check: the new email is present in all 6, AI PDFs show AI framing, frontend PDFs show frontend framing **and none of the invented AI numbers**. (A proper PDF text-extractor install was auto-blocked; the poster fonts are hex-glyph-subsetted so raw stream scraping can't read them — verified instead via the exact DOM each PDF renders from, which is faithful, plus the build tool's page/bg checks.)
+
+### Notes
+- `node --check tools/build-resume-pdf.mjs` passes. AI PDFs show as *modified* in git (re-rendered; byte-identical content); the 3 frontend PDFs are new. Left **uncommitted** for review.
+
 ## 2026-08-18 — Contact email + ATS default mode
 
 ### Changed

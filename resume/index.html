@@ -11,9 +11,24 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
   <script>
+    /* Résumé VERSION registry — the single source of truth for the version axis.
+       Drives the "Tailored for …" dropdown options, the ?variant= deep-link
+       validation, the html[data-resume-variant] value, the downloadable PDF file
+       names, and the forced download filename. Adding a future version = append
+       one entry here + one .rv-<slug> block in the poster and the doc + one slug
+       in tools/build-resume-pdf.mjs. Default version = 'ai'. */
+    window.RESUME_VERSIONS = [
+      { slug: 'ai',       label: 'AI & Technology Leader', focus: 'AI platforms, agentic systems, org transformation',        file: 'resume',          download: 'Sai Dhruva K V - Resume.pdf' },
+      { slug: 'frontend', label: 'Frontend Architect',     focus: 'design systems, component architecture, performance, a11y', file: 'resume-frontend', download: 'Sai Dhruva K V - Frontend Resume.pdf' },
+    ];
+    window.DEFAULT_VARIANT = 'ai';
+  </script>
+
+  <script>
     /* Honor the site's saved theme (shared localStorage key) so the résumé matches
        the mode the visitor picked on the main site (falls back to OS), and paint a
-       theme-aware SD favicon to match. */
+       theme-aware SD favicon to match. Also resolve the résumé VERSION pre-paint
+       (flash-free), mirroring the resumeMode bootstrap. */
     (function () {
       var dark = false;
       try {
@@ -22,6 +37,16 @@
         document.documentElement.dataset.themeMode = (m === 'light' || m === 'dark') ? m : 'system';
         var rm = localStorage.getItem('resumeMode');
         document.documentElement.dataset.resumeMode = (rm === 'normal') ? 'normal' : 'ats';
+        /* Version resolution order: ?variant= (registry-validated) -> localStorage -> default. */
+        var slugs = (window.RESUME_VERSIONS || []).map(function (v) { return v.slug; });
+        var def = window.DEFAULT_VARIANT || (slugs[0] || 'ai');
+        var qv = null, sv = null;
+        try { qv = new URLSearchParams(window.location.search).get('variant'); } catch (e) {}
+        try { sv = localStorage.getItem('resumeVariant'); } catch (e) {}
+        var variant = (qv && slugs.indexOf(qv) >= 0) ? qv
+                    : (sv && slugs.indexOf(sv) >= 0) ? sv
+                    : def;
+        document.documentElement.dataset.resumeVariant = variant;
         dark = m === 'dark' ? true : (m === 'light' ? false : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches));
       } catch (e) {}
       try {
@@ -231,12 +256,66 @@
     .doc h2 { break-after: avoid; page-break-after: avoid; }
 
     /* --- Mode toggle (Normal | ATS) — themed segmented control ----------- */
-    .mode-toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 2px; overflow: hidden; }
-    .mode-toggle button { font-family: var(--mono); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; padding: 8px 12px; background: transparent; color: var(--muted); border: none; cursor: pointer; line-height: 1; transition: background-color 0.2s, color 0.2s; }
-    .mode-toggle button + button { border-left: 1px solid var(--line); }
-    .mode-toggle button:hover { color: var(--ink); }
-    :root[data-resume-mode="normal"] .mode-toggle [data-mode-btn="normal"],
-    :root[data-resume-mode="ats"] .mode-toggle [data-mode-btn="ats"] { background: var(--ink); color: var(--paper); }
+    /* --- Edition picker (replaces the version <select> + Normal|ATS toggle) ---
+       One control that scales to any number of registry versions: popover on
+       desktop, bottom sheet on mobile. Panel + backdrop live at <body> level
+       (outside the header's backdrop-filter, which would capture position:fixed). */
+    .edition-trigger {
+      display: inline-flex; align-items: center; gap: 8px; max-width: 42vw;
+      font-family: var(--mono); font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 2px;
+      padding: 8px 12px; line-height: 1; cursor: pointer;
+      transition: border-color 0.2s var(--ease);
+    }
+    .edition-trigger:hover { border-color: var(--red); }
+    .edition-trigger:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+    .edition-trigger .et-mark { flex: 0 0 auto; color: var(--red); font-size: 8px; line-height: 1; }
+    .edition-trigger .et-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .edition-trigger .et-arrow { flex: 0 0 auto; color: var(--red); font-size: 11px; line-height: 1; }
+
+    .edition-backdrop { display: none; }
+
+    .edition-panel {
+      position: fixed; top: var(--ep-top, 64px); right: var(--ep-right, 16px); z-index: 160;
+      visibility: hidden; opacity: 0;
+      width: 340px; max-width: calc(100vw - 24px);
+      background: var(--paper); border: 1px solid var(--line-2); border-radius: 4px; padding: 6px;
+      box-shadow: 0 14px 40px -16px light-dark(rgba(22, 20, 15, 0.32), rgba(0, 0, 0, 0.66));
+      transition: opacity 0.16s var(--ease), visibility 0.16s var(--ease);
+    }
+    :root.ep-open .edition-panel { visibility: visible; opacity: 1; }
+    .ep-group { padding: 6px 2px; }
+    .ep-group + .ep-group { border-top: 1px solid var(--line); margin-top: 2px; }
+    .ep-heading { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--red); margin: 4px 8px 8px; }
+    .ep-list { display: flex; flex-direction: column; gap: 2px; }
+    .ep-item {
+      display: block; width: 100%; text-align: left; cursor: pointer;
+      background: transparent; border: none; border-left: 2px solid transparent; border-radius: 2px; padding: 9px 10px;
+      transition: background-color 0.15s var(--ease), border-color 0.15s var(--ease);
+    }
+    .ep-item:hover { background: var(--paper-2); }
+    .ep-item.is-active { border-left-color: var(--red); background: var(--paper-2); }
+    .ep-item:focus-visible { outline: 2px solid var(--red); outline-offset: -2px; }
+    .ep-item-label { display: block; font-family: var(--serif); font-weight: 600; font-size: 16px; line-height: 1.15; color: var(--ink); }
+    .ep-item-focus { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.3px; color: var(--muted); margin-top: 3px; }
+    .ep-format { display: inline-flex; border: 1px solid var(--line); border-radius: 2px; overflow: hidden; margin: 0 8px; }
+    .ep-mode {
+      font-family: var(--mono); font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+      padding: 8px 14px; background: transparent; color: var(--muted); border: none; cursor: pointer; line-height: 1;
+      transition: background-color 0.2s, color 0.2s;
+    }
+    .ep-mode + .ep-mode { border-left: 1px solid var(--line); }
+    .ep-mode:hover { color: var(--ink); }
+    .ep-mode.is-active { background: var(--ink); color: var(--paper); }
+    .ep-mode:focus-visible { outline: 2px solid var(--red); outline-offset: -2px; }
+    @media (prefers-reduced-motion: reduce) { .edition-panel { transition: none !important; } }
+
+    /* --- Version show/hide (orthogonal to mode + theme) ------------------ */
+    /* Generic: only the active version's .rv-<slug> blocks are visible; all others
+       collapse to zero height (so the single #sheet / fit() path still works). */
+    .rv-frontend { display: none; }
+    :root[data-resume-variant="frontend"] .rv-ai { display: none; }
+    :root[data-resume-variant="frontend"] .rv-frontend { display: block; }
 
     /* --- Header bar (Back · wordmark · mode + theme toggle + Download) ---------- */
     .rz-bar {
@@ -329,7 +408,22 @@
       .role li::before { top: 11px; width: 10px; }
       .foot { flex-direction: column; gap: 8px; font-size: 13px; margin-top: 40px; padding-top: 28px; align-items: flex-start; }
       .dl-btn { top: 12px; right: 12px; font-size: 12px; padding: 10px 16px; }
-      .mode-toggle button { padding: 7px 9px; font-size: 11px; }
+      /* Edition picker becomes a bottom sheet */
+      .edition-trigger { max-width: 52vw; }
+      :root.ep-open .edition-backdrop { display: block; position: fixed; inset: 0; z-index: 150; background: color-mix(in srgb, var(--ink) 45%, transparent); }
+      .edition-panel {
+        top: auto; left: 0; right: 0; bottom: 0; width: 100%; max-width: none;
+        border-radius: 14px 14px 0 0; border-left: none; border-right: none; border-bottom: none;
+        padding: 10px 14px calc(16px + env(safe-area-inset-bottom, 0px));
+        opacity: 1; transform: translateY(101%);
+        box-shadow: 0 -14px 34px -16px rgba(0, 0, 0, 0.4);
+        transition: transform 0.28s var(--ease), visibility 0.28s var(--ease);
+      }
+      :root.ep-open .edition-panel { visibility: visible; opacity: 1; transform: translateY(0); }
+      .ep-item { padding: 13px 12px; }
+      .ep-item-label { font-size: 18px; }
+      .ep-format { display: flex; margin: 6px 8px; }
+      .ep-format .ep-mode { flex: 1; text-align: center; padding: 12px 10px; font-size: 13px; }
       .doc { padding: 24px 18px; }
     }
   </style>
@@ -343,10 +437,12 @@
     </a>
     <a class="rz-wm" href="/" aria-label="Sai Dhruva K V — home">SAI DHRUVA K V</a>
     <div class="rz-actions">
-      <div class="mode-toggle" id="mode-toggle" role="group" aria-label="Résumé mode">
-        <button type="button" data-mode-btn="normal" aria-label="Normal résumé">Normal</button>
-        <button type="button" data-mode-btn="ats" aria-label="ATS-friendly résumé">ATS</button>
-      </div>
+      <button class="edition-trigger" id="edition-trigger" type="button"
+              aria-haspopup="menu" aria-expanded="false" aria-controls="edition-panel">
+        <span class="et-mark" aria-hidden="true">◆</span>
+        <span class="et-label" id="edition-trigger-label">Résumé</span>
+        <span class="et-arrow" aria-hidden="true">▾</span>
+      </button>
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Theme: follow system">
         <svg data-icon="system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
         <svg data-icon="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -355,6 +451,23 @@
       <a class="dl-btn" id="dl-btn" href="/resume/resume-light.pdf" download="Sai Dhruva K V - Resume.pdf" aria-label="Download résumé as PDF">Download PDF</a>
     </div>
   </header>
+
+  <!-- Edition picker surface (body-level so it escapes the header's backdrop-filter
+       containing block): popover on desktop, bottom sheet on mobile. -->
+  <div class="edition-backdrop" id="edition-backdrop" aria-hidden="true"></div>
+  <div class="edition-panel" id="edition-panel" role="menu" aria-label="Résumé edition and format">
+    <div class="ep-group" role="group" aria-label="Edition">
+      <div class="ep-heading">Edition</div>
+      <div class="ep-list" data-edition-list></div>
+    </div>
+    <div class="ep-group" role="group" aria-label="Format">
+      <div class="ep-heading">Format</div>
+      <div class="ep-format">
+        <button type="button" class="ep-mode" role="menuitemradio" data-mode-btn="normal">Normal</button>
+        <button type="button" class="ep-mode" role="menuitemradio" data-mode-btn="ats">ATS</button>
+      </div>
+    </div>
+  </div>
 
   <div class="stage">
     <div class="scaler" id="scaler">
@@ -365,8 +478,10 @@
           <span class="doc-tag">Résumé · 2026</span>
         </div>
         <h1 class="name">Sai Dhruva K V</h1>
-        <p class="title">AI &amp; Technology Leader — Architecting Intelligent Platforms at Scale</p>
-        <p class="specialties">Generative AI <span class="dot">·</span> Enterprise Architecture <span class="dot">·</span> Cloud Engineering <span class="dot">·</span> Organizational Transformation</p>
+        <p class="title rv-ai">AI &amp; Technology Leader — Architecting Intelligent Platforms at Scale</p>
+        <p class="title rv-frontend">Frontend Architect — Design Systems, Component Architecture &amp; Performance at Scale</p>
+        <p class="specialties rv-ai">Generative AI <span class="dot">·</span> Enterprise Architecture <span class="dot">·</span> Cloud Engineering <span class="dot">·</span> Organizational Transformation</p>
+        <p class="specialties rv-frontend">Design Systems <span class="dot">·</span> Component &amp; State Architecture <span class="dot">·</span> Performance <span class="dot">·</span> Accessibility (WCAG)</p>
         <p class="contact">
           <span>Bengaluru, India</span><span class="dot">·</span>
           <a href="tel:+918123166570">+91 8123 166 570</a><span class="dot">·</span>
@@ -380,7 +495,7 @@
         <div class="body">
           <!-- Left rail: summary, metrics, competencies, skills, education, languages -->
           <aside class="rail">
-            <div class="rail-block">
+            <div class="rail-block rv-ai">
               <div class="label"><span class="num">// 01</span> Professional Summary</div>
               <p class="summary">AI &amp; Technology Leader and Enterprise Architect with 10+ years leading engineering teams, technology strategy, and organizational transformation at enterprise scale. Proven track record designing and governing AI platforms, agentic AI systems, and cloud-native architecture on AWS that turn strategy into <em>measurable business value</em>.</p>
               <div class="metric-group">
@@ -403,8 +518,29 @@
               </div>
             </div>
 
+            <div class="rail-block rv-frontend">
+              <div class="label"><span class="num">// 01</span> Professional Summary</div>
+              <p class="summary">Frontend Architect and engineering leader with 10+ years leading ReactJS and React Native at scale — design systems, component and state architecture, and front-end standards that turn product vision into <em>fast, accessible, maintainable interfaces</em>. Hands-on across performance, accessibility (WCAG), and developer experience while mentoring engineers and directing cross-functional delivery.</p>
+              <div class="metric-group">
+                <div class="metric-label">At a glance</div>
+                <div class="metrics">
+                  <div class="metric"><div class="n">10+</div><div class="l">Years leading at scale</div></div>
+                  <div class="metric"><div class="n">6.5</div><div class="l">Years enterprise React platform</div></div>
+                  <div class="metric"><div class="n">10+</div><div class="l">Organizations shaped</div></div>
+                  <div class="metric"><div class="n">20+</div><div class="l">Technologies delivered</div></div>
+                </div>
+              </div>
+              <div class="metric-group">
+                <div class="metric-label">Measured outcomes</div>
+                <div class="metrics">
+                  <div class="metric"><div class="n">20%</div><div class="l">Faster time-to-market (HPE)</div></div>
+                  <div class="metric"><div class="n">WCAG</div><div class="l">Accessible delivery (Goin)</div></div>
+                </div>
+              </div>
+            </div>
 
-            <div class="rail-block">
+
+            <div class="rail-block rv-ai">
               <div class="label"><span class="num">// 03</span> Core Competencies</div>
               <div class="comp">
                 <span>Strategic Leadership</span>
@@ -424,14 +560,41 @@
               </div>
             </div>
 
+            <div class="rail-block rv-frontend">
+              <div class="label"><span class="num">// 03</span> Core Competencies</div>
+              <div class="comp">
+                <span>Frontend Architecture</span>
+                <span>Design Systems</span>
+                <span>Component &amp; State Architecture</span>
+                <span>Performance Optimization</span>
+                <span>Accessibility (WCAG)</span>
+                <span>Design–Dev Collaboration</span>
+                <span>Team Leadership</span>
+                <span>Mentoring &amp; Coaching</span>
+                <span>Technology Strategy</span>
+                <span>Cross-Functional Delivery</span>
+                <span>Agile Delivery</span>
+                <span>Technical Vision</span>
+              </div>
+            </div>
 
-            <div class="rail-block">
+
+            <div class="rail-block rv-ai">
               <div class="label"><span class="num">// 04</span> Technical Skills</div>
               <div class="skillgroup"><h4>AI &amp; Data</h4><p>Generative AI, LLM Products, Agentic AI, NLP Analytics, ML Pipelines, Data Architecture, Data Standards, Data Analytics</p></div>
               <div class="skillgroup"><h4>Cloud — AWS</h4><p>Lambda, API Gateway, CloudFormation, DynamoDB, CloudFront, CloudWatch, Cognito, S3</p></div>
               <div class="skillgroup"><h4>Engineering</h4><p>ReactJS, Next.js, Node.js, React Native, iOS, Android, JavaScript, HTML, CSS, GraphQL, ElasticSearch, Python</p></div>
               <div class="skillgroup"><h4>DevOps &amp; CI/CD</h4><p>Terraform, CircleCI, Jenkins, GitHub, Bitbucket</p></div>
               <div class="skillgroup"><h4>Tools &amp; Design</h4><p>Jira, Asana, Figma, Adobe Photoshop</p></div>
+            </div>
+
+            <div class="rail-block rv-frontend">
+              <div class="label"><span class="num">// 04</span> Technical Skills</div>
+              <div class="skillgroup"><h4>Engineering</h4><p>ReactJS, Next.js, React Native, JavaScript, TypeScript, HTML, CSS Architecture, GraphQL, ElasticSearch, State Management, Testing, Node.js, iOS, Android</p></div>
+              <div class="skillgroup"><h4>Cloud — AWS</h4><p>Lambda, API Gateway, CloudFormation, DynamoDB, CloudFront, CloudWatch, Cognito, S3</p></div>
+              <div class="skillgroup"><h4>AI &amp; Data</h4><p>Generative AI, LLM Products, Agentic AI, ML Pipelines, Data Architecture</p></div>
+              <div class="skillgroup"><h4>DevOps &amp; CI/CD</h4><p>Terraform, CircleCI, Jenkins, GitHub, Bitbucket</p></div>
+              <div class="skillgroup"><h4>Tools &amp; Design</h4><p>Figma, Adobe Photoshop, Jira, Asana</p></div>
             </div>
 
 
@@ -451,6 +614,7 @@
           <section class="main">
             <div class="label"><span class="num">// 02</span> Experience</div>
 
+            <div class="rv-ai">
             <article class="role">
               <h3 class="co">AMD</h3>
               <div class="meta"><span class="r">Consulting Architect</span> · via Infobell IT Solutions Pvt. Ltd.<br>February 2025 – Present</div>
@@ -517,6 +681,68 @@
                 <li>Partnered with diverse clients to plan, build, and deliver tailored web and mobile solutions across JavaScript frameworks and cloud services, on time and within budget.</li>
               </ul>
             </article>
+            </div>
+
+            <div class="rv-frontend">
+            <article class="role">
+              <h3 class="co">AMD</h3>
+              <div class="meta"><span class="r">Consulting Architect</span> · via Infobell IT Solutions Pvt. Ltd.<br>February 2025 – Present</div>
+              <ul>
+                <li>Lead front-end architecture and technical direction for role- and entitlement-aware ReactJS analytics applications, guiding engineers through the full SDLC.</li>
+                <li>Architected a reusable component system and front-end standards for performance-analytics UIs, enabling secure natural-language search and multi-dimensional comparison.</li>
+                <li>Directed component and state architecture and design–dev collaboration so stakeholders explore complex benchmark data through consistent, accessible interfaces.</li>
+                <li>Established front-end delivery guardrails — reuse, access control, and automated testing — that kept analytics UIs consistent and auditable across teams.</li>
+                <li>Mentored engineers and aligned teams onto shared component libraries, standards, and delivery practices, lifting overall UI quality.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <h3 class="co">FINEOS <span style="font-weight:400;font-style:italic;color:var(--muted);font-size:0.62em;">(formerly Spraoi)</span></h3>
+              <div class="meta"><span class="r">Senior Software Developer</span> · FINEOS Corporate Holdings, Ireland<br>March 2018 – January 2025</div>
+              <ul>
+                <li>Led cross-functional teams of ~20 engineers, designers, and QA to deliver an enterprise insurance portal front end on ReactJS, Node.js, GraphQL, and ElasticSearch.</li>
+                <li>Built and owned a reusable component system and front-end standards spanning product showcase, e-commerce, document management, and claims tracking.</li>
+                <li>Architected component and state patterns across a 6.5-year enterprise React platform, raising consistency, scalability, and shipping velocity.</li>
+                <li>Drove design–dev collaboration and a reusable workflow builder that let teams compose and deploy UI flows rapidly, eliminating duplicated engineering effort.</li>
+                <li>Mentored developers and set front-end and delivery standards that raised code quality and shipping consistency across the portal.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <h3 class="co">Goin LLC</h3>
+              <div class="meta"><span class="r">Consulting Mobile Application Developer</span><br>June 2017 – March 2018</div>
+              <ul>
+                <li>Led development of an inclusive cab aggregator with a strong focus on accessibility (WCAG) for riders with disabilities.</li>
+                <li>Built an iOS Rider app and a React Native Driver app; defined requirements and coordinated design and QA for registration, booking, and real-time tracking.</li>
+                <li>Applied accessibility guidelines to ride-tracking UX driven by driver activity.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <h3 class="co">HPE</h3>
+              <div class="meta"><span class="r">Consulting Mobile Application Developer</span><br>October 2016 – June 2017</div>
+              <ul>
+                <li>Led rapid-prototyping of cross-platform ReactJS and mobile front ends supporting HPE's mobility product strategy.</li>
+                <li>Delivered cross-platform solutions in ReactJS, Android, and PHP/MySQL, expediting time-to-market by 20%.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <h3 class="co">iService</h3>
+              <div class="meta"><span class="r">Mobile Application Developer</span> · Service Monk Technologies Pvt. Ltd.<br>October 2015 – October 2016</div>
+              <ul>
+                <li>Built a CRM suite front end with integrated geo-fencing and mobile lab testing, ensuring scalability across fragmented Android ecosystems.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <h3 class="co">Freelance Consultant</h3>
+              <div class="meta"><span class="r">Part-time, concurrent</span><br>2016 – Present</div>
+              <ul>
+                <li>Partnered with diverse clients to design and build tailored web and mobile front ends across JavaScript frameworks and cloud services, on time and within budget.</li>
+              </ul>
+            </article>
+            </div>
           </section>
         </div>
 
@@ -531,8 +757,10 @@
     <div class="doc" id="doc">
       <div class="masthead">
         <h1>Sai Dhruva K V</h1>
-        <div class="headline">AI &amp; Technology Leader — Architecting Intelligent Platforms at Scale</div>
-        <div class="doc-spec">Generative AI <span class="dot">·</span> Enterprise Architecture <span class="dot">·</span> Cloud Engineering <span class="dot">·</span> Organizational Transformation</div>
+        <div class="headline rv-ai">AI &amp; Technology Leader — Architecting Intelligent Platforms at Scale</div>
+        <div class="headline rv-frontend">Frontend Architect — Design Systems, Component Architecture &amp; Performance at Scale</div>
+        <div class="doc-spec rv-ai">Generative AI <span class="dot">·</span> Enterprise Architecture <span class="dot">·</span> Cloud Engineering <span class="dot">·</span> Organizational Transformation</div>
+        <div class="doc-spec rv-frontend">Design Systems <span class="dot">·</span> Component &amp; State Architecture <span class="dot">·</span> Performance <span class="dot">·</span> Accessibility (WCAG)</div>
         <div class="doc-contact">
           Bengaluru, India <span class="dot">·</span>
           <a href="tel:+918123166570">+91 8123 166 570</a> <span class="dot">·</span>
@@ -543,18 +771,29 @@
       </div>
       <div class="hr"></div>
 
-      <section>
+      <section class="rv-ai">
         <h2>Professional Summary</h2>
         <p class="doc-summary">AI &amp; Technology Leader and Enterprise Architect with 10+ years leading engineering teams, technology strategy, and organizational transformation at enterprise scale. Proven track record designing and governing AI platforms, agentic AI systems, and cloud-native architecture on AWS that turn strategy into measurable business value.</p>
         <p class="highlights"><strong>Highlights:</strong> 10+ years leading at scale · 8+ years AI/ML platform ownership · 10+ organizations shaped · 20+ technologies delivered · 100% AI-coded products · ~67% less development time with AI · ~95% fewer critical errors · ~40% faster delivery.</p>
       </section>
 
-      <section>
+      <section class="rv-frontend">
+        <h2>Professional Summary</h2>
+        <p class="doc-summary">Frontend Architect and engineering leader with 10+ years leading ReactJS and React Native at scale — design systems, component and state architecture, and front-end standards that turn product vision into fast, accessible, maintainable interfaces. Hands-on across performance, accessibility (WCAG), and developer experience while mentoring engineers and directing cross-functional delivery.</p>
+        <p class="highlights"><strong>Highlights:</strong> 10+ years leading at scale · 6.5 years enterprise React platform (FINEOS) · 10+ organizations shaped · 20+ technologies delivered · 20% faster time-to-market (HPE) · WCAG-compliant delivery (Goin).</p>
+      </section>
+
+      <section class="rv-ai">
         <h2>Core Competencies</h2>
         <p>Strategic Leadership, Technology Strategy, Enterprise Architecture, Organizational Transformation, Technical Vision &amp; Innovation, Agile Delivery, Product Roadmapping, Project Management, Risk Management &amp; Governance, Stakeholder Management, Vendor &amp; Contract Management, Cross-Functional Team Leadership, Mentoring &amp; Coaching, Cybersecurity Awareness.</p>
       </section>
 
-      <section>
+      <section class="rv-frontend">
+        <h2>Core Competencies</h2>
+        <p>Frontend Architecture, Design Systems, Component &amp; State Architecture, Performance Optimization, Accessibility (WCAG), Design–Dev Collaboration, Team Leadership, Mentoring &amp; Coaching, Technology Strategy, Cross-Functional Delivery, Agile Delivery, Technical Vision.</p>
+      </section>
+
+      <section class="rv-ai">
         <h2>Technical Skills</h2>
         <p class="kv"><strong>AI &amp; Data:</strong> Generative AI, LLM Products, Agentic AI, NLP Analytics, ML Pipelines, Data Architecture, Data Standards, Data Analytics</p>
         <p class="kv"><strong>Cloud (AWS):</strong> Lambda, API Gateway, CloudFormation, DynamoDB, CloudFront, CloudWatch, Cognito, S3</p>
@@ -563,7 +802,16 @@
         <p class="kv"><strong>Tools &amp; Design:</strong> Jira, Asana, Figma, Adobe Photoshop</p>
       </section>
 
-      <section>
+      <section class="rv-frontend">
+        <h2>Technical Skills</h2>
+        <p class="kv"><strong>Engineering:</strong> ReactJS, Next.js, React Native, JavaScript, TypeScript, HTML, CSS Architecture, GraphQL, ElasticSearch, State Management, Testing, Node.js, iOS, Android</p>
+        <p class="kv"><strong>Cloud (AWS):</strong> Lambda, API Gateway, CloudFormation, DynamoDB, CloudFront, CloudWatch, Cognito, S3</p>
+        <p class="kv"><strong>AI &amp; Data:</strong> Generative AI, LLM Products, Agentic AI, ML Pipelines, Data Architecture</p>
+        <p class="kv"><strong>DevOps &amp; CI/CD:</strong> Terraform, CircleCI, Jenkins, GitHub, Bitbucket</p>
+        <p class="kv"><strong>Tools &amp; Design:</strong> Figma, Adobe Photoshop, Jira, Asana</p>
+      </section>
+
+      <section class="rv-ai">
         <h2>Professional Experience</h2>
 
         <div class="job">
@@ -630,6 +878,69 @@
           <div class="meta">2016 – Present</div>
           <ul>
             <li>Partnered with diverse clients to plan, build, and deliver tailored web and mobile solutions across JavaScript frameworks and cloud services, on time and within budget.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="rv-frontend">
+        <h2>Professional Experience</h2>
+
+        <div class="job">
+          <h3>AMD — Consulting Architect</h3>
+          <div class="meta">via Infobell IT Solutions Pvt. Ltd. · February 2025 – Present</div>
+          <ul>
+            <li>Lead front-end architecture and technical direction for role- and entitlement-aware ReactJS analytics applications, guiding engineers through the full SDLC.</li>
+            <li>Architected a reusable component system and front-end standards for performance-analytics UIs, enabling secure natural-language search and multi-dimensional comparison.</li>
+            <li>Directed component and state architecture and design–dev collaboration so stakeholders explore complex benchmark data through consistent, accessible interfaces.</li>
+            <li>Established front-end delivery guardrails — reuse, access control, and automated testing — that kept analytics UIs consistent and auditable across teams.</li>
+            <li>Mentored engineers and aligned teams onto shared component libraries, standards, and delivery practices, lifting overall UI quality.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <h3>FINEOS (formerly Spraoi) — Senior Software Developer</h3>
+          <div class="meta">FINEOS Corporate Holdings, Ireland · March 2018 – January 2025</div>
+          <ul>
+            <li>Led cross-functional teams of ~20 engineers, designers, and QA to deliver an enterprise insurance portal front end on ReactJS, Node.js, GraphQL, and ElasticSearch.</li>
+            <li>Built and owned a reusable component system and front-end standards spanning product showcase, e-commerce, document management, and claims tracking.</li>
+            <li>Architected component and state patterns across a 6.5-year enterprise React platform, raising consistency, scalability, and shipping velocity.</li>
+            <li>Drove design–dev collaboration and a reusable workflow builder that let teams compose and deploy UI flows rapidly, eliminating duplicated engineering effort.</li>
+            <li>Mentored developers and set front-end and delivery standards that raised code quality and shipping consistency across the portal.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <h3>Goin LLC — Consulting Mobile Application Developer</h3>
+          <div class="meta">June 2017 – March 2018</div>
+          <ul>
+            <li>Led development of an inclusive cab aggregator with a strong focus on accessibility (WCAG) for riders with disabilities.</li>
+            <li>Built an iOS Rider app and a React Native Driver app; defined requirements and coordinated design and QA for registration, booking, and real-time tracking.</li>
+            <li>Applied accessibility guidelines to ride-tracking UX driven by driver activity.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <h3>HPE — Consulting Mobile Application Developer</h3>
+          <div class="meta">October 2016 – June 2017</div>
+          <ul>
+            <li>Led rapid-prototyping of cross-platform ReactJS and mobile front ends supporting HPE's mobility product strategy.</li>
+            <li>Delivered cross-platform solutions in ReactJS, Android, and PHP/MySQL, expediting time-to-market by 20%.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <h3>iService — Mobile Application Developer</h3>
+          <div class="meta">Service Monk Technologies Pvt. Ltd. · October 2015 – October 2016</div>
+          <ul>
+            <li>Built a CRM suite front end with integrated geo-fencing and mobile lab testing, ensuring scalability across fragmented Android ecosystems.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <h3>Freelance Consultant — Part-time, concurrent</h3>
+          <div class="meta">2016 – Present</div>
+          <ul>
+            <li>Partnered with diverse clients to design and build tailored web and mobile front ends across JavaScript frameworks and cloud services, on time and within budget.</li>
           </ul>
         </div>
       </section>
@@ -711,13 +1022,21 @@
         var link = document.getElementById('favicon');
         if (link) link.setAttribute('href', 'data:image/svg+xml,' + encodeURIComponent(svg));
       }
+      function currentVersion() {
+        var VERSIONS = window.RESUME_VERSIONS || [];
+        var slug = root.dataset.resumeVariant || window.DEFAULT_VARIANT || 'ai';
+        for (var i = 0; i < VERSIONS.length; i++) if (VERSIONS[i].slug === slug) return VERSIONS[i];
+        return VERSIONS[0] || { file: 'resume', download: 'Sai Dhruva K V - Resume.pdf' };
+      }
+      window.__resumeCurrentVersion = currentVersion;
       function updateDownload() {
         var dl = document.getElementById('dl-btn');
         if (!dl) return;
         var rmode = root.dataset.resumeMode || 'ats';
+        var file = currentVersion().file;      /* per-version PDF base name (e.g. resume-frontend) */
         dl.setAttribute('href', rmode === 'ats'
-          ? '/resume/resume-ats.pdf'
-          : (resolvedDark() ? '/resume/resume-dark.pdf' : '/resume/resume-light.pdf'));
+          ? '/resume/' + file + '-ats.pdf'
+          : (resolvedDark() ? '/resume/' + file + '-dark.pdf' : '/resume/' + file + '-light.pdf'));
       }
       window.__resumeUpdateDownload = updateDownload;
       function applyTheme(mode) {
@@ -743,21 +1062,138 @@
       }
     })();
 
-    /* Résumé mode toggle (Normal poster ⇄ ATS document), persisted to 'resumeMode'. */
+    /* Résumé EDITION picker — one control replacing the version <select> AND the
+       Normal|ATS toggle: a popover on desktop, a bottom sheet on mobile. Registry-
+       driven; orthogonal to theme. Selecting applies immediately and keeps the panel
+       open so both axes are adjustable; closes on trigger / Esc / outside / backdrop. */
     (function () {
       var root = document.documentElement;
-      function currentMode() { return root.dataset.resumeMode || 'ats'; }
-      function applyMode(m) {
-        root.dataset.resumeMode = (m === 'ats') ? 'ats' : 'normal';
-        try { localStorage.setItem('resumeMode', root.dataset.resumeMode); } catch (e) {}
+      var VERSIONS = window.RESUME_VERSIONS || [];
+      var DEFAULT = window.DEFAULT_VARIANT || (VERSIONS[0] && VERSIONS[0].slug) || 'ai';
+      var slugs = VERSIONS.map(function (v) { return v.slug; });
+
+      var trigger = document.getElementById('edition-trigger');
+      var labelEl = document.getElementById('edition-trigger-label');
+      var panel = document.getElementById('edition-panel');
+      var backdrop = document.getElementById('edition-backdrop');
+      var list = panel && panel.querySelector('[data-edition-list]');
+      if (!trigger || !panel || !list) return;
+
+      function currentVariant() {
+        var v = root.dataset.resumeVariant;
+        return (v && slugs.indexOf(v) >= 0) ? v : DEFAULT;
+      }
+      function currentMode() { return root.dataset.resumeMode === 'normal' ? 'normal' : 'ats'; }
+      function versionBySlug(s) {
+        for (var i = 0; i < VERSIONS.length; i++) if (VERSIONS[i].slug === s) return VERSIONS[i];
+        return VERSIONS[0] || { slug: DEFAULT, label: 'Résumé' };
+      }
+
+      /* --- cores: set version / set format (mirror the old handlers) --- */
+      function setVariant(slug) {
+        var s = (slugs.indexOf(slug) >= 0) ? slug : DEFAULT;
+        root.dataset.resumeVariant = s;
+        try { localStorage.setItem('resumeVariant', s); } catch (e) {}
+        sync();
         if (window.__resumeUpdateDownload) window.__resumeUpdateDownload();
         if (window.__resumeFit) window.__resumeFit();
       }
-      var btns = document.querySelectorAll('[data-mode-btn]');
-      for (var i = 0; i < btns.length; i++) {
-        (function (b) { b.addEventListener('click', function () { applyMode(b.getAttribute('data-mode-btn')); }); })(btns[i]);
+      function setMode(m) {
+        root.dataset.resumeMode = (m === 'normal') ? 'normal' : 'ats';
+        try { localStorage.setItem('resumeMode', root.dataset.resumeMode); } catch (e) {}
+        sync();
+        if (window.__resumeUpdateDownload) window.__resumeUpdateDownload();
+        if (window.__resumeFit) window.__resumeFit();
       }
-      applyMode(currentMode());
+      window.__resumeApplyVariant = setVariant;   /* preserve prior global name */
+      window.__resumeApplyMode = setMode;
+
+      /* --- build the edition list from the registry; wire format buttons --- */
+      var editionBtns = [];
+      VERSIONS.forEach(function (v) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'ep-item';
+        b.setAttribute('role', 'menuitemradio');
+        b.dataset.variant = v.slug;
+        b.innerHTML = '<span class="ep-item-label"></span><span class="ep-item-focus"></span>';
+        b.querySelector('.ep-item-label').textContent = v.label;
+        b.querySelector('.ep-item-focus').textContent = v.focus || '';
+        b.addEventListener('click', function () { setVariant(v.slug); });
+        list.appendChild(b);
+        editionBtns.push(b);
+      });
+      var modeBtns = Array.prototype.slice.call(panel.querySelectorAll('[data-mode-btn]'));
+      modeBtns.forEach(function (b) {
+        b.addEventListener('click', function () { setMode(b.getAttribute('data-mode-btn')); });
+      });
+
+      function sync() {
+        var cv = currentVariant(), cm = currentMode();
+        if (labelEl) labelEl.textContent = versionBySlug(cv).label;
+        editionBtns.forEach(function (b) {
+          var on = b.dataset.variant === cv;
+          b.classList.toggle('is-active', on);
+          b.setAttribute('aria-checked', on ? 'true' : 'false');
+        });
+        modeBtns.forEach(function (b) {
+          var on = b.getAttribute('data-mode-btn') === cm;
+          b.classList.toggle('is-active', on);
+          b.setAttribute('aria-checked', on ? 'true' : 'false');
+        });
+      }
+
+      /* --- open / close + positioning + a11y --- */
+      var isOpen = false;
+      function isMobile() { return !!(window.matchMedia && window.matchMedia('(max-width: 700px)').matches); }
+      function positionPopover() {
+        if (isMobile()) { panel.style.removeProperty('--ep-top'); panel.style.removeProperty('--ep-right'); return; }
+        var r = trigger.getBoundingClientRect();
+        panel.style.setProperty('--ep-top', (r.bottom + 8) + 'px');
+        panel.style.setProperty('--ep-right', Math.max(8, window.innerWidth - r.right) + 'px');
+      }
+      function openPanel() {
+        if (isOpen) return;
+        isOpen = true;
+        positionPopover();
+        root.classList.add('ep-open');
+        trigger.setAttribute('aria-expanded', 'true');
+        var active = list.querySelector('.ep-item.is-active') || list.querySelector('.ep-item');
+        if (active) active.focus();
+        document.addEventListener('keydown', onKey, true);
+        document.addEventListener('mousedown', onDocDown, true);
+        window.addEventListener('resize', positionPopover, { passive: true });
+      }
+      function closePanel(returnFocus) {
+        if (!isOpen) return;
+        isOpen = false;
+        root.classList.remove('ep-open');
+        trigger.setAttribute('aria-expanded', 'false');
+        document.removeEventListener('keydown', onKey, true);
+        document.removeEventListener('mousedown', onDocDown, true);
+        window.removeEventListener('resize', positionPopover);
+        if (returnFocus !== false) trigger.focus();
+      }
+      function onKey(e) {
+        if (e.key === 'Escape') { e.preventDefault(); closePanel(); return; }
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          var items = Array.prototype.slice.call(panel.querySelectorAll('.ep-item, [data-mode-btn]'));
+          var idx = items.indexOf(document.activeElement);
+          if (idx >= 0) {
+            e.preventDefault();
+            var n = e.key === 'ArrowDown' ? (idx + 1) % items.length : (idx - 1 + items.length) % items.length;
+            items[n].focus();
+          }
+        }
+      }
+      function onDocDown(e) {
+        if (panel.contains(e.target) || trigger.contains(e.target)) return;
+        closePanel(false);
+      }
+      trigger.addEventListener('click', function () { isOpen ? closePanel() : openPanel(); });
+      if (backdrop) backdrop.addEventListener('click', function () { closePanel(false); });
+
+      sync();
     })();
 
     /* Download the résumé PDF that matches the current mode + colour, with a forced
@@ -765,11 +1201,12 @@
     (function () {
       const btn = document.getElementById('dl-btn');
       if (!btn) return;
-      const FILENAME = 'Sai Dhruva K V - Resume.pdf';
       btn.addEventListener('click', async (e) => {
         e.preventDefault();
-        /* href is kept in sync with mode + theme by updateDownload() above. */
+        /* href is kept in sync with version + mode + theme by updateDownload() above;
+           the forced filename is per-version (from the registry). */
         const file = btn.getAttribute('href') || '/resume/resume-light.pdf';
+        const filename = (window.__resumeCurrentVersion && window.__resumeCurrentVersion().download) || 'Sai Dhruva K V - Resume.pdf';
         try {
           const res = await fetch(file, { cache: 'no-store' });
           if (!res.ok) throw new Error('fetch failed');
@@ -777,7 +1214,7 @@
           const url = URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = FILENAME;
+          a.download = filename;
           document.body.appendChild(a);
           a.click();
           a.remove();

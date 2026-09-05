@@ -1,9 +1,16 @@
 /**
- * Offline tool — renders resume/index.html to the three downloadable PDFs:
- *   resume-light.pdf / resume-dark.pdf  — Normal mode poster (native size, light/dark)
- *   resume-ats.pdf                      — ATS mode (one tall page, cream, Atkinson)
- * The page's Download button serves whichever matches the current mode + colour.
+ * Offline tool — renders resume/index.html to the downloadable PDFs, one set per
+ * résumé VERSION (see the RESUME_VERSIONS registry in resume/index.html). For each
+ * version's `file` base name it emits three PDFs:
+ *   <file>-light.pdf / <file>-dark.pdf  — Normal mode poster (native size, light/dark)
+ *   <file>-ats.pdf                      — ATS mode (one tall page, cream, Atkinson)
+ * i.e. ai       -> resume-{light,dark,ats}.pdf
+ *      frontend -> resume-frontend-{light,dark,ats}.pdf   (N versions × 3 = 6 today)
+ * The page's Download button serves whichever matches the current version + mode + colour.
  * Not part of the deployed site; run manually when the résumé changes.
+ *
+ * The VERSIONS list below MUST mirror the page's RESUME_VERSIONS registry
+ * (slug + file). Adding a version = one entry here + one .rv-<slug> block in the page.
  *
  * Usage:
  *   npm i puppeteer            # if not already available
@@ -42,6 +49,12 @@ if (process.env.RESUME_URL) {
 }
 const URL = `${base}/resume/`;
 
+// Résumé versions — MUST mirror RESUME_VERSIONS (slug + file) in resume/index.html.
+const VERSIONS = [
+  { slug: 'ai',       file: 'resume' },
+  { slug: 'frontend', file: 'resume-frontend' },
+];
+
 // Render the sheet at native scale, top-left, without the scaler/stage chrome.
 const NEUTRALIZE = `
   .stage { padding: 0 !important; display: block !important; }
@@ -51,14 +64,17 @@ const NEUTRALIZE = `
 `;
 
 const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
+
+for (const version of VERSIONS) {
 for (const mode of ['light', 'dark']) {
   const page = await browser.newPage();
   await page.setViewport({ width: 2600, height: 1400, deviceScaleFactor: 1 });
 
   // Drive the résumé's OWN theme (explicit inline color-scheme via the shared
   // 'theme' key) so the light-dark() tokens resolve deterministically to `mode`.
-  // This does NOT depend on the headless OS preference. Seed before page scripts.
-  await page.evaluateOnNewDocument((m) => { try { localStorage.setItem('theme', m); localStorage.setItem('resumeMode', 'normal'); } catch (e) {} }, mode);
+  // This does NOT depend on the headless OS preference. Also seed the résumé
+  // VERSION so only this version's .rv-<slug> blocks render. Seed before page scripts.
+  await page.evaluateOnNewDocument((m, v) => { try { localStorage.setItem('theme', m); localStorage.setItem('resumeMode', 'normal'); localStorage.setItem('resumeVariant', v); } catch (e) {} }, mode, version.slug);
 
   // One CDP call sets BOTH the media type (screen → skip the @media print
   // anti-print swap) and the colour-scheme feature (for the grain blend). Doing
@@ -93,7 +109,7 @@ for (const mode of ['light', 'dark']) {
   const ok = info.bg === expect;
 
   await page.pdf({
-    path: join(OUTDIR, `resume-${mode}.pdf`),
+    path: join(OUTDIR, `${version.file}-${mode}.pdf`),
     width: `${info.w + 2}px`,
     height: `${info.h + 2}px`,
     printBackground: true,
@@ -101,7 +117,7 @@ for (const mode of ['light', 'dark']) {
     pageRanges: '1',
   });
   await page.close();
-  console.log(`wrote resume-${mode}.pdf  ${info.w}x${info.h}  body-bg=${info.bg}  color-scheme=${info.scheme}  ${ok ? 'OK' : 'WRONG (expected ' + expect + ')'}`);
+  console.log(`wrote ${version.file}-${mode}.pdf  ${info.w}x${info.h}  body-bg=${info.bg}  color-scheme=${info.scheme}  ${ok ? 'OK' : 'WRONG (expected ' + expect + ')'}`);
 }
 
 // ATS résumé PDF — /resume in ATS mode: ONE tall page (no page breaks), cream, Atkinson.
@@ -113,7 +129,7 @@ for (const mode of ['light', 'dark']) {
   // Chromium's dark canvas in the margins, whereas @page lets the cream body fill it.
   const WIDTH = 794; // 210mm at 96dpi
   await page.setViewport({ width: WIDTH, height: 1123, deviceScaleFactor: 1 });
-  await page.evaluateOnNewDocument(() => { try { localStorage.setItem('resumeMode', 'ats'); } catch (e) {} });
+  await page.evaluateOnNewDocument((v) => { try { localStorage.setItem('resumeMode', 'ats'); localStorage.setItem('resumeVariant', v); } catch (e) {} }, version.slug);
   await page.goto(`${base}/resume/`, { waitUntil: 'networkidle0' });
   await page.evaluateHandle('document.fonts.ready');
   await page.emulateMediaType('print'); // so the measured height reflects the print layout
@@ -139,10 +155,11 @@ for (const mode of ['light', 'dark']) {
   // Size the page to the content AND stretch the cream doc to the full page height so the
   // dark colour-scheme canvas is never exposed in the trailing millimetres at the bottom.
   await page.addStyleTag({ content: `@media print { @page { size: 210mm ${H}mm !important; margin: 0 !important; } .doc { min-height: ${H}mm !important; } }` });
-  await page.pdf({ path: join(OUTDIR, 'resume-ats.pdf'), printBackground: true, preferCSSPageSize: true });
+  await page.pdf({ path: join(OUTDIR, `${version.file}-ats.pdf`), printBackground: true, preferCSSPageSize: true });
   await page.close();
-  console.log(`wrote resume-ats.pdf  single page 210x${H}mm  doc-bg=${info.bg}  atkinson=${info.atkinson}`);
+  console.log(`wrote ${version.file}-ats.pdf  single page 210x${H}mm  doc-bg=${info.bg}  atkinson=${info.atkinson}`);
 }
+} // end VERSIONS loop
 
 await browser.close();
 if (server) server.close();

@@ -1,5 +1,33 @@
 # Session History
 
+## 2026-09-04 (later) — Résumé selector redesign (adaptive edition picker)
+
+**Summary:** User felt the native `<select>` version selector "did not look good" and wanted something clever for web + mobile. Replaced it with an **adaptive edition picker** — one trigger opening a **popover on desktop** and a **bottom sheet on mobile** — and folded the Normal|ATS Format toggle into the same panel, cutting the top-bar cluster from four controls to `[Edition ▾] · theme · Download`. Registry-driven (edition list built from `RESUME_VERSIONS`), keyboard-accessible, reduced-motion aware.
+
+**Key gotcha:** the header (`.rz-bar`) has `backdrop-filter`, which establishes a containing block for `position:fixed` descendants — a fixed bottom sheet nested inside would anchor to the header, not the viewport. Fixed by rendering the panel + backdrop at `<body>` level and positioning the desktop popover via `--ep-top`/`--ep-right` custom properties (mobile CSS overrides to a viewport-anchored sheet).
+
+**Scope:** pure UI refactor of `resume/index.html` (markup + inline CSS + the two control IIFEs collapsed into one picker IIFE with `setVariant()`/`setMode()` cores). No content, PDF, or build-tool changes; no regen.
+
+**Verified (headless, 48/48):** all 8 version×mode×theme combos (content swap, trigger label, download href matrix); desktop popover (opens/anchors near right, active marker, click-switch keeps panel open, Format→Normal updates href, Esc closes + returns focus to trigger); mobile bottom sheet (full-width at viewport bottom + backdrop); light + dark screenshots; 0 non-beacon console errors.
+
+**State:** uncommitted, left for review; preview server on :4327.
+
+## 2026-09-04 — Résumé version axis + Frontend Architect variant
+
+**Summary:** Added a scalable, **registry-driven "version" axis** to `/resume`, orthogonal to the existing mode (Normal|ATS) and theme, and shipped a leadership-forward **Frontend Architect** version alongside the current **AI & Technology Leader** one. The switcher is a **"Tailored for: <Version> ▾" dropdown** in the top bar (styled native `<select>`, options built from the registry), not a segmented chip — so future versions are one registry entry + one content block.
+
+**How it's wired:** A `RESUME_VERSIONS` registry (`{slug,label,focus,file,download}`) at the top of the head in `resume/index.html` is the single source of truth for the dropdown, `?variant=` validation, `data-resume-variant`, PDF file names, and the forced download filename. Head bootstrap resolves the version pre-paint (flash-free), order `?variant=` (registry-validated) → `localStorage.resumeVariant` → default `ai` (mirrors the `resumeMode` bootstrap). Content lives as per-version `.rv-<slug>` blocks inside the single `.sheet` and single `.doc`; generic CSS shows only the active version (hidden one collapses to zero height, so the one `#sheet`/`fit()` path is untouched). Only differing content is duplicated — the name + contact line (email) stay shared. A version-selector IIFE persists + sets the attribute + refreshes the download href + re-fits; `updateDownload()` now derives the PDF from version × mode × theme via the registry.
+
+**Frontend content (real facts only, leadership retained):** headline "Frontend Architect — Design Systems, Component Architecture & Performance at Scale"; reframed summary; metrics kept defensible (10+ yrs, 6.5 yrs enterprise React platform, 10+ orgs, 20+ tech; 20% faster TTM at HPE, WCAG delivery at Goin) — the AI-specific 100%/~67%/~95%/~40% dropped; competencies + technical skills reordered front-end-first; experience reframed around ReactJS/React Native, design systems, reusable component systems, performance, and a11y while keeping team-leadership framing. Existing AI content kept verbatim.
+
+**Build tool:** `tools/build-resume-pdf.mjs` now loops `VERSIONS` (mirrors the page registry), seeding `resumeVariant` alongside theme/resumeMode, emitting **6 PDFs** (`resume-{light,dark,ats}.pdf` + `resume-frontend-{light,dark,ats}.pdf`) with the same ATS full-bleed one-tall-page handling per version. Regenerated all 6.
+
+**Verified (headless, unsandboxed):** all 8 version×mode×theme combos — correct visible content, download `href` matches the matrix, dropdown correct, no console errors (only the expected off-domain Cloudflare beacon `ERR_FAILED`, ignored). Build tool: all 6 PDFs 1 page, correct backgrounds (light cream / dark / ATS cream), Atkinson embedded; frontend poster 2480×3067. Screenshotted the frontend poster + frontend ATS (look correct). Per-PDF-render DOM check confirmed the email in all 6 and the right framing per version (frontend has none of the invented AI numbers). `node --check` on the build tool passes.
+
+**Env notes:** every Shell call needs `required_permissions:["all"]` (sandbox can't be enforced here); PowerShell → chain with `;`. Puppeteer resolves from the **home** `node_modules`; set `PUPPETEER_CACHE_DIR=C:\Users\sadhruva\.cache\puppeteer` inline before `node` (matching Chromium already cached — do NOT `npm i` or run the browsers-install, it stalls). A temp `pdfjs-dist` install for PDF text extraction was auto-blocked, and the poster fonts are hex-glyph-subsetted (raw stream scraping unreadable), so PDF content was verified via the faithful render-DOM + the build tool's page/bg checks instead.
+
+**State:** all **uncommitted** — working tree: `resume/index.html`, `tools/build-resume-pdf.mjs`, 3 modified AI PDFs (re-rendered), 3 new frontend PDFs, and the 4 memory files. Not committed/pushed per request.
+
 ## 2026-08-18 — Email change + ATS-default + PDF regen
 
 **Summary:** (1) Changed the contact email everywhere to `saidhruvakv@outlook.com` (`index.html` JSON-LD/contact/copy-button; `resume/index.html` Normal + ATS lines) — left the `twitter.com/sai_dhruv` handle alone. (2) Made **ATS the default résumé mode** (head bootstrap `(rm === 'normal') ? 'normal' : 'ats'`; `currentMode`/`updateDownload`/`fit` fallbacks flipped `|| 'normal'` → `|| 'ats'`; explicit stored `normal` still wins and persists). (3) **Regenerated all three résumé PDFs** so downloads carry the new email; verified the new address in the ATS PDF text.
