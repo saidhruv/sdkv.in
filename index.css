@@ -369,6 +369,7 @@ body.intro .hero .hero-foot { opacity: 0; transform: translateY(8px);
 .social:hover { border-color: var(--red); color: var(--red); }
 .social.social-accent { background: var(--red); color: var(--paper); border-color: var(--red); }
 .social.social-accent:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.social-note { align-self: center; font-family: var(--mono); font-size: 12px; letter-spacing: 0.5px; color: var(--faint); }
 
 /* ---- Footer ------------------------------------------------------------ */
 .footer {

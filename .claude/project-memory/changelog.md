@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-09-09 — Résumé edition picker: highlighted strip + frosted popup + discoverability
+
+### Changed
+- **Relocated the edition picker into a dedicated red "EDITION —" strip** below the top bar (it previously sat among the top-bar controls and read like chrome). The top bar slims to Back · wordmark · theme · Download. The menu is **flush, borderless, and left-anchored** to the selector and equal width. Left-anchoring (`--ep-left = trigger.left`) is scrollbar-safe; the old right-anchor used `window.innerWidth`, which counts the scrollbar and shifted the menu left.
+- **Frosted-glass backdrop on open** — content-only blur on desktop (backdrop below the chrome); full-cover haze on mobile (above the chrome).
+- **Sequenced ~250ms animation:** backdrop fades in first, then the menu **rolls down** (desktop, `clip-path`) / **springs up** (mobile); dismiss is the exact reverse (menu leaves, then blur). Reduced-motion disables it.
+- **Fixed a latent bug:** `--ease`/`--ease-out` were never defined on the résumé page, so every `transition` referencing them was silently invalid (instant). Defined them in the résumé `:root` (also repairs pre-existing hover transitions).
+
+### Added (discoverability)
+- **Auto-reveal on every visit** — the picker briefly opens on load (no focus steal; dismisses on interaction or a short hold) to advertise multiple editions.
+- **Inline "Also available: <edition> →"** switch in the poster masthead and the ATS document (registry-driven; updates on switch).
+- **Homepage hint** — an "AI & Frontend editions" caption beside the "Résumé →" pill (`index.html` + `.social-note` in `index.css`).
+
+### Process
+- Iterated in an isolated throwaway mock (`resume/_mock-edition.html`), then promoted into `resume/index.html`; mock removed. Verified headless: 38/38 picker checks + 6/6 discoverability checks, 0 console errors.
+
 ## 2026-09-04 (later) — Résumé selector redesign: adaptive edition picker
 
 ### Changed

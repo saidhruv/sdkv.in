@@ -1,5 +1,17 @@
 # Session History
 
+## 2026-09-09 — Résumé edition picker: strip relocation + frosted popup + discoverability (ported from mock)
+
+**Summary:** Redesigned the résumé edition selector for discoverability. Iterated entirely in an isolated mock (`resume/_mock-edition.html`), reviewing screenshots each step, then ported into the real `resume/index.html`.
+
+**Shipped:** trigger relocated into a dedicated red "EDITION —" strip below the top bar; menu flush + borderless + left-anchored (scrollbar-safe) + equal width; frosted-glass backdrop (content-only desktop / full-cover mobile); sequenced ~250ms animation (blur fade → roll-down desktop / spring-up mobile), reverse on dismiss; auto-reveal on EVERY visit (no focus steal); inline "Also available: <edition> →" in poster + ATS masthead; homepage "AI & Frontend editions" hint.
+
+**Key fixes/gotchas:** (1) `--ease`/`--ease-out` were undefined on the résumé page → any transition using them was silently invalid (instant); defined them in `:root`. (2) Right-anchoring via `window.innerWidth` shifted the menu left by the scrollbar width; switched to left-anchoring. (3) `clip-path: inset(... round 4px)` doesn't interpolate → dropped `round` so the roll animates. (4) Headless Chromium defaults to `prefers-reduced-motion: reduce`, disabling transitions in captures — verified with `emulateMediaFeatures no-preference`. (5) Header `backdrop-filter` creates a containing block for `position:fixed`, so the panel/backdrop live at `<body>` level.
+
+**Verified:** headless — 38/38 picker (editions × mode × theme, alignment, flush, switch, Esc/focus) + 6/6 discoverability (auto-reveal without focus steal, dismiss on scroll, inline switch, homepage hint); 0 non-beacon console errors.
+
+**State:** uncommitted — `resume/index.html`, `index.html`, `index.css` modified. (Cover-letter draft also provided in-chat, not yet built into the site.)
+
 ## 2026-09-04 (later) — Résumé selector redesign (adaptive edition picker)
 
 **Summary:** User felt the native `<select>` version selector "did not look good" and wanted something clever for web + mobile. Replaced it with an **adaptive edition picker** — one trigger opening a **popover on desktop** and a **bottom sheet on mobile** — and folded the Normal|ATS Format toggle into the same panel, cutting the top-bar cluster from four controls to `[Edition ▾] · theme · Download`. Registry-driven (edition list built from `RESUME_VERSIONS`), keyboard-accessible, reduced-motion aware.
