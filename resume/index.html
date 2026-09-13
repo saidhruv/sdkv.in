@@ -20,6 +20,7 @@
     window.RESUME_VERSIONS = [
       { slug: 'ai',       label: 'AI & Technology Leader', focus: 'AI platforms, agentic systems, org transformation',        file: 'resume',          download: 'Sai Dhruva K V - Resume.pdf' },
       { slug: 'frontend', label: 'Frontend Architect',     focus: 'design systems, component architecture, performance, a11y', file: 'resume-frontend', download: 'Sai Dhruva K V - Frontend Resume.pdf' },
+      { slug: 'tpm',      label: 'Senior Technical Program Manager', focus: 'technical program leadership, GenAI/LLM delivery, cross-functional scale', file: 'resume-tpm', download: 'Sai Dhruva K V - TPM Resume.pdf' },
     ];
     window.DEFAULT_VARIANT = 'ai';
   </script>
@@ -387,9 +388,11 @@
     /* --- Version show/hide (orthogonal to mode + theme) ------------------ */
     /* Generic: only the active version's .rv-<slug> blocks are visible; all others
        collapse to zero height (so the single #sheet / fit() path still works). */
-    .rv-frontend { display: none; }
-    :root[data-resume-variant="frontend"] .rv-ai { display: none; }
+    .rv-frontend, .rv-tpm { display: none; }
+    :root[data-resume-variant="frontend"] .rv-ai, :root[data-resume-variant="frontend"] .rv-tpm { display: none; }
     :root[data-resume-variant="frontend"] .rv-frontend { display: block; }
+    :root[data-resume-variant="tpm"] .rv-ai, :root[data-resume-variant="tpm"] .rv-frontend { display: none; }
+    :root[data-resume-variant="tpm"] .rv-tpm { display: block; }
 
     /* --- Header bar (Back · wordmark · mode + theme toggle + Download) ---------- */
     .rz-bar {
@@ -569,8 +572,10 @@
         <h1 class="name">Sai Dhruva K V</h1>
         <p class="title rv-ai">AI &amp; Technology Leader — Architecting Intelligent Platforms at Scale</p>
         <p class="title rv-frontend">Frontend Architect — Design Systems, Component Architecture &amp; Performance at Scale</p>
+        <p class="title rv-tpm">Senior Technical Program Manager — Driving AI &amp; Platform Programs at Enterprise Scale</p>
         <p class="specialties rv-ai">Generative AI <span class="dot">·</span> Enterprise Architecture <span class="dot">·</span> Cloud Engineering <span class="dot">·</span> Organizational Transformation</p>
         <p class="specialties rv-frontend">Design Systems <span class="dot">·</span> Component &amp; State Architecture <span class="dot">·</span> Performance <span class="dot">·</span> Accessibility (WCAG)</p>
+        <p class="specialties rv-tpm">Technical Program Management <span class="dot">·</span> GenAI/LLM Program Delivery <span class="dot">·</span> Cross-Functional Delivery <span class="dot">·</span> Risk &amp; Governance</p>
         <p class="contact">
           <span>Bengaluru, India</span><span class="dot">·</span>
           <a href="tel:+918123166570">+91 8123 166 570</a><span class="dot">·</span>
@@ -629,6 +634,28 @@
               </div>
             </div>
 
+            <div class="rail-block rv-tpm">
+              <div class="label"><span class="num">// 01</span> Professional Summary</div>
+              <p class="summary">Technical Program Leader with 10+ years owning end-to-end delivery across 20–30-engineer organizations — roadmaps, risk and dependency tracking, and cross-team coordination. Deep, current hands-on experience with <em>GenAI/LLM program delivery</em>, agentic automation, and enterprise data-platform governance, most recently compressing a month-long delivery cycle to under four days.</p>
+              <div class="metric-group">
+                <div class="metric-label">At a glance</div>
+                <div class="metrics">
+                  <div class="metric"><div class="n">10+</div><div class="l">Years technical program leadership</div></div>
+                  <div class="metric"><div class="n">30</div><div class="l">Engineers in largest program scope</div></div>
+                  <div class="metric"><div class="n">10+</div><div class="l">Organizations aligned</div></div>
+                  <div class="metric"><div class="n">20+</div><div class="l">Technologies delivered</div></div>
+                </div>
+              </div>
+              <div class="metric-group">
+                <div class="metric-label">Measured outcomes</div>
+                <div class="metrics">
+                  <div class="metric"><div class="n">&lt;4d</div><div class="l">Delivery cycle, down from 1 month</div></div>
+                  <div class="metric"><div class="n">~95%</div><div class="l">Fewer critical errors (AI-augmented QA)</div></div>
+                  <div class="metric"><div class="n">~40%</div><div class="l">Faster program delivery</div></div>
+                  <div class="metric"><div class="n">~67%</div><div class="l">Less dev time via AI-assisted delivery</div></div>
+                </div>
+              </div>
+            </div>
 
             <div class="rail-block rv-ai">
               <div class="label"><span class="num">// 03</span> Core Competencies</div>
@@ -668,6 +695,24 @@
               </div>
             </div>
 
+            <div class="rail-block rv-tpm">
+              <div class="label"><span class="num">// 03</span> Core Competencies</div>
+              <div class="comp">
+                <span>Technical Program Management</span>
+                <span>Risk Management &amp; Governance</span>
+                <span>Stakeholder Management</span>
+                <span>Cross-Functional Team Leadership</span>
+                <span>Program &amp; Roadmap Planning</span>
+                <span>KPI/SLA Definition &amp; Reporting</span>
+                <span>GenAI/LLM Program Delivery</span>
+                <span>Agile Delivery</span>
+                <span>Vendor &amp; Contract Mgmt</span>
+                <span>Mentoring &amp; Coaching</span>
+                <span>Enterprise Architecture</span>
+                <span>Technology Strategy</span>
+              </div>
+            </div>
+
 
             <div class="rail-block rv-ai">
               <div class="label"><span class="num">// 04</span> Technical Skills</div>
@@ -685,6 +730,15 @@
               <div class="skillgroup"><h4>AI &amp; Data</h4><p>Generative AI, LLM Products, Agentic AI, ML Pipelines, Data Architecture</p></div>
               <div class="skillgroup"><h4>DevOps &amp; CI/CD</h4><p>Terraform, CircleCI, Jenkins, GitHub, Bitbucket</p></div>
               <div class="skillgroup"><h4>Tools &amp; Design</h4><p>Figma, Adobe Photoshop, Jira, Asana</p></div>
+            </div>
+
+            <div class="rail-block rv-tpm">
+              <div class="label"><span class="num">// 04</span> Technical Skills</div>
+              <div class="skillgroup"><h4>Program &amp; Delivery Tools</h4><p>Jira, Asana, Risk Registers, Dependency Tracking, Release Coordination</p></div>
+              <div class="skillgroup"><h4>AI &amp; Data</h4><p>Generative AI, LLM Products, Agentic AI, NLP Analytics, ML Pipelines, Data Architecture, Data Standards, Data Analytics</p></div>
+              <div class="skillgroup"><h4>Cloud — AWS</h4><p>Lambda, API Gateway, CloudFormation, DynamoDB, CloudFront, CloudWatch, Cognito, S3</p></div>
+              <div class="skillgroup"><h4>Engineering (hands-on)</h4><p>ReactJS, Next.js, Node.js, React Native, JavaScript, GraphQL, ElasticSearch, Python</p></div>
+              <div class="skillgroup"><h4>DevOps &amp; CI/CD</h4><p>Terraform, CircleCI, Jenkins, GitHub, Bitbucket</p></div>
             </div>
 
 
@@ -833,6 +887,70 @@
               </ul>
             </article>
             </div>
+
+            <div class="rv-tpm">
+            <article class="role">
+              <h3 class="co">AMD</h3>
+              <div class="meta"><span class="r">Consulting Architect</span> · via Infobell IT Solutions Pvt. Ltd.<br>February 2025 – Present</div>
+              <ul>
+                <li>Own technical program delivery for agentic AI initiatives, driving ~30 engineers through the full SDLC — from roadmap definition through production release.</li>
+                <li>Architect and govern an enterprise AI data platform and data standards, aligning multiple business units on shared, reusable, auditable infrastructure.</li>
+                <li>Direct GenAI/LLM program delivery as technical lead for a natural-language benchmark-analysis product, coordinating model, prompt, and delivery decisions across the team.</li>
+                <li>Reduce manual, human-in-the-loop effort by spearheading agent-based pipelines for AI-augmented data validation, enrichment, and reasoning — improving accuracy, scalability, and throughput.</li>
+                <li>Compressed a month-long delivery cycle to under four days by re-architecting the Automated Benchmarking Platform, enterprise data warehouse, and end-to-end workflow — a program-level schedule and process win.</li>
+                <li>Established program governance mechanisms — explainability, access control, and reuse guardrails — that de-risked enterprise AI adoption and kept delivery auditable across teams.</li>
+                <li>Coordinate cross-business-unit alignment, mentoring engineers and driving shared platforms, standards, and delivery practices across multiple orgs.</li>
+                <li>Deliver measurable program outcomes: 100% AI-coded products, ~67% less development time, ~40% faster delivery, and ~95% fewer critical production errors via AI-augmented testing embedded in the delivery pipeline.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <h3 class="co">FINEOS <span style="font-weight:400;font-style:italic;color:var(--muted);font-size:0.62em;">(formerly Spraoi)</span></h3>
+              <div class="meta"><span class="r">Senior Software Developer</span> · FINEOS Corporate Holdings, Ireland<br>March 2018 – January 2025</div>
+              <ul>
+                <li>Led cross-functional program delivery across ~20 engineers, designers, and QA to ship an enterprise insurance portal spanning product showcase, e-commerce, document management, and claims tracking.</li>
+                <li>Owned the AI/ML platform end-to-end — data architecture, pipelines, and model delivery — establishing it as the reusable backbone for the organization's intelligent product features.</li>
+                <li>Drove a cross-team personalization program that shipped predictive plan recommendations, measurably lifting user engagement and conversion.</li>
+                <li>Built scalable, reusable delivery infrastructure — a standardized AI/ML training accelerator and a reusable workflow pipeline builder — cutting time-to-insight and eliminating duplicated engineering effort across teams.</li>
+                <li>Engineered data-quality guardrails — self-describing dataset infrastructure with built-in validation and error handling — ensuring integrity and trust across AI workloads.</li>
+                <li>Set delivery and mentoring standards across the engineering org, raising code quality and shipping consistency.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <h3 class="co">Goin LLC</h3>
+              <div class="meta"><span class="r">Consulting Mobile Application Developer</span><br>June 2017 – March 2018</div>
+              <ul>
+                <li>Led delivery of an inclusive cab aggregator program, ensuring accessibility for riders with disabilities and WCAG compliance.</li>
+                <li>Coordinated requirements, design, and QA across an iOS Rider app and a React Native Driver app spanning registration, booking, and real-time tracking.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <h3 class="co">HPE</h3>
+              <div class="meta"><span class="r">Consulting Mobile Application Developer</span><br>October 2016 – June 2017</div>
+              <ul>
+                <li>Drove rapid-prototyping programs for enterprise-partner mobile and web apps, supporting HPE's mobility product strategy.</li>
+                <li>Coordinated cross-platform delivery in ReactJS, Android, and PHP/MySQL, expediting time-to-market by 20%.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <h3 class="co">iService</h3>
+              <div class="meta"><span class="r">Mobile Application Developer</span> · Service Monk Technologies Pvt. Ltd.<br>October 2015 – October 2016</div>
+              <ul>
+                <li>Managed delivery of a CRM suite with integrated geo-fencing and mobile lab testing, ensuring scalability across fragmented Android ecosystems.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <h3 class="co">Freelance Consultant</h3>
+              <div class="meta"><span class="r">Part-time, concurrent</span><br>2016 – Present</div>
+              <ul>
+                <li>Partnered with diverse clients to scope, plan, and deliver tailored web and mobile programs across JavaScript frameworks and cloud services, on time and within budget.</li>
+              </ul>
+            </article>
+            </div>
           </section>
         </div>
 
@@ -849,8 +967,10 @@
         <h1>Sai Dhruva K V</h1>
         <div class="headline rv-ai">AI &amp; Technology Leader — Architecting Intelligent Platforms at Scale</div>
         <div class="headline rv-frontend">Frontend Architect — Design Systems, Component Architecture &amp; Performance at Scale</div>
+        <div class="headline rv-tpm">Senior Technical Program Manager — Driving AI &amp; Platform Programs at Enterprise Scale</div>
         <div class="doc-spec rv-ai">Generative AI <span class="dot">·</span> Enterprise Architecture <span class="dot">·</span> Cloud Engineering <span class="dot">·</span> Organizational Transformation</div>
         <div class="doc-spec rv-frontend">Design Systems <span class="dot">·</span> Component &amp; State Architecture <span class="dot">·</span> Performance <span class="dot">·</span> Accessibility (WCAG)</div>
+        <div class="doc-spec rv-tpm">Technical Program Management <span class="dot">·</span> GenAI/LLM Program Delivery <span class="dot">·</span> Cross-Functional Delivery <span class="dot">·</span> Risk &amp; Governance</div>
         <div class="doc-contact">
           Bengaluru, India <span class="dot">·</span>
           <a href="tel:+918123166570">+91 8123 166 570</a> <span class="dot">·</span>
@@ -874,6 +994,12 @@
         <p class="highlights"><strong>Highlights:</strong> 10+ years leading at scale · 6.5 years enterprise React platform (FINEOS) · 10+ organizations shaped · 20+ technologies delivered · 20% faster time-to-market (HPE) · WCAG-compliant delivery (Goin).</p>
       </section>
 
+      <section class="rv-tpm">
+        <h2>Professional Summary</h2>
+        <p class="doc-summary">Technical Program Leader with 10+ years owning end-to-end delivery across 20–30-engineer organizations — roadmaps, risk and dependency tracking, and cross-team coordination. Deep, current hands-on experience with GenAI/LLM program delivery, agentic automation, and enterprise data-platform governance, most recently compressing a month-long delivery cycle to under four days.</p>
+        <p class="highlights"><strong>Highlights:</strong> 10+ years technical program leadership · up to 30 engineers in largest program scope · 10+ organizations aligned · 20+ technologies delivered · delivery cycle compressed from 1 month to &lt;4 days · ~95% fewer critical errors · ~40% faster program delivery · ~67% less dev time via AI-assisted delivery.</p>
+      </section>
+
       <section class="rv-ai">
         <h2>Core Competencies</h2>
         <p>Strategic Leadership, Technology Strategy, Enterprise Architecture, Organizational Transformation, Technical Vision &amp; Innovation, Agile Delivery, Product Roadmapping, Project Management, Risk Management &amp; Governance, Stakeholder Management, Vendor &amp; Contract Management, Cross-Functional Team Leadership, Mentoring &amp; Coaching, Cybersecurity Awareness.</p>
@@ -882,6 +1008,11 @@
       <section class="rv-frontend">
         <h2>Core Competencies</h2>
         <p>Frontend Architecture, Design Systems, Component &amp; State Architecture, Performance Optimization, Accessibility (WCAG), Design–Dev Collaboration, Team Leadership, Mentoring &amp; Coaching, Technology Strategy, Cross-Functional Delivery, Agile Delivery, Technical Vision.</p>
+      </section>
+
+      <section class="rv-tpm">
+        <h2>Core Competencies</h2>
+        <p>Technical Program Management, Risk Management &amp; Governance, Stakeholder Management, Cross-Functional Team Leadership, Program &amp; Roadmap Planning, KPI/SLA Definition &amp; Reporting, GenAI/LLM Program Delivery, Agile Delivery, Vendor &amp; Contract Management, Mentoring &amp; Coaching, Enterprise Architecture, Technology Strategy.</p>
       </section>
 
       <section class="rv-ai">
@@ -900,6 +1031,15 @@
         <p class="kv"><strong>AI &amp; Data:</strong> Generative AI, LLM Products, Agentic AI, ML Pipelines, Data Architecture</p>
         <p class="kv"><strong>DevOps &amp; CI/CD:</strong> Terraform, CircleCI, Jenkins, GitHub, Bitbucket</p>
         <p class="kv"><strong>Tools &amp; Design:</strong> Figma, Adobe Photoshop, Jira, Asana</p>
+      </section>
+
+      <section class="rv-tpm">
+        <h2>Technical Skills</h2>
+        <p class="kv"><strong>Program &amp; Delivery Tools:</strong> Jira, Asana, Risk Registers, Dependency Tracking, Release Coordination</p>
+        <p class="kv"><strong>AI &amp; Data:</strong> Generative AI, LLM Products, Agentic AI, NLP Analytics, ML Pipelines, Data Architecture, Data Standards, Data Analytics</p>
+        <p class="kv"><strong>Cloud (AWS):</strong> Lambda, API Gateway, CloudFormation, DynamoDB, CloudFront, CloudWatch, Cognito, S3</p>
+        <p class="kv"><strong>Engineering (hands-on):</strong> ReactJS, Next.js, Node.js, React Native, JavaScript, GraphQL, ElasticSearch, Python</p>
+        <p class="kv"><strong>DevOps &amp; CI/CD:</strong> Terraform, CircleCI, Jenkins, GitHub, Bitbucket</p>
       </section>
 
       <section class="rv-ai">
@@ -1032,6 +1172,72 @@
           <div class="meta">2016 – Present</div>
           <ul>
             <li>Partnered with diverse clients to design and build tailored web and mobile front ends across JavaScript frameworks and cloud services, on time and within budget.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="rv-tpm">
+        <h2>Professional Experience</h2>
+
+        <div class="job">
+          <h3>AMD — Consulting Architect</h3>
+          <div class="meta">via Infobell IT Solutions Pvt. Ltd. · February 2025 – Present</div>
+          <ul>
+            <li>Own technical program delivery for agentic AI initiatives, driving ~30 engineers through the full SDLC — from roadmap definition through production release.</li>
+            <li>Architect and govern an enterprise AI data platform and data standards, aligning multiple business units on shared, reusable, auditable infrastructure.</li>
+            <li>Direct GenAI/LLM program delivery as technical lead for a natural-language benchmark-analysis product, coordinating model, prompt, and delivery decisions across the team.</li>
+            <li>Reduce manual, human-in-the-loop effort by spearheading agent-based pipelines for AI-augmented data validation, enrichment, and reasoning — improving accuracy, scalability, and throughput.</li>
+            <li>Compressed a month-long delivery cycle to under four days by re-architecting the Automated Benchmarking Platform, enterprise data warehouse, and end-to-end workflow — a program-level schedule and process win.</li>
+            <li>Established program governance mechanisms — explainability, access control, and reuse guardrails — that de-risked enterprise AI adoption and kept delivery auditable across teams.</li>
+            <li>Coordinate cross-business-unit alignment, mentoring engineers and driving shared platforms, standards, and delivery practices across multiple orgs.</li>
+            <li>Deliver measurable program outcomes: 100% AI-coded products, ~67% less development time, ~40% faster delivery, and ~95% fewer critical production errors via AI-augmented testing embedded in the delivery pipeline.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <h3>FINEOS (formerly Spraoi) — Senior Software Developer</h3>
+          <div class="meta">FINEOS Corporate Holdings, Ireland · March 2018 – January 2025</div>
+          <ul>
+            <li>Led cross-functional program delivery across ~20 engineers, designers, and QA to ship an enterprise insurance portal spanning product showcase, e-commerce, document management, and claims tracking.</li>
+            <li>Owned the AI/ML platform end-to-end — data architecture, pipelines, and model delivery — establishing it as the reusable backbone for the organization's intelligent product features.</li>
+            <li>Drove a cross-team personalization program that shipped predictive plan recommendations, measurably lifting user engagement and conversion.</li>
+            <li>Built scalable, reusable delivery infrastructure — a standardized AI/ML training accelerator and a reusable workflow pipeline builder — cutting time-to-insight and eliminating duplicated engineering effort across teams.</li>
+            <li>Engineered data-quality guardrails — self-describing dataset infrastructure with built-in validation and error handling — ensuring integrity and trust across AI workloads.</li>
+            <li>Set delivery and mentoring standards across the engineering org, raising code quality and shipping consistency.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <h3>Goin LLC — Consulting Mobile Application Developer</h3>
+          <div class="meta">June 2017 – March 2018</div>
+          <ul>
+            <li>Led delivery of an inclusive cab aggregator program, ensuring accessibility for riders with disabilities and WCAG compliance.</li>
+            <li>Coordinated requirements, design, and QA across an iOS Rider app and a React Native Driver app spanning registration, booking, and real-time tracking.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <h3>HPE — Consulting Mobile Application Developer</h3>
+          <div class="meta">October 2016 – June 2017</div>
+          <ul>
+            <li>Drove rapid-prototyping programs for enterprise-partner mobile and web apps, supporting HPE's mobility product strategy.</li>
+            <li>Coordinated cross-platform delivery in ReactJS, Android, and PHP/MySQL, expediting time-to-market by 20%.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <h3>iService — Mobile Application Developer</h3>
+          <div class="meta">Service Monk Technologies Pvt. Ltd. · October 2015 – October 2016</div>
+          <ul>
+            <li>Managed delivery of a CRM suite with integrated geo-fencing and mobile lab testing, ensuring scalability across fragmented Android ecosystems.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <h3>Freelance Consultant — Part-time, concurrent</h3>
+          <div class="meta">2016 – Present</div>
+          <ul>
+            <li>Partnered with diverse clients to scope, plan, and deliver tailored web and mobile programs across JavaScript frameworks and cloud services, on time and within budget.</li>
           </ul>
         </div>
       </section>

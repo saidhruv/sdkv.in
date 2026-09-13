@@ -53,14 +53,20 @@ const URL = `${base}/resume/`;
 const VERSIONS = [
   { slug: 'ai',       file: 'resume' },
   { slug: 'frontend', file: 'resume-frontend' },
+  { slug: 'tpm',      file: 'resume-tpm' },
 ];
 
 // Render the sheet at native scale, top-left, without the scaler/stage chrome.
+// Also suppresses the EDITION picker's "auto-reveal" (it pops open ~600ms after
+// load to advertise editions, then auto-closes ~3s later — a JS setTimeout that
+// races against this script's fixed post-load wait). Hiding it here is timing-
+// independent: it stays suppressed no matter when the capture actually fires.
 const NEUTRALIZE = `
   .stage { padding: 0 !important; display: block !important; }
   .scaler { width: auto !important; height: auto !important; margin: 0 !important; box-shadow: none !important; }
   .sheet { position: static !important; transform: none !important; }
   .dl-btn, .rz-bar, .doc, #bg-grid { display: none !important; }
+  .rz-editions, .edition-panel, .edition-backdrop { display: none !important; }
 `;
 
 const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
@@ -135,6 +141,10 @@ for (const mode of ['light', 'dark']) {
   await page.emulateMediaType('print'); // so the measured height reflects the print layout
   // The résumé anti-prints in BOTH modes now; re-reveal the ATS document so this offline
   // build can still capture it full-bleed (a real user pressing Print gets the notice).
+  // Belt-and-suspenders: the EDITION picker's auto-reveal (see NEUTRALIZE above)
+  // is a screen-only widget with no @media print rule of its own, but hide it
+  // unconditionally in case it's ever mid-animation when this capture fires.
+  await page.addStyleTag({ content: `.rz-editions, .edition-panel, .edition-backdrop { display: none !important; }` });
   await page.addStyleTag({ content: `@media print {
     .print-notice { display: none !important; }
     .scaler { display: none !important; }
