@@ -15,3 +15,11 @@ src/config.json
 yalc.lock
 yarn-debug.log
 yarn-error.log
+
+# Playwright (tests/) — dev-tooling only, not part of the deployed site.
+# Baseline snapshots (tests/e2e/**/*-snapshots/) ARE committed — they're the
+# source of truth for toHaveScreenshot() diffing.
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/

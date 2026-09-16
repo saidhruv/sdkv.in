@@ -1,5 +1,40 @@
 # Session History
 
+## 2026-09-16 — Fixed the color-contrast gaps the E2E suite flagged (red + faint), closed two test-timing blind spots
+
+**Summary:** Follow-on from the 2026-09-15 session, which discovered a pre-existing brand-red color-contrast gap but deliberately left it excluded/backlogged pending the user's call. This session, the user asked directly "how much effort would it be to darken the red?" — answered with a concrete, low-effort estimate (the token is a `light-dark()` CSS var, dark mode already passed, so only one hex needed to change), backed by actual WCAG relative-luminance math rather than a guess. Computed a candidate (`#c53016`, 4.81:1, same hue/saturation as the original `#e8472b`) and a safer alternative (`#b82d14`, 5.35:1), then **verified both live in the actual browser** via a Cursor browser tab + CDP `Runtime.evaluate` color overrides + screenshots (hero italic word, impact numbers) before asking the user to pick — they chose the closer-to-original shade.
+
+**What "fixing the red" actually took:** 2 lines in `index.css` + 3 spots in `resume/index.html` (root token, a hardcoded ATS-`.doc` fallback, a `@media print` fallback the earlier session hadn't noticed). Verified clean with axe.
+
+**Cascading discoveries once the blanket `.disableRules(['color-contrast'])` exclusion was removed (it had been hiding more than just red):**
+1. A second, separate, worse pre-existing gap: `--faint` token at 2.63:1 (light) / 3.90:1 (dark) — used for "Also available:" and the résumé footer note. The dark-mode half was failing *silently*, since no existing axe test scanned the site under dark theme. User was asked and chose to fix this too, same technique (computed `#6f6a5d`/`#85858e`, landing at 4.70:1/5.16:1, preserving the "fainter than muted" relationship in both directions).
+2. Two test-timing races that had been masked by the same blanket exclusion, misidentified at first as more real design bugs (`#cb4830`, `#7c7569` foreground colors that didn't match any known token) until solved for the alpha-blend factor between the token and paper background (~87% both times) — confirming both were animations/transitions caught mid-flight by the scan, not static design issues: the résumé edition-picker's axe test was missing the existing `disableAutoReveal()` call, and the homepage's one-time ~2s intro nav-link stagger-fade had no equivalent guard. Fixed the résumé one by adding the missing helper call; fixed the homepage one by emulating `prefers-reduced-motion: reduce` (the site's own CSS already forces instant `opacity:1` under that media feature).
+3. Added dark-theme axe coverage to both spec files specifically so a dark-mode-only regression like #1 can't hide again.
+4. An unrelated sandbox flake: `net::ERR_NAME_NOT_RESOLVED` for the Cloudflare beacon (same benign cross-origin failure as before, different Chromium error string) — broadened the existing filter regex from `net::ERR_FAILED` to `net::ERR_/i`, still gated behind the `requestfailed`-URL cross-check.
+
+**Verified:** Full 38-test suite green, re-run clean twice (including a `--repeat-each=2` pass) with zero flakiness after all fixes. All 14 visual-regression baselines regenerated. `npm run test:pdf` rebuilt + verified all 9 PDFs clean (one transient Windows file-lock on `resume-tpm-dark.pdf`, resolved by deleting the stale file and retrying — environmental, not a regression).
+
+**Environmental notes for future sessions:** the sandbox's temp cache can get cleared between sessions, silently breaking `npx playwright test` (missing chromium binary) and `npm run test:pdf` (missing puppeteer's Chrome) — if either fails with a "Could not find/Executable doesn't exist" error, just re-run `npx playwright install chromium` / `npx puppeteer browsers install chrome` first.
+
+**State:** left uncommitted for review, same as the 2026-09-15 session's testing-suite work.
+
+## 2026-09-15 — E2E testing suite + CI (planned, then fully implemented + verified)
+
+**Summary:** Prior session's request ("write and execute end-to-end automated testing for the entire project... on every commit to master or PR to any branch") was planned first (per instruction), then this session executed the plan end to end without stopping: scaffolded `package.json` (dev-tooling-only devDependencies: `@playwright/test`, `@axe-core/playwright`, `puppeteer`, `pdfjs-dist`), `tests/dev-server.mjs`, `playwright.config.js`, `tests/e2e/homepage.spec.js` + `resume.spec.js`, `tests/pdf/verify-pdfs.mjs`, `.gitignore` updates, `.github/workflows/ci.yml`, ran `npm install` + the full suite locally, fixed every failure, and generated + reviewed all 14 visual-regression baselines.
+
+**Scope correction mid-plan:** user explicitly expanded the résumé visual-regression ask from a proportional subset (5 snapshots) to the **full** 3-edition × 2-mode × 2-theme combinatorial matrix (12 snapshots) — updated the plan accordingly before executing.
+
+**Real bugs found and fixed while writing/running the tests (not pre-existing site bugs — test-code issues that surfaced against the real app's timing):**
+1. The résumé edition-picker's own timed **auto-reveal** (`setTimeout(fn, 600)`, silently opens the panel ~600ms after load) raced any test that clicked the trigger — a blind click could close an already-(silently)-opened panel instead of opening it. Fixed by deterministically no-op'ing that one `setTimeout(..., 600)` call in an init script (verified unique in `resume/index.html`, so no other timer is affected) for functional tests; visual-regression tests instead force-hide `.edition-panel`/`.edition-backdrop` via an injected stylesheet (timing doesn't matter for a screenshot).
+2. The homepage's about-section count-up metrics are gated by their OWN `IntersectionObserver` (separate from `.reveal`'s reduced-motion instant-fast-path) — a naive full-page screenshot without scrolling first captured them stuck at "0". Fixed by `scrollIntoViewIfNeeded()`-ing the metrics before asserting/capturing.
+3. The "no console errors" test's Cloudflare-beacon filter was too narrow (Chromium logs a generic, URL-less `net::ERR_FAILED` for the blocked cross-origin beacon request) — broadened it, but cross-checked against the actual failed-request URL (via the `requestfailed` page event) rather than blindly swallowing any `net::ERR_FAILED` text, so a genuinely broken resource elsewhere would still fail the test.
+
+**Real, pre-existing site issue discovered (NOT fixed this session — deliberately, see `decisions.md`):** the axe-core a11y scan surfaced ~100+ "serious" color-contrast violations, all tracing to one sitewide, deliberate design choice — brand red `#e8472b` on paper `#f3efe7` (and its reverse) at ~3.41:1, below the 4.5:1 AA text threshold, used decoratively throughout headings/labels/links on both pages. Rather than unilaterally re-theme the brand (would also invalidate every visual baseline) or silently hide it, excluded `color-contrast` from the automated gate with an explanatory comment in both spec files, and logged it as a tracked backlog item for the user to decide on separately.
+
+**Verified:** 35 Playwright tests × 3 repeats = 105/105 passed, zero flakiness, before finalizing baselines. `npm run test:pdf` (rebuilds all 9 résumé PDFs + verifies them) passed clean. 14 visual-regression PNGs committed under `tests/e2e/*.spec.js-snapshots/`.
+
+**State:** left uncommitted for review per the plan's execution note ("not committing/pushing without sign-off"), alongside prior session's still-uncommitted content changes (index.html/css, js/data.js, js/main.js — Résumé nav link, capabilities/leadership relabeling, mobile-menu intro-animation cleanup fix).
+
 ## 2026-09-09 — Résumé edition picker: strip relocation + frosted popup + discoverability (ported from mock)
 
 **Summary:** Redesigned the résumé edition selector for discoverability. Iterated entirely in an isolated mock (`resume/_mock-edition.html`), reviewing screenshots each step, then ported into the real `resume/index.html`.

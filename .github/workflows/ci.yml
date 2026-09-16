@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  e2e:
+    # Windows, not ubuntu: the committed visual-regression baselines in
+    # tests/e2e/*.spec.js-snapshots/ were generated on Windows, and Playwright
+    # bakes the OS into snapshot filenames (…-win32.png). Running on a
+    # different OS would look for …-linux.png, find nothing, and fail every
+    # visual test on the first run regardless of any real change. If the
+    # baselines are ever regenerated on Linux (e.g. via the official
+    # mcr.microsoft.com/playwright Docker image), switch this back to
+    # ubuntu-latest and drop the OS-suffixed files.
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+  pdf-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      # puppeteer's postinstall auto-downloads its pinned Chrome build here —
+      # CI has full internet access, sidestepping the system-Chrome-version
+      # mismatch hit when testing locally with PUPPETEER_EXECUTABLE_PATH.
+      - run: npm ci
+      - run: npm run test:pdf

@@ -12,13 +12,16 @@ Chosen over two alternatives (Living Architecture node-graph, Spatial Depth flow
 --paper-2:  light-dark(#ebe5d9, #1c1915)
 --ink:      light-dark(#16140f, #f3efe7)   /* primary text */
 --muted:    light-dark(#6b6457, #a39a89)
---faint:    light-dark(#9a9486, #6a6356)
+--faint:    light-dark(#6f6a5d, #85858e)   /* AA-fixed 2026-09-16, was #9a9486/#71717a */
 --line:     light-dark(#d8d2c6, #322d25)   /* hairlines */
 --line-2:   light-dark(#16140f, #f3efe7)   /* strong rules (= ink) */
---red:      light-dark(#e8472b, #ff6347)   /* the single accent */
+--red:      light-dark(#c53016, #ff6347)   /* AA-fixed 2026-09-16, was #e8472b (light only) */
 ```
 Components reference ONLY semantic tokens. The toggle overrides via `color-scheme`.
 The red is the sole accent — used for italic display words, units (+), section numbers, hover bars, links.
+Both `--red` (light mode) and `--faint` (both modes) were darkened/adjusted on 2026-09-16
+to meet WCAG AA 4.5:1 text contrast against `--paper` — see `decisions.md` for the exact
+color math. Same hue/saturation as before, just less lightness; not a brand redesign.
 
 ## Typography
 - **Display/headings:** `'Fraunces', Georgia, serif` — variable, optical-sizing, weights 300/400/600/900, incl. italic

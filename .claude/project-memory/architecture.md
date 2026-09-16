@@ -72,3 +72,91 @@ elements exist before the reveal observer wires up. Every init guards on element
 
 ## Local Preview
 `.claude/launch.json` defines a "static" server (`npx serve -l 4321 .`).
+
+## Testing & CI (dev-tooling only — not part of the deployed site)
+The live site itself stays zero-build/zero-dependency; a real `package.json` was
+added purely to scaffold Playwright E2E/visual/a11y tests + CI, mirroring what
+`tools/build-resume-pdf.mjs` already informally required (`npm i puppeteer`).
+
+```
+package.json                      ← devDependencies only: @playwright/test,
+                                     @axe-core/playwright, puppeteer, pdfjs-dist
+playwright.config.js              ← webServer (tests/dev-server.mjs on :4173),
+                                     chromium-only project, toHaveScreenshot maxDiffPixelRatio 0.01
+tests/
+  dev-server.mjs                  ← tiny zero-dep static server (mirrors the
+                                     inline server in build-resume-pdf.mjs),
+                                     used only by Playwright's webServer
+  e2e/
+    homepage.spec.js              ← nav, mobile-menu regression, theme, sections
+                                     (work/caps/impact), copy-email, a11y, visual (2 snapshots)
+    resume.spec.js                ← edition picker, mode toggle, theme, print
+                                     anti-swap, download flow, a11y, visual
+                                     (full 3 editions × 2 modes × 2 themes = 12 snapshots)
+    *.spec.js-snapshots/*.png     ← COMMITTED baselines (source of truth for diffing)
+  pdf/
+    verify-pdfs.mjs               ← plain Node script (not Playwright): runs
+                                     tools/build-resume-pdf.mjs, asserts all 9
+                                     PDFs exist/sized/have real text, and don't
+                                     contain the edition-picker's own chrome text
+                                     ("Format"/"Edition" headings) — the exact
+                                     regression class of the picker-leaked-into-PDF bug
+.github/workflows/ci.yml          ← push to master + PR (any branch): `e2e` job
+                                     (Playwright) + `pdf-smoke` job (build + verify-pdfs)
+```
+
+`.gitignore` excludes Playwright's `test-results/`, `playwright-report/`,
+`blob-report/`, `playwright/.cache/` — but the snapshot baselines above ARE committed.
+
+**Gotchas discovered while writing these tests (see also `decisions.md`):**
+- The résumé edition-picker has a timed "auto-reveal" (`setTimeout(fn, 600)`, opens
+  itself briefly to advertise editions) that races any test clicking the trigger
+  around the same time — a blind click can toggle an already-(silently)-open
+  panel CLOSED. Functional tests neutralize it deterministically by no-op'ing
+  that one `setTimeout(..., 600)` call (`disableAutoReveal()` in `resume.spec.js`);
+  visual-regression tests instead just force-hide `.edition-panel`/`.edition-backdrop`
+  via an injected stylesheet, since timing doesn't matter for a screenshot.
+- The About-section count-up metrics (`[data-count]`) are gated by their OWN
+  `IntersectionObserver` (independent of `.reveal`'s reduced-motion fast-path) —
+  they only resolve once scrolled into view, even under `prefers-reduced-motion`.
+  Visual-regression/functional tests must `scrollIntoViewIfNeeded()` them first.
+- Chromium logs a generic, URL-less `"Failed to load resource: net::ERR_*"`
+  (the exact code varies by environment — `ERR_FAILED`, `ERR_NAME_NOT_RESOLVED`,
+  etc.) console error for the Cloudflare beacon's blocked cross-origin request on
+  localhost/CI — tests correlate it against an actual failed request to
+  `cloudflareinsights.com` (via the `requestfailed` page event) before excusing it,
+  so a genuinely broken resource elsewhere still fails the test.
+- axe-core's `color-contrast` scan can race any in-flight CSS transition/animation
+  and sample a transient, partially-blended color as a "violation" that doesn't
+  match any real, settled page state. Two instances found (2026-09-16): the
+  résumé edition-picker's axe test was missing the `disableAutoReveal()` call
+  used elsewhere (its silent auto-open transition got sampled mid-fade); the
+  homepage's one-time ~2s intro nav-link stagger-fade had no guard at all (fixed
+  by emulating `prefers-reduced-motion: reduce`, which the site's own CSS already
+  uses to force instant `opacity:1; animation:none` on those elements). If a
+  future axe run reports a "violation" color that doesn't match any CSS custom
+  property, suspect this before suspecting the design — solve for the alpha-blend
+  factor between the token and background color to confirm.
+- The `--red`/`--faint` tokens are `light-dark()` pairs — when fixing a contrast
+  issue, check whether ONE side already passes (it usually does; dark paper is
+  very dark, so a mid-tone dark-mode accent color often already clears AA) before
+  touching both. `--red`'s dark half (`#ff6347`, ~6.4:1) didn't need touching in
+  2026-09-16's fix; `--faint`'s dark half (`#71717a`, ~3.9:1) did.
+- axe's `color-contrast` rule only checks whatever theme/mode the page is in when
+  `analyze()` runs — a dark-mode-only failure won't surface unless a test
+  explicitly seeds dark theme. Both spec files now loop `['light', 'dark']` for
+  their a11y tests specifically to prevent this blind spot recurring.
+- Playwright bakes the OS into visual-regression snapshot filenames (e.g.
+  `homepage-light-chromium-win32.png`). The baselines here were generated on
+  Windows, so `.github/workflows/ci.yml`'s `e2e` job runs on `windows-latest`
+  (not `ubuntu-latest`, which `pdf-smoke` still uses) — running on a different
+  OS would look for `-linux.png` files that don't exist and fail every visual
+  test regardless of any real change. If baselines are ever regenerated on
+  Linux (e.g. via the official `mcr.microsoft.com/playwright` Docker image),
+  switch the runner back and drop the win32-suffixed files.
+- Sandbox/CI environment gotcha: the temp cache housing Playwright's and
+  puppeteer's downloaded browser binaries can get cleared between sessions,
+  breaking `npx playwright test` ("Executable doesn't exist") and
+  `npm run test:pdf` ("Could not find Chrome") independently of any code change.
+  Re-run `npx playwright install chromium` / `npx puppeteer browsers install chrome`
+  first when either fails with that specific error class.

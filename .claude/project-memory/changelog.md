@@ -1,5 +1,36 @@
 # Changelog
 
+## 2026-09-16 — Fixed color-contrast gaps (brand red + faint token) surfaced by the E2E a11y suite
+
+### Fixed
+- **`--red` darkened `#e8472b` → `#c53016`** (light mode only; dark mode's `#ff6347` was already AA-compliant) in `index.css` and `resume/index.html` (root token + the ATS `.doc`-scoped hardcoded fallback + the `@media print` `.print-notice` fallback). Contrast on `--paper`: 3.41:1 → 4.81:1. Same hue/saturation as the original, only lightness reduced — verified live in-browser via a CDP color override before locking in the shade (user compared against a darker/safer alternative and picked this one).
+- **`--faint` adjusted `#9a9486`/`#71717a` → `#6f6a5d`/`#85858e`** (light/dark) in both files. This was a SEPARATE, worse gap (2.63:1 light / 3.90:1 dark — the dark half was failing silently, with no existing test covering dark theme) only exposed after removing the blanket `color-contrast` exclusion. Now 4.70:1 / 5.16:1.
+- Removed the `.disableRules(['color-contrast'])` exclusion entirely from both `homepage.spec.js` and `resume.spec.js` — the rule now runs unexcluded and enforced.
+- All 14 visual-regression baseline snapshots regenerated to match the new colors.
+
+### Fixed (test-infrastructure, found while re-enabling the axe gate)
+- Résumé axe scan was missing the existing `disableAutoReveal()` call, letting the picker's silent auto-open timer race the scan and get sampled mid-CSS-transition (phantom "violations" from partial-opacity blended colors that don't reflect any real page state).
+- Homepage axe scan now emulates `prefers-reduced-motion: reduce` to avoid racing the one-time ~2s intro nav-link stagger-fade animation for the same reason.
+- Added dark-theme axe coverage to both spec files (previously only light theme was ever scanned) — this is what caught the dark-mode `--faint` failure above.
+- Broadened the Cloudflare-beacon console-error filter (`net::ERR_FAILED` → `net::ERR_/i`) after the sandbox surfaced `net::ERR_NAME_NOT_RESOLVED` for the same benign, already-cross-checked beacon failure.
+
+## 2026-09-15 — E2E testing suite + CI (Playwright, dev-tooling only)
+
+### Added
+- **Playwright test suite** (`tests/e2e/homepage.spec.js` + `resume.spec.js`, 35 tests): functional coverage (nav links incl. the new Résumé link, mobile-menu regression test, theme toggle + persistence, work/capabilities/impact sections, copy-email, edition picker, Normal⇄ATS mode toggle, print anti-swap, PDF download flow), `@axe-core/playwright` accessibility scans (zero critical/serious, `color-contrast` excluded — see Notes), and **visual regression**: 2 homepage snapshots (light/dark) + the **full résumé matrix** — 3 editions × 2 modes × 2 themes = 12 snapshots, including `ats-dark` per edition as a guard that ATS mode stays visually light-only regardless of the dark-theme toggle.
+- **`tests/pdf/verify-pdfs.mjs`** — plain Node script (not a Playwright test): runs `tools/build-resume-pdf.mjs`, asserts all 9 PDFs exist with sane file sizes, extracts real text via `pdfjs-dist` (catches a blank/garbled render), and asserts the extracted text does NOT contain the edition-picker's own chrome headings ("Format"/"Edition") or a duplicated "Also available:" pointer — a direct, cheap regression guard for the exact bug fixed last session (the picker's auto-reveal getting captured into the PDF).
+- **`.github/workflows/ci.yml`** — triggers on push to `master` + PRs to any branch; `e2e` job (installs Chromium, runs the Playwright suite, uploads the HTML report as an artifact) + `pdf-smoke` job (build + verify).
+- **`package.json`** (dev-tooling only, first one in this repo) — devDependencies `@playwright/test`, `@axe-core/playwright`, `puppeteer`, `pdfjs-dist`; scripts `test:e2e`/`test:pdf`. The deployed site remains zero-build/zero-dependency (`git push` still serves raw files); this only formalizes what `tools/build-resume-pdf.mjs` already informally required.
+- **`tests/dev-server.mjs`** — tiny zero-dep static server mirroring the inline pattern already in `build-resume-pdf.mjs`, used only by Playwright's `webServer` option.
+
+### Fixed (discovered while writing the tests)
+- Made the résumé edition-picker's helper test-robust against its own **timed auto-reveal** (`setTimeout(fn, 600)`, opens the panel silently ~600ms after load to advertise editions): a blind trigger click racing that timer could toggle an already-open panel CLOSED. Functional tests now no-op that specific timer (`disableAutoReveal()`); visual-regression tests force-hide the panel/backdrop via an injected stylesheet instead.
+- The About-section count-up metrics (`[data-count]`) turned out to be gated by their own `IntersectionObserver`, independent of `.reveal`'s reduced-motion fast-path — they stayed at "0" in a naive full-page screenshot taken without scrolling. Tests now `scrollIntoViewIfNeeded()` the metrics before asserting/capturing.
+
+### Notes (not fixed this session — flagged, tracked in `tasks.md` Backlog)
+- The a11y scan surfaced a real, **pre-existing, sitewide** color-contrast gap: brand red `#e8472b` on paper `#f3efe7` (and its reverse) is ~3.41:1, below the 4.5:1 AA threshold, used decoratively throughout both `index.html` and `resume/index.html`. Excluded via `.disableRules(['color-contrast'])` (commented inline) rather than silently ignored or unilaterally re-themed — a deliberate design-system fix is a separate task.
+- Verified 105/105 (35 tests × 3 repeats) with zero flakiness before committing baselines.
+
 ## 2026-09-09 — Résumé edition picker: highlighted strip + frosted popup + discoverability
 
 ### Changed

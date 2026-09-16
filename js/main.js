@@ -139,6 +139,16 @@ const Main = (() => {
       bar.classList.add('tb-animate');
       document.body.classList.add('intro');
       document.removeEventListener('visibilitychange', armIntro);
+      // Drop the intro flags once the sequence finishes. CSS animations don't
+      // progress on elements that aren't rendered (display:none), so leaving
+      // 'tb-animate' on forever would replay the nav-link stagger from
+      // opacity:0 every time the mobile menu's .tb-links toggles open (it's
+      // display:none while closed). Cleaning up after the last animated piece
+      // (.hero-foot) finishes means later toggles just render normally.
+      const foot = document.querySelector('.hero-foot');
+      const cleanup = () => { bar.classList.remove('tb-animate'); document.body.classList.remove('intro'); };
+      if (foot) foot.addEventListener('animationend', cleanup, { once: true });
+      else setTimeout(cleanup, 3000);
     }
     armIntro();
     if (document.hidden) document.addEventListener('visibilitychange', armIntro);

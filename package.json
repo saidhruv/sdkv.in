@@ -1,0 +1,19 @@
+{
+  "name": "sdkv.in-tests",
+  "private": true,
+  "description": "Dev-only tooling for sdkv.in — E2E/visual/a11y tests and the résumé PDF build script. Not part of the deployed site (still zero-build, git push to master).",
+  "scripts": {
+    "test": "npm run test:e2e && npm run test:pdf",
+    "test:e2e": "playwright test tests/e2e",
+    "test:e2e:update": "playwright test tests/e2e --update-snapshots",
+    "test:e2e:ui": "playwright test tests/e2e --ui",
+    "test:pdf": "node tests/pdf/verify-pdfs.mjs",
+    "build:resume-pdf": "node tools/build-resume-pdf.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "^1.55.0",
+    "pdfjs-dist": "^4.7.76",
+    "puppeteer": "^23.11.1"
+  }
+}
