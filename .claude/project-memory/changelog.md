@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-28 — Résumé nav link highlighted
+
+### Changed
+- The Résumé link in the homepage nav bar (`.tb-accent`) is now red with a thin red underline, on desktop and in the mobile menu. On hover it switches to ink. Covered by a homepage functional test.
+
 ## 2026-09-16 — Fixed color-contrast gaps (brand red + faint token) surfaced by the E2E a11y suite
 
 ### Fixed

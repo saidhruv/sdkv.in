@@ -224,6 +224,8 @@ body.intro .hero .hero-foot { opacity: 0; transform: translateY(8px);
 .tb-links { display: inline-flex; align-items: center; gap: clamp(18px, 2.6vw, 38px); }
 .tb-links a { color: var(--muted); transition: color 0.2s var(--ease); }
 .tb-links a:hover { color: var(--red); }
+.tb-links a.tb-accent { color: var(--red); border-bottom: 1px solid var(--red); padding-bottom: 2px; }
+.tb-links a.tb-accent:hover { color: var(--ink); border-color: var(--ink); }
 
 .theme-toggle {
   display: inline-flex; align-items: center; justify-content: center;

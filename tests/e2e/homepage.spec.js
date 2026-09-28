@@ -41,6 +41,28 @@ test.describe('Homepage — functional', () => {
     expect(real, `Unexpected console errors:\n${real.join('\n')}`).toEqual([]);
   });
 
+  test('Résumé nav link is highlighted in the accent red with an underline', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    const resume = page.locator('#tb-links a[href="resume/"]');
+    const work = page.locator('#tb-links a[href="#work"]');
+    const style = (loc) => loc.evaluate((a) => {
+      const s = getComputedStyle(a);
+      const probe = document.createElement('span');
+      probe.style.color = 'var(--red)';
+      document.body.appendChild(probe);
+      const red = getComputedStyle(probe).color;
+      probe.remove();
+      return { color: s.color, underline: s.borderBottomStyle !== 'none' && parseFloat(s.borderBottomWidth) > 0, red };
+    });
+    const r = await style(resume);
+    const w = await style(work);
+    expect(r.color).toBe(r.red);
+    expect(r.underline).toBe(true);
+    expect(w.color).not.toBe(w.red);
+    expect(w.underline).toBe(false);
+  });
+
   test('title and meta tags are present and correct', async ({ page }) => {
     await page.goto('/');
     await expect(page).toHaveTitle(/Sai Dhruva K V/);
