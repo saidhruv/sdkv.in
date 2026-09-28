@@ -5,6 +5,23 @@
 ### Changed
 - The Résumé link in the homepage nav bar (`.tb-accent`) is now red with a thin red underline, on desktop and in the mobile menu. On hover it switches to ink. Covered by a homepage functional test.
 
+## 2026-09-28 — Résumé email links use the same mailto with CC
+
+### Changed
+- Every email on the Normal poster and the ATS document — shared by all three editions — opens `mailto:sai_dhruv@hotmail.com?cc=sai.dhruv.99@gmail.com`. The visible addresses are unchanged. All 9 PDFs were regenerated so the downloads carry the same link.
+
+## 2026-09-28 — Contact Email action opens mail with the secondary address in CC
+
+### Changed
+- Replaced the homepage **Copy** button with an **Email** link. It opens `mailto:sai_dhruv@hotmail.com?cc=sai.dhruv.99@gmail.com`. The clipboard copy path in `js/main.js` is gone.
+
+## 2026-09-28 — Primary email restored to Hotmail; Gmail added as secondary
+
+### Changed
+- **Primary email** is `sai_dhruv@hotmail.com` again (replacing `saidhruvakv@outlook.com`) on the homepage contact row, the Copy button, JSON-LD (`email` is now an array, primary first), and both résumé contact lines (Normal poster and ATS).
+- **Secondary email** `sai.dhruv.99@gmail.com` is a mailto link under the primary on the homepage (mono, red underline) and a second address on both résumé contact lines. Copy still copies only the primary.
+- **All 9 résumé PDFs regenerated** so downloads carry both addresses. ATS text extraction confirms `sai_dhruv@hotmail.com` and `sai.dhruv.99@gmail.com`, and no longer contains `saidhruvakv@outlook.com`.
+
 ## 2026-09-16 — Fixed color-contrast gaps (brand red + faint token) surfaced by the E2E a11y suite
 
 ### Fixed

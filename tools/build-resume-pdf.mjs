@@ -71,6 +71,23 @@ const NEUTRALIZE = `
 
 const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
 
+// Windows briefly locks a PDF that was just written (indexer, preview, a
+// previous Chrome handle). Retry the write instead of aborting the batch.
+async function writePdf(page, opts) {
+  let last;
+  for (let attempt = 0; attempt < 6; attempt++) {
+    try {
+      await page.pdf(opts);
+      return;
+    } catch (err) {
+      last = err;
+      if (!['UNKNOWN', 'EBUSY', 'EPERM'].includes(err.code)) throw err;
+      await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
+    }
+  }
+  throw last;
+}
+
 for (const version of VERSIONS) {
 for (const mode of ['light', 'dark']) {
   const page = await browser.newPage();
@@ -114,7 +131,7 @@ for (const mode of ['light', 'dark']) {
   const expect = mode === 'dark' ? 'rgb(17, 17, 19)' : 'rgb(243, 239, 231)';
   const ok = info.bg === expect;
 
-  await page.pdf({
+  await writePdf(page, {
     path: join(OUTDIR, `${version.file}-${mode}.pdf`),
     width: `${info.w + 2}px`,
     height: `${info.h + 2}px`,
@@ -165,7 +182,7 @@ for (const mode of ['light', 'dark']) {
   // Size the page to the content AND stretch the cream doc to the full page height so the
   // dark colour-scheme canvas is never exposed in the trailing millimetres at the bottom.
   await page.addStyleTag({ content: `@media print { @page { size: 210mm ${H}mm !important; margin: 0 !important; } .doc { min-height: ${H}mm !important; } }` });
-  await page.pdf({ path: join(OUTDIR, `${version.file}-ats.pdf`), printBackground: true, preferCSSPageSize: true });
+  await writePdf(page, { path: join(OUTDIR, `${version.file}-ats.pdf`), printBackground: true, preferCSSPageSize: true });
   await page.close();
   console.log(`wrote ${version.file}-ats.pdf  single page 210x${H}mm  doc-bg=${info.bg}  atkinson=${info.atkinson}`);
 }

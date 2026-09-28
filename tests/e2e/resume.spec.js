@@ -50,6 +50,23 @@ async function openEditionPanel(page) {
 }
 
 test.describe('Résumé — functional', () => {
+  test('every résumé email addresses the primary inbox and CCs the secondary', async ({ page }) => {
+    await disableAutoReveal(page);
+    const href = 'mailto:sai_dhruv@hotmail.com?cc=sai.dhruv.99%40gmail.com';
+
+    await seed(page, { mode: 'normal', theme: 'light', variant: 'ai' });
+    await page.goto('/resume/');
+    const poster = page.locator('.sheet .contact a[href^="mailto:"]');
+    await expect(poster).toHaveCount(2);
+    for (const link of await poster.all()) await expect(link).toHaveAttribute('href', href);
+
+    await seed(page, { mode: 'ats', theme: 'light', variant: 'frontend' });
+    await page.goto('/resume/');
+    const ats = page.locator('.doc-contact a[href^="mailto:"]');
+    await expect(ats).toHaveCount(2);
+    for (const link of await ats.all()) await expect(link).toHaveAttribute('href', href);
+  });
+
   test('loads without unexpected console/page errors', async ({ page }) => {
     const errors = [];
     page.on('console', (msg) => { if (msg.type() === 'error') errors.push(msg.text()); });

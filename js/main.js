@@ -1,4 +1,4 @@
-/* Main — topbar, theme toggle, mobile nav, copy-email, orchestration. */
+/* Main — topbar, theme toggle, mobile nav, orchestration. */
 const Main = (() => {
   const THEMES = ['system', 'light', 'dark'];
   const LABELS = { system: 'Theme: follow system', light: 'Theme: light', dark: 'Theme: dark' };
@@ -162,38 +162,6 @@ const Main = (() => {
     onScroll();
   }
 
-  function initCopyEmail() {
-    const btn = document.getElementById('copy-email');
-    if (!btn) return;
-    const label = btn.querySelector('[data-copy-label]');
-    function fallbackCopy(text) {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.setAttribute('readonly', '');
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      let ok = false;
-      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
-      document.body.removeChild(ta);
-      return ok;
-    }
-    function confirmCopied() {
-      if (label) label.textContent = 'Copied';
-      announce('Email address copied to clipboard');
-      setTimeout(() => { if (label) label.textContent = 'Copy'; }, 2000);
-    }
-    btn.addEventListener('click', async () => {
-      const email = btn.dataset.email;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        try { await navigator.clipboard.writeText(email); confirmCopied(); return; } catch (e) { /* fall through */ }
-      }
-      if (fallbackCopy(email)) confirmCopied();
-      else announce('Could not copy. Email: ' + email);
-    });
-  }
-
   function init() {
     if (typeof Kinetic !== 'undefined' && Kinetic.init) Kinetic.init();
     if (typeof Reveal !== 'undefined' && Reveal.init) Reveal.init();
@@ -202,7 +170,6 @@ const Main = (() => {
     initFaviconLoop();
     initBurger();
     initTopbar();
-    initCopyEmail();
     const yr = document.getElementById('footer-year');
     if (yr) yr.textContent = new Date().getFullYear();
   }

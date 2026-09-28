@@ -1,5 +1,17 @@
 # Session History
 
+## 2026-09-28 — Résumé emails use the homepage mailto with CC
+
+**Summary:** Both addresses on the Normal poster and the ATS document now open a message to `sai_dhruv@hotmail.com` with `sai.dhruv.99@gmail.com` in CC. Those contact lines are shared by the AI, Frontend, and TPM editions. Visible text is unchanged.
+
+## 2026-09-28 — Contact Email action is a mailto with CC
+
+**Summary:** Replaced the homepage Copy button with an Email link that opens the mail client to `sai_dhruv@hotmail.com` and CCs `sai.dhruv.99@gmail.com`. Removed the clipboard handler. The homepage functional test asserts the accessible name, visible label, and `mailto` href.
+
+## 2026-09-28 — Email change: Hotmail primary, Gmail secondary
+
+**Summary:** Replaced `saidhruvakv@outlook.com` with `sai_dhruv@hotmail.com` as the primary address, and added `sai.dhruv.99@gmail.com` as a secondary mailto. Copy on the homepage still copies only the primary. JSON-LD `email` is an array with the primary first. Both résumé layouts (Normal poster and ATS) list both addresses on the contact line. All 9 PDFs regenerated (`PUPPETEER_EXECUTABLE_PATH` pointed at the Playwright Chromium because the Puppeteer cache had no Chrome 131). ATS PDF text confirmed both new addresses and no Outlook address.
+
 ## 2026-09-16 — Fixed the color-contrast gaps the E2E suite flagged (red + faint), closed two test-timing blind spots
 
 **Summary:** Follow-on from the 2026-09-15 session, which discovered a pre-existing brand-red color-contrast gap but deliberately left it excluded/backlogged pending the user's call. This session, the user asked directly "how much effort would it be to darken the red?" — answered with a concrete, low-effort estimate (the token is a `light-dark()` CSS var, dark mode already passed, so only one hex needed to change), backed by actual WCAG relative-luminance math rather than a guess. Computed a candidate (`#c53016`, 4.81:1, same hue/saturation as the original `#e8472b`) and a safer alternative (`#b82d14`, 5.35:1), then **verified both live in the actual browser** via a Cursor browser tab + CDP `Runtime.evaluate` color overrides + screenshots (hero italic word, impact numbers) before asking the user to pick — they chose the closer-to-original shade.

@@ -73,4 +73,4 @@ color math. Same hue/saturation as before, just less lightness; not a brand rede
 - **Work entry:** `.entry` grid (num · company · meta) with expanding `.detail` + tag pills
 - **Capability:** `.cap` cell, numbered red superscript + mono list
 - **Impact:** `.imp` big red number + title + description
-- **Buttons/links:** mono uppercase; copy-btn inverts on hover; social pills border-to-red on hover; email underlined in red
+- **Buttons/links:** mono uppercase; the contact **Email** action inverts on hover and is a `mailto:` to the primary address with the secondary address in `cc`; social pills border-to-red on hover; primary email underlined in red (large). Secondary email sits under it in mono with a 1px red underline.

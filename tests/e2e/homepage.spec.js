@@ -162,13 +162,11 @@ test.describe('Homepage — functional', () => {
     }
   });
 
-  test('contact copy-email button updates the aria-live status region', async ({ page, context }) => {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  test('contact email action addresses the primary inbox and CCs the secondary', async ({ page }) => {
     await page.goto('/');
-    const btn = page.locator('#copy-email');
-    await btn.click();
-    await expect(page.locator('#live-region')).toHaveText(/copied/i);
-    await expect(btn.locator('[data-copy-label]')).toHaveText('Copied');
+    const link = page.getByRole('link', { name: 'Email sai_dhruv@hotmail.com, CC sai.dhruv.99@gmail.com' });
+    await expect(link).toHaveText('Email');
+    await expect(link).toHaveAttribute('href', 'mailto:sai_dhruv@hotmail.com?cc=sai.dhruv.99%40gmail.com');
   });
 
   // Both themes: a dark-mode-only contrast regression (e.g. the --faint token

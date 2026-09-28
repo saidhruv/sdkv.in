@@ -14,7 +14,7 @@ sdkv.in/
 │   ├── kinetic.js      ← Kinetic IIFE: renders content from data + animates the headline
 │   ├── animations.js   ← Reveal IIFE: scroll reveal + count-up metrics
 │   ├── backgrounds.js  ← Backgrounds IIFE: cursor/scroll parallax for the drafting-grid layer
-│   └── main.js         ← Main IIFE: topbar, theme toggle, mobile nav, copy-email, init
+│   └── main.js         ← Main IIFE: topbar, theme toggle, mobile nav, init
 ├── fonts/              ← self-hosted latin woff2 (Fraunces roman+italic, JetBrains Mono, Italiana; Atkinson Hyperlegible 400/700 + italics for the résumé's ATS mode)
 ├── resume/
 │   ├── index.html      ← résumé page. Header: Back + wordmark + Normal|ATS mode toggle + theme toggle + Download. Contains BOTH the branded poster (.sheet, Normal) AND the accessible single-column Atkinson doc (.doc, ATS, always light); mode persists via localStorage.resumeMode. Download picks the PDF by mode+theme. Anti-print in BOTH modes (Ctrl+P → "designed for screen" notice). Has the drafting-grid background + site footer; honors shared `theme` key + theme-aware favicon. Linked from Contact; public.
